@@ -3,7 +3,7 @@ services: docker
 
 branches:
     only:
-        - master
+        - main
         - /^release-[0-9]+\..*$/
 
 before_script:
@@ -33,7 +33,7 @@ jobs:
               - if [ "$DOCKER_PASS" != "" ]; then make component/push ; else echo "No DOCKER_PASS. Skipping image push."; fi
 
         - stage: fast forward commits to release branch
-          if: type = push AND branch =~ /^master$/
+          if: type = push AND branch =~ /^main$/
           script: make release-ff
 
         - stage: update release manifest
@@ -41,7 +41,7 @@ jobs:
           script: make pipeline-manifest/update PIPELINE_MANIFEST_COMPONENT_SHA256=${TRAVIS_COMMIT} PIPELINE_MANIFEST_COMPONENT_REPO=${TRAVIS_REPO_SLUG} PIPELINE_MANIFEST_BRANCH=${TRAVIS_BRANCH}
 
         - stage: Automated Dependency Upgrade
-          if: type = cron AND branch = master
+          if: type = cron AND branch = main
           language: node_js
           node_js: '12'
           install: echo skip install
@@ -49,13 +49,12 @@ jobs:
               - set -e
               - git remote remove origin
               - git remote add origin https://${GITHUB_TOKEN}@github.com/@open-cluster-management/search-ui.git > /dev/null 2>&1
-              - git checkout master
+              - git checkout main
               - npm ci
-              - npm run update
               - npm run build
               - git config --global user.email "travis@travis-ci.org"
               - git config --global user.name "Travis CI"
               - git add -u :/
               - set +e
               - git commit -m "fix(deps) - upgrade dependencies"
-              - if [ $? -eq 0 ]; then git push origin master; fi
+              - if [ $? -eq 0 ]; then git push origin main; fi
