@@ -6,6 +6,7 @@
 		"start": "react-scripts start",
 		"build": "react-scripts build",
 		"check": "concurrently prettier --check src/**/*.tsx src/**/*.ts",
+		"check:fix": "prettier --write src/**/*.tsx src/**/*.ts",
 		"test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts",
 		"test:watch": "react-scripts test --watch",
 		"lint": "eslint --ext tsx src",
