@@ -4,6 +4,10 @@
 /node_modules
 /.pnp
 .pnp.js
+.build-harness
+.build-harness-bootstrap
+build-harness
+build-harness-extensions
 
 # testing
 /coverage
