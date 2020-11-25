@@ -1,4 +1,6 @@
--include $(shell [ -f ".build-harness-bootstrap" ] || curl --fail -H 'Authorization: token ${GITHUB_TOKEN}' -H 'Accept: application/vnd.github.v4.raw' -L https://api.github.com/repos/open-cluster-management/build-harness-extensions-test/contents/templates/Makefile.build-harness-bootstrap -o .build-harness-bootstrap; echo .build-harness-bootstrap)
+ifdef GITHUB_TOKEN
+-include $(shell curl -H 'Authorization: token ${GITHUB_TOKEN}' -H 'Accept: application/vnd.github.v4.raw' -L https://api.github.com/repos/open-cluster-management/build-harness-extensions/contents/templates/Makefile.build-harness-bootstrap -o .build-harness-bootstrap; echo .build-harness-bootstrap)
+endif
 
 export PROJECT_DIR            = $(shell 'pwd')
 export BUILD_DIR              = $(PROJECT_DIR)/build
@@ -6,7 +8,7 @@ export COMPONENT_SCRIPTS_PATH = $(BUILD_DIR)
 
 export GIT_REMOTE_URL  = $(shell git config --get remote.origin.url)
 export DOCKER_IMAGE  ?= $(COMPONENT_NAME)
-export IMAGE_DESCRIPTION ?= Search
+export IMAGE_DESCRIPTION ?= Search-ui
 export DOCKER_BUILD_TAG  ?= latest
 export DOCKER_BUILD_OPTS  = --build-arg VCS_REF=$(VCS_REF) \
 	--build-arg VCS_URL=$(GIT_REMOTE_URL) \
