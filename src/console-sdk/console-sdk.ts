@@ -2,52 +2,52 @@ import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = {
-	[K in keyof T]: T[K]
+    [K in keyof T]: T[K]
 }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-	ID: string
-	String: string
-	Boolean: boolean
-	Int: number
-	Float: number
+    ID: string
+    String: string
+    Boolean: boolean
+    Int: number
+    Float: number
 }
 
 export type Metadata = {
-	creationTimestamp: Scalars['String']
-	uid: Scalars['String']
-	name: Scalars['String']
-	namespace?: Maybe<Scalars['String']>
-	labels: Array<Scalars['String']>
+    creationTimestamp: Scalars['String']
+    uid: Scalars['String']
+    name: Scalars['String']
+    namespace?: Maybe<Scalars['String']>
+    labels: Array<Scalars['String']>
 }
 
 export type Namespace = {
-	apiVersion: Scalars['String']
-	kind: Scalars['String']
-	metadata: Metadata
+    apiVersion: Scalars['String']
+    kind: Scalars['String']
+    metadata: Metadata
 }
 
 export type NamespacesQueryVariables = Exact<{
-	labelSelector?: Maybe<Scalars['String']>
+    labelSelector?: Maybe<Scalars['String']>
 }>
 
 export type NamespacesQuery = {
-	namespaces: Array<{
-		metadata: Pick<Metadata, 'uid' | 'name' | 'namespace' | 'labels'>
-	}>
+    namespaces: Array<{
+        metadata: Pick<Metadata, 'uid' | 'name' | 'namespace' | 'labels'>
+    }>
 }
 
 export const NamespacesDocument = gql`
-	query namespaces($labelSelector: String) {
-		namespaces(labelSelector: $labelSelector) {
-			metadata {
-				uid
-				name
-				namespace
-				labels
-			}
-		}
-	}
+    query namespaces($labelSelector: String) {
+        namespaces(labelSelector: $labelSelector) {
+            metadata {
+                uid
+                name
+                namespace
+                labels
+            }
+        }
+    }
 `
 
 /**
@@ -66,33 +66,14 @@ export const NamespacesDocument = gql`
  *   },
  * });
  */
-export function useNamespacesQuery(
-	baseOptions?: Apollo.QueryHookOptions<
-		NamespacesQuery,
-		NamespacesQueryVariables
-	>
-) {
-	return Apollo.useQuery<NamespacesQuery, NamespacesQueryVariables>(
-		NamespacesDocument,
-		baseOptions
-	)
+export function useNamespacesQuery(baseOptions?: Apollo.QueryHookOptions<NamespacesQuery, NamespacesQueryVariables>) {
+    return Apollo.useQuery<NamespacesQuery, NamespacesQueryVariables>(NamespacesDocument, baseOptions)
 }
 export function useNamespacesLazyQuery(
-	baseOptions?: Apollo.LazyQueryHookOptions<
-		NamespacesQuery,
-		NamespacesQueryVariables
-	>
+    baseOptions?: Apollo.LazyQueryHookOptions<NamespacesQuery, NamespacesQueryVariables>
 ) {
-	return Apollo.useLazyQuery<NamespacesQuery, NamespacesQueryVariables>(
-		NamespacesDocument,
-		baseOptions
-	)
+    return Apollo.useLazyQuery<NamespacesQuery, NamespacesQueryVariables>(NamespacesDocument, baseOptions)
 }
 export type NamespacesQueryHookResult = ReturnType<typeof useNamespacesQuery>
-export type NamespacesLazyQueryHookResult = ReturnType<
-	typeof useNamespacesLazyQuery
->
-export type NamespacesQueryResult = Apollo.QueryResult<
-	NamespacesQuery,
-	NamespacesQueryVariables
->
+export type NamespacesLazyQueryHookResult = ReturnType<typeof useNamespacesLazyQuery>
+export type NamespacesQueryResult = Apollo.QueryResult<NamespacesQuery, NamespacesQueryVariables>
