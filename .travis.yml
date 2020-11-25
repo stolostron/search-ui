@@ -17,71 +17,55 @@ env:
         - OS=linux
         - COMPONENT_TAG_EXTENSION="-${TRAVIS_COMMIT}"
 
-before_install:
-    - set -e
-
-stages:
-    - build
-    - unit-test
-    - test-e2e
-    - release-ff
-    - publish
-
-# before_script:
-#     - travis_retry timeout 2m make init
+before_script:
+    - travis_retry timeout 2m make init
 
 jobs:
     include:
-        - stage: build
-          name: 'Build the test image, push it, check potential leaked credentials and check image security scan status'
+        - stage: build test lint check push
           if: type != cron
           language: node_js
           node_js: '12'
           install: npm ci
           script:
-              - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
-              - |
-                  make
-                  make component/build
-                  make component/push
-                  make security/scans
+              - set -e
+              - npm run lint
+              - npm run check
+              - npm test
 
-        - stage: unit-test
-          name: 'Run unit tests'
-          if: type = pull_request
+        - stage: build test lint check push
+          if: type != cron
           script:
-              # Set the image tag differently for PRs
+              - set -e
+              - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/nodejs-12
+              - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/ubi-minimal
               - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
-              # Bootstrap the build harness, pull test image, and run unit tests.
-              # - |
-              #     make
-              #     make component/pull
-              #     make component/test/unit
-              #     sonar-scanner --debug
+              - make component/build
+              - if [ "$DOCKER_PASS" != "" ]; then make component/push ; else echo "No DOCKER_PASS. Skipping image push."; fi
 
-        - stage: test-e2e
-          name: 'Deploy the image to a cluster and run e2e tests'
-          if: type = pull_request
-          script:
-              #Check out a clusterpool, set up oc, deploy, run e2e tests, and return clusterpool cluster
-              - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
-              # - |
-              #     make
-              #     make component/pull
-              #     make component/test/e2e
+        - stage: fast forward commits to release branch
+          if: type = push AND branch =~ /^main$/
+          script: make release-ff
 
-        - stage: release-ff
-          name: 'Push commits from master to branch defined in RELEASE_FF_BRANCH'
-          if: type = push AND branch =~ /^master$/
-          script:
-              - |
-                  make 
-                  make release-ff
-
-        - stage: publish
-          name: 'Publish the image to quay with an official version/sha tag and publish entry to integration pipeline stage'
+        - stage: update release manifest
           if: type = push AND branch =~ /^release-[0-9]+\..*$/
+          script: make pipeline-manifest/update PIPELINE_MANIFEST_COMPONENT_SHA256=${TRAVIS_COMMIT} PIPELINE_MANIFEST_COMPONENT_REPO=${TRAVIS_REPO_SLUG} PIPELINE_MANIFEST_BRANCH=${TRAVIS_BRANCH}
+
+        - stage: Automated Dependency Upgrade
+          if: type = cron AND branch = main
+          language: node_js
+          node_js: '12'
+          install: echo skip install
           script:
-              - |
-                  make 
-                  make pipeline-manifest/update PIPELINE_MANIFEST_COMPONENT_SHA256=${TRAVIS_COMMIT} PIPELINE_MANIFEST_COMPONENT_REPO=${TRAVIS_REPO_SLUG} PIPELINE_MANIFEST_BRANCH=${TRAVIS_BRANCH}
+              - set -e
+              - git remote remove origin
+              - git remote add origin https://${GITHUB_TOKEN}@github.com/@open-cluster-management/search-ui.git > /dev/null 2>&1
+              - git checkout main
+              - npm ci
+              - npm run build
+              - git config --global user.email "travis@travis-ci.org"
+              - git config --global user.name "Travis CI"
+              - git add -u :/
+              - set +e
+              - git commit -m "fix(deps) - upgrade dependencies"
+              - if [ $? -eq 0 ]; then git push origin main; fi
