@@ -6,7 +6,7 @@ export COMPONENT_SCRIPTS_PATH = $(BUILD_DIR)
 
 export GIT_REMOTE_URL  = $(shell git config --get remote.origin.url)
 export DOCKER_IMAGE  ?= $(COMPONENT_NAME)
-export IMAGE_DESCRIPTION ?= Search-ui
+export IMAGE_DESCRIPTION ?= Search
 export DOCKER_BUILD_TAG  ?= latest
 export DOCKER_BUILD_OPTS  = --build-arg VCS_REF=$(VCS_REF) \
 	--build-arg VCS_URL=$(GIT_REMOTE_URL) \

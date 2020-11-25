@@ -6,6 +6,12 @@ branches:
         - main
         - /^release-[0-9]+\..*$/
 
+# addons:
+#   sonarcloud:
+#     organization: "open-cluster-management"
+#     token:
+#       secure: ""
+
 before_script:
     - travis_retry timeout 2m make init
 
