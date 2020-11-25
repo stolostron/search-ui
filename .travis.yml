@@ -27,6 +27,9 @@ stages:
     - release-ff
     - publish
 
+before_script:
+    - travis_retry timeout 2m make init
+
 jobs:
     include:
         - stage: build
