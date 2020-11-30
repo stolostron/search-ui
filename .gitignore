@@ -9,10 +9,11 @@
 build-harness
 build-harness-extensions
 .eslintcache
-sonar-project.properties
 
 # testing
 /coverage
+sonar-project.properties
+test-report.xml
 
 # production
 # /build
