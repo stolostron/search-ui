@@ -10,7 +10,7 @@ const jestConfig = {
     },
     coverageReporters: ['text', 'text-summary', 'html', 'lcov'],
     watchPathIgnorePatterns: ['node_modules', 'coverage'],
-    testResultsprocessor: 'jest-sonar-reporter',
+    testResultProcessor: 'jest-sonar-reporter',
 }
 
 module.exports = jestConfig
