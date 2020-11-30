@@ -5,7 +5,9 @@
     "scripts": {
         "start": "react-scripts start",
         "build": "react-scripts build",
-        "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts",
+        "check": "prettier --check src/**/*.tsx src/**/*.ts",
+        "check:fix": "prettier --write src/**/*.tsx src/**/*.ts",
+        "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts --testResultsProcessor jest-sonar-reporter",
         "test:watch": "react-scripts test --watch",
         "lint": "eslint --ext tsx src",
         "generate": "graphql-codegen --config src/console-sdk/console-sdk.yml",
@@ -38,6 +40,7 @@
         "@testing-library/user-event": "^7.2.1",
         "@types/jest": "^24.9.1",
         "jest-junit": "^12.0.0",
+        "jest-sonar-reporter": "^2.0.0",
         "prettier": "^2.1.2"
     },
     "eslintConfig": {
@@ -54,5 +57,11 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "prettier": {
+        "printWidth": 120,
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
     }
 }

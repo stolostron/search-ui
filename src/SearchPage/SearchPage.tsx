@@ -1,12 +1,10 @@
 import {
-    AcmEmptyPage,
     AcmExpandableSection,
-    AcmLoadingPage,
     AcmPage,
     AcmPageCard,
     AcmPageHeader,
     AcmTable,
-} from "@open-cluster-management/ui-components";
+} from '@open-cluster-management/ui-components'
 import {
     Card,
     CardBody,
@@ -17,11 +15,9 @@ import {
     GridItem,
     PageSection,
     SearchInput,
-} from "@patternfly/react-core";
-import "@patternfly/react-core/dist/styles/base.css";
-import React, { Fragment } from "react";
-import { consoleClient } from "../console-sdk/console-client";
-import { Namespace, useNamespacesQuery } from "../console-sdk/console-sdk";
+} from '@patternfly/react-core'
+import '@patternfly/react-core/dist/styles/base.css'
+import React, { Fragment } from 'react'
 
 export function SearchTemplate(props: { title: string; description: string }) {
     return (
@@ -29,17 +25,14 @@ export function SearchTemplate(props: { title: string; description: string }) {
             <CardBody>
                 <Flex>
                     <FlexItem>
-                        <Flex
-                            direction={{ default: "column" }}
-                            alignItems={{ default: "alignItemsCenter" }}
-                        >
+                        <Flex direction={{ default: 'column' }} alignItems={{ default: 'alignItemsCenter' }}>
                             <FlexItem>10</FlexItem>
                             <FlexItem>Results</FlexItem>
                         </Flex>
                     </FlexItem>
                     <Divider isVertical />
                     <FlexItem>
-                        <Flex direction={{ default: "column" }}>
+                        <Flex direction={{ default: 'column' }}>
                             <FlexItem>{props.title}</FlexItem>
                             <FlexItem>
                                 <Divider />
@@ -50,7 +43,7 @@ export function SearchTemplate(props: { title: string; description: string }) {
                 </Flex>
             </CardBody>
         </Card>
-    );
+    )
 }
 
 export function SearchResult() {
@@ -58,26 +51,26 @@ export function SearchResult() {
         <Card>
             <CardBody>1 Result</CardBody>
         </Card>
-    );
+    )
 }
 
 const searchTemplates: {
-    title: string;
-    description: string;
+    title: string
+    description: string
 }[] = [
     {
-        title: "Workloads",
-        description: "A pre-defined search to help you review your workloads.",
+        title: 'Workloads',
+        description: 'A pre-defined search to help you review your workloads.',
     },
     {
-        title: "Unhealthy Pods",
-        description: "Show pods with unhealth status.",
+        title: 'Unhealthy Pods',
+        description: 'Show pods with unhealth status.',
     },
     {
-        title: "Created last hour Pods",
-        description: "Search for resources created within the last hour.",
+        title: 'Created last hour Pods',
+        description: 'Search for resources created within the last hour.',
     },
-];
+]
 
 export function SearchPage() {
     return (
@@ -85,39 +78,14 @@ export function SearchPage() {
             <AcmPageHeader title="Search" />
             <SearchData />
         </AcmPage>
-    );
+    )
 }
 
 export function SearchData() {
-    // const { loading, error, data, refetch, startPolling, stopPolling } = useNamespacesQuery({
-    //     client,
-    // })
-    // useEffect(() => {
-    //     refetch()
-    //     startPolling(10 * 1000)
-    //     return () => {
-    //         stopPolling()
-    //     }
-    // }, [refetch, startPolling, stopPolling])
-    // if (loading) {
-    //     return <AcmLoadingPage />;
-    // } else if (error) {
-    //     return <div>TODO</div>;
-    //     // return <ErrorPage error={error} />
-    // } else if (!data?.namespaces || data.namespaces.length === 0) {
-    //     return (
-    //         <AcmEmptyPage
-    //             title="No clusters found."
-    //             message="No managed clusters found."
-    //             action="Create cluster"
-    //         />
-    //     );
-    // }
-    // return <SearchContent namespaces={data?.namespaces as Namespace[]} />;
-    return <SearchContent namespaces={[]} />;
+    return <SearchContent />
 }
 
-export function SearchContent(props: { namespaces: Namespace[] }) {
+export function SearchContent() {
     return (
         <Fragment>
             <PageSection>
@@ -130,10 +98,7 @@ export function SearchContent(props: { namespaces: Namespace[] }) {
                 <Grid hasGutter>
                     {searchTemplates.map((searchTemplate) => (
                         <GridItem span={4} key={searchTemplate.title}>
-                            <SearchTemplate
-                                title={searchTemplate.title}
-                                description={searchTemplate.description}
-                            />
+                            <SearchTemplate title={searchTemplate.title} description={searchTemplate.description} />
                         </GridItem>
                     ))}
                 </Grid>
@@ -183,13 +148,9 @@ export function SearchContent(props: { namespaces: Namespace[] }) {
                 <AcmExpandableSection label="Replicaset" expanded={true}>
                     <AcmTable
                         plural="replicasets"
-                        items={[
-                            { name: "one" },
-                            { name: "two" },
-                            { name: "three" },
-                        ]}
-                        columns={[{ header: "Name", cell: "name" }]}
-                        keyFn={() => "123"}
+                        items={[{ name: 'one' }, { name: 'two' }, { name: 'three' }]}
+                        columns={[{ header: 'Name', cell: 'name' }]}
+                        keyFn={() => '123'}
                         tableActions={[]}
                         rowActions={[]}
                         bulkActions={[]}
@@ -197,5 +158,5 @@ export function SearchContent(props: { namespaces: Namespace[] }) {
                 </AcmExpandableSection>
             </AcmPageCard>
         </Fragment>
-    );
+    )
 }

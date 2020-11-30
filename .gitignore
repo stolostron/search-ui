@@ -4,12 +4,19 @@
 /node_modules
 /.pnp
 .pnp.js
+.build-harness
+.build-harness-bootstrap
+build-harness
+build-harness-extensions
+.eslintcache
 
 # testing
 /coverage
+sonar-project.properties
+test-report.xml
 
 # production
-/build
+# /build
 
 # misc
 .DS_Store
