@@ -9,6 +9,7 @@
 build-harness
 build-harness-extensions
 .eslintcache
+sonar-project.properties
 
 # testing
 /coverage

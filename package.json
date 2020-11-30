@@ -7,7 +7,7 @@
         "build": "react-scripts build",
         "check": "prettier --check src/**/*.tsx src/**/*.ts",
         "check:fix": "prettier --write src/**/*.tsx src/**/*.ts",
-        "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts",
+        "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts --testResultsProcessor jest-sonar-reporter",
         "test:watch": "react-scripts test --watch",
         "lint": "eslint --ext tsx src",
         "generate": "graphql-codegen --config src/console-sdk/console-sdk.yml",
