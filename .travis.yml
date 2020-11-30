@@ -22,19 +22,12 @@ before_script:
 
 jobs:
     include:
-        - stage: build test lint check push
+        - stage: build push
+          name: 'Build the test image and push it'
           if: type != cron
           language: node_js
           node_js: '12'
           install: npm ci
-          script:
-              - set -e
-              - npm run lint
-              - npm run check
-              - npm test
-
-        - stage: build test lint check push
-          if: type != cron
           script:
               - set -e
               - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/nodejs-12
@@ -42,6 +35,16 @@ jobs:
               - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
               - make component/build
               - if [ "$DOCKER_PASS" != "" ]; then make component/push ; else echo "No DOCKER_PASS. Skipping image push."; fi
+
+        - stage: test lint check
+          if: type != cron
+          script:
+              - set -e
+              - npm run lint
+              - npm run check
+              - npm test
+              - make sonar/js/jest-init
+              - make sonar/js
 
         - stage: fast forward commits to release branch
           if: type = push AND branch =~ /^main$/
