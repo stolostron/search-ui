@@ -25,9 +25,6 @@ jobs:
         - stage: build push
           name: 'Build the test image and push it'
           if: type != cron
-          language: node_js
-          node_js: '12'
-          install: npm ci
           script:
               - set -e
               - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/nodejs-12
@@ -38,6 +35,9 @@ jobs:
 
         - stage: test lint check
           if: type != cron
+          language: node_js
+          node_js: '12'
+          install: npm ci
           script:
               - set -e
               - npm run lint
