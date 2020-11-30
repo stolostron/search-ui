@@ -8,6 +8,7 @@ const jestConfig = {
             statements: 0,
         },
     },
+    coverageDirectory: './coverage',
     coverageReporters: ['text', 'text-summary', 'html', 'lcov'],
     watchPathIgnorePatterns: ['node_modules', 'coverage'],
     testResultProcessor: 'jest-sonar-reporter',
