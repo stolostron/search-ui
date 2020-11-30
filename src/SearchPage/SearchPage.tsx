@@ -18,8 +18,6 @@ import {
 } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
-// import { consoleClient } from '../console-sdk/console-client'
-import { Namespace /*useNamespacesQuery*/ } from '../console-sdk/console-sdk'
 
 export function SearchTemplate(props: { title: string; description: string }) {
     return (
@@ -84,35 +82,10 @@ export function SearchPage() {
 }
 
 export function SearchData() {
-    // const { loading, error, data, refetch, startPolling, stopPolling } = useNamespacesQuery({
-    //     client,
-    // })
-    // useEffect(() => {
-    //     refetch()
-    //     startPolling(10 * 1000)
-    //     return () => {
-    //         stopPolling()
-    //     }
-    // }, [refetch, startPolling, stopPolling])
-    // if (loading) {
-    //     return <AcmLoadingPage />;
-    // } else if (error) {
-    //     return <div>TODO</div>;
-    //     // return <ErrorPage error={error} />
-    // } else if (!data?.namespaces || data.namespaces.length === 0) {
-    //     return (
-    //         <AcmEmptyPage
-    //             title="No clusters found."
-    //             message="No managed clusters found."
-    //             action="Create cluster"
-    //         />
-    //     );
-    // }
-    // return <SearchContent namespaces={data?.namespaces as Namespace[]} />;
-    return <SearchContent namespaces={[]} />
+    return <SearchContent />
 }
 
-export function SearchContent(props: { namespaces: Namespace[] }) {
+export function SearchContent() {
     return (
         <Fragment>
             <PageSection>
