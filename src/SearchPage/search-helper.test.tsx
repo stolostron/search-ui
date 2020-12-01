@@ -3,11 +3,7 @@ import { render } from '@testing-library/react'
 import { formatSearchbarSuggestions, convertStringToQuery, formatNumber } from './search-helper'
 
 test('Correctly returns formatSearchbarSuggestions', () => {
-    const testData = [
-        'kind',
-        'cluster',
-        'deployment'
-    ]
+    const testData = ['kind', 'cluster', 'deployment']
     const result = formatSearchbarSuggestions(testData, 'filter')
     expect(result).toMatchSnapshot()
 })

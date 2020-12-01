@@ -23,7 +23,7 @@ export const convertStringToQuery = (searchText: string) => {
         .filter((f) => ['', '=', '<', '>', '<=', '>=', '!=', '!'].findIndex((op) => op === f.values[0]) === -1)
     return {
         keywords,
-        filters
+        filters,
     }
 }
 
