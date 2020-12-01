@@ -20,10 +20,6 @@ Object {
 }
 `;
 
-exports[`Correctly returns formatNumber of number larger than 999 1`] = `"1k"`;
-
-exports[`Correctly returns formatNumber of number smaller than 999 1`] = `10`;
-
 exports[`Correctly returns formatSearchbarSuggestions 1`] = `
 Array [
   Object {

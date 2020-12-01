@@ -26,12 +26,3 @@ export const convertStringToQuery = (searchText: string) => {
         filters,
     }
 }
-
-export const formatNumber = (count: number) => {
-    if (count > 999) {
-        // show one decimal place
-        const num = (count - (count % 100)) / 1000
-        return num + 'k'
-    }
-    return count
-}
