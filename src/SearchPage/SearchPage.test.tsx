@@ -1,8 +1,8 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { SearchContent } from './SearchPage'
+import { SearchPage } from './SearchPage'
 
 test('renders search', () => {
-    const { getByText } = render(<SearchContent namespaces={[]} />)
-    expect(getByText('Suggested search templates')).toBeInTheDocument()
+    const { getByText } = render(<SearchPage />)
+    expect(getByText('Search items')).toBeInTheDocument()
 })
