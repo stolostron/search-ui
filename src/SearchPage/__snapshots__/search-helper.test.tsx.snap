@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Correctly returns convertStringToQuery 1`] = `
+Object {
+  "filters": Array [
+    Object {
+      "property": "namespace",
+      "values": Array [
+        "open-cluster-management",
+      ],
+    },
+    Object {
+      "property": "kind",
+      "values": Array [
+        "pod",
+      ],
+    },
+  ],
+  "keywords": Array [],
+}
+`;
+
+exports[`Correctly returns formatNumber of number larger than 999 1`] = `"1k"`;
+
+exports[`Correctly returns formatNumber of number smaller than 999 1`] = `10`;
+
+exports[`Correctly returns formatSearchbarSuggestions 1`] = `
+Array [
+  Object {
+    "id": "id-kind",
+    "key": "key-kind",
+    "kind": "filter",
+    "name": "kind",
+  },
+  Object {
+    "id": "id-cluster",
+    "key": "key-cluster",
+    "kind": "filter",
+    "name": "cluster",
+  },
+  Object {
+    "id": "id-deployment",
+    "key": "key-deployment",
+    "kind": "filter",
+    "name": "deployment",
+  },
+]
+`;

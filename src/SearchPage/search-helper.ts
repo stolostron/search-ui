@@ -23,8 +23,7 @@ export const convertStringToQuery = (searchText: string) => {
         .filter((f) => ['', '=', '<', '>', '<=', '>=', '!=', '!'].findIndex((op) => op === f.values[0]) === -1)
     return {
         keywords,
-        filters,
-        limit: 10000, // TODO make configurable config (config['searchQueryLimit'])
+        filters
     }
 }
 
