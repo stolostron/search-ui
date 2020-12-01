@@ -10,7 +10,7 @@
         "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts --testResultsProcessor jest-sonar-reporter",
         "test:watch": "react-scripts test --watch",
         "lint": "eslint --ext tsx src",
-        "generate": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config src/search-sdk/search-sdk.yml",
+        "generate": "graphql-codegen --config src/search-sdk/search-sdk.yml",
         "update": "rm -rf package-lock.json node_modules && npx npm-check-updates -u && npm install && npm audit fix && npm dedup && npm test && npm run lint && npm run check",
         "docker:build": "docker build -t search .",
         "docker:run": "docker run --rm -p 5000:5000 search"
