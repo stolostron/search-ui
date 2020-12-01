@@ -16,6 +16,7 @@ env:
     global:
         - OS=linux
         - COMPONENT_TAG_EXTENSION="-${TRAVIS_COMMIT}"
+        - BUILD_HARNESS_BRANCH?="main"
 
 before_script:
     - travis_retry timeout 2m make init
