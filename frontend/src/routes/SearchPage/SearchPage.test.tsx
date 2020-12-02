@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import { SearchPage } from './SearchPage'
+import SearchPage from './SearchPage'
 
 test('renders search', () => {
     const { getByText } = render(<SearchPage />)

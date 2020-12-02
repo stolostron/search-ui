@@ -1,80 +1,38 @@
 {
     "name": "@open-cluster-management/search-ui",
     "version": "0.0.1",
-    "private": true,
+    "license": "SEE LICENSE IN LICENSE",
     "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "check": "prettier --check src/**/*.tsx src/**/*.ts",
-        "check:fix": "prettier --write src/**/*.tsx src/**/*.ts",
-        "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!**/*.d.ts --collectCoverageFrom=!**/*.snap --testResultsProcessor jest-sonar-reporter",
-        "test:updateSnapshot": "react-scripts test --all --watchAll=false -u",
-        "test:watch": "react-scripts test --watch",
-        "lint": "eslint --ext tsx src",
-        "generate": "graphql-codegen --config src/search-sdk/search-sdk.yml",
-        "update": "rm -rf package-lock.json node_modules && npx npm-check-updates -u && npm install && npm audit fix && npm dedup && npm test && npm run lint && npm run check",
-        "docker:build": "docker build -t search .",
-        "docker:run": "docker run --rm -p 5000:5000 search"
+        "setup": "./setup.sh",
+        "postinstall": "concurrently npm:*:ci",
+        "frontend:ci": "cd frontend && npm ci",
+        "backend:ci": "cd backend && npm ci",
+        "test": "concurrently npm:*:test",
+        "frontend:test": "cd frontend && npm test",
+        "backend:test": "cd backend && npm test",
+        "lint": "concurrently npm:*:lint",
+        "frontend:lint": "cd frontend && npm run lint",
+        "backend:lint": "cd backend && npm run lint",
+        "check": "concurrently npm:*:check",
+        "check:fix": "concurrently npm:*:check:fix",
+        "frontend:check": "cd frontend && npm run check",
+        "backend:check": "cd backend && npm run check",
+        "start": "concurrently npm:frontend npm:backend -n 'frontend, backend' -c blue,cyan",
+        "backend": "cd backend && npm start",
+        "frontend": "cd frontend && npm start",
+        "build": "concurrently npm:*:build",
+        "backend:build": "cd backend && npm run build",
+        "frontend:build": "cd frontend && npm run build",
+        "update": "npm run backend:update && npm run frontend:update",
+        "backend:update": "cd backend && npm run update",
+        "frontend:update": "cd frontend && npm run update"
     },
     "dependencies": {
-        "@apollo/client": "^3.2.9",
-        "@open-cluster-management/ui-components": "^0.1.80",
-        "@patternfly/react-core": "^4.79.2",
-        "@types/node": "^14.14.10",
-        "@types/react": "^17.0.0",
-        "@types/react-dom": "^17.0.0",
-        "axios": "^0.21.0",
-        "dotenv": "^8.2.0",
-        "graphql": "^15.4.0",
-        "graphql-tag": "^2.11.0",
-        "lodash": "^4.17.20",
-        "react": "^17.0.1",
-        "react-dom": "^17.0.1",
-        "react-scripts": "4.0.1",
+        "@kubernetes/client-node": "^0.13.0",
+        "concurrently": "^5.3.0",
         "typescript": "^4.1.2"
     },
     "devDependencies": {
-        "@graphql-codegen/cli": "^1.19.4",
-        "@graphql-codegen/introspection": "^1.18.1",
-        "@graphql-codegen/typescript": "^1.19.0",
-        "@graphql-codegen/typescript-operations": "^1.17.12",
-        "@graphql-codegen/typescript-react-apollo": "^2.2.1",
-        "@testing-library/jest-dom": "^5.11.6",
-        "@testing-library/react": "^11.2.2",
-        "@testing-library/user-event": "^12.3.0",
-        "@types/jest": "^26.0.15",
-        "@types/lodash": "^4.14.165",
-        "husky": "^4.3.0",
-        "jest-junit": "^12.0.0",
-        "jest-sonar-reporter": "^2.0.0",
-        "prettier": "^2.2.1",
         "serve": "^11.3.2"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "npm run lint && npm run check",
-            "pre-push": "npm run test"
-        }
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "prettier": {
-        "printWidth": 120,
-        "tabWidth": 4,
-        "semi": false,
-        "singleQuote": true
     }
 }

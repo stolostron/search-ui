@@ -23,7 +23,7 @@ before_script:
 jobs:
     include:
         - stage: test lint check
-          name: 'Run tests'
+          name: 'Run tests lint and prettier check'
           if: type != cron
           language: node_js
           node_js: '12'
@@ -66,6 +66,7 @@ jobs:
               - git remote add origin https://${GITHUB_TOKEN}@github.com/@open-cluster-management/search-ui.git > /dev/null 2>&1
               - git checkout main
               - npm ci
+              - npm run update
               - npm run build
               - git config --global user.email "travis@travis-ci.org"
               - git config --global user.name "Travis CI"

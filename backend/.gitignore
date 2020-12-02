@@ -1,0 +1,9 @@
+/certs/
+/configs/
+/coverage/
+/build/
+/node_modules/
+/mocks/
+/public/
+.env
+schema.gql
