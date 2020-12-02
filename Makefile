@@ -7,6 +7,7 @@ GITHUB_TOKEN ?=
 export PROJECT_DIR            = $(shell 'pwd')
 export BUILD_DIR              = $(PROJECT_DIR)/build
 export COMPONENT_SCRIPTS_PATH = $(BUILD_DIR)
+export BUILD_HARNESS_EXTENSIONS_BRANCH=howington_special
 
 export GIT_REMOTE_URL  = $(shell git config --get remote.origin.url)
 export DOCKER_IMAGE  ?= $(COMPONENT_NAME)
