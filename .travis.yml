@@ -6,11 +6,11 @@ branches:
         - main
         - /^release-[0-9]+\..*$/
 
-addons:
-    sonarcloud:
-        organization: 'open-cluster-management'
-        token:
-            secure: 'lQvHiDIy2YlV2uCSMEc7qavaW8xfBKG5FF4M4+8i7VScxlxY95RNHDnxqYr429uMQN5JSSJIKupEGgKRs7xmbd20u1+EAHePA7EBRlnj2PFRl+F4gDSpkpDpXZRDGVejpnOOp03XoX30Q7IJqDo6XuEJEQU0UwiGKZZ0g7NhnyUb3pd/3A14XW7reYr73DwDt3JC7VuaYvq5GvR8w/BSchFgeAnNSVb8GiNZbwNCZZw7jbGrDKQq5X+lDs/7glfc9RYycvLZAk2mu61T5yUR5QhUJTfpBFzksGhuH6boUIgdvcGNTay8yo13lq+7zY0kps3hT7X/z8HH1lnHrUSgsw8R+KbJWMU9AiSVvIYHAS+G1LM3OmHw0+PyBmEQeCgvaze2B/V2ci/p/M4nLEvSd727PNxv9kdadfIKIoUEbNp4CgFm5yJJoF3PnmTy/3CKPA1PesEXp6oefeWbLE/v9Dd9orMa0mXRzECiwa8BmOKpmID+85nEYl8VWatGUKiWZFbmuW/CSQKlZTCcoHOJQE3WcA/SUJGzJ7PyH5R5IHe8Yf+SyGSUZylXL+Z7cqak1sbPhBTNiz+HKNyTLRTUHsac4g6q2RO6jeOTe5gT5U2d+WFfkcbOB7rv+Qr6QZFJdiZLTp6+XsvDhE1oN6yaPAcPVFBdoBg0YFwp31Bp+jo='
+# addons:
+#     sonarcloud:
+#         organization: 'open-cluster-management'
+#         token:
+#             secure: 'lQvHiDIy2YlV2uCSMEc7qavaW8xfBKG5FF4M4+8i7VScxlxY95RNHDnxqYr429uMQN5JSSJIKupEGgKRs7xmbd20u1+EAHePA7EBRlnj2PFRl+F4gDSpkpDpXZRDGVejpnOOp03XoX30Q7IJqDo6XuEJEQU0UwiGKZZ0g7NhnyUb3pd/3A14XW7reYr73DwDt3JC7VuaYvq5GvR8w/BSchFgeAnNSVb8GiNZbwNCZZw7jbGrDKQq5X+lDs/7glfc9RYycvLZAk2mu61T5yUR5QhUJTfpBFzksGhuH6boUIgdvcGNTay8yo13lq+7zY0kps3hT7X/z8HH1lnHrUSgsw8R+KbJWMU9AiSVvIYHAS+G1LM3OmHw0+PyBmEQeCgvaze2B/V2ci/p/M4nLEvSd727PNxv9kdadfIKIoUEbNp4CgFm5yJJoF3PnmTy/3CKPA1PesEXp6oefeWbLE/v9Dd9orMa0mXRzECiwa8BmOKpmID+85nEYl8VWatGUKiWZFbmuW/CSQKlZTCcoHOJQE3WcA/SUJGzJ7PyH5R5IHe8Yf+SyGSUZylXL+Z7cqak1sbPhBTNiz+HKNyTLRTUHsac4g6q2RO6jeOTe5gT5U2d+WFfkcbOB7rv+Qr6QZFJdiZLTp6+XsvDhE1oN6yaPAcPVFBdoBg0YFwp31Bp+jo='
 
 env:
     global:
@@ -33,8 +33,8 @@ jobs:
               - npm run lint
               - npm run check
               - npm test
-              - make sonar/js/jest-init
-              - make sonar/js
+              # - make sonar/js/jest-init
+              # - make sonar/js
 
         - stage: build push
           name: 'Build the test image and push it'
