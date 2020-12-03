@@ -26,10 +26,11 @@ type HeaderAssets = {
 }
 
 export const fetchHeader = async () => {
+    const isLocal: boolean = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     let headerResponse: AxiosResponse
     try {
         headerResponse = await Axios.request({
-            url: '/search/header',
+            url: isLocal ? '/search/header' : '/multicloud/header/api/v1/header',
             method: 'GET',
             responseType: 'json',
             withCredentials: true,

@@ -2,8 +2,8 @@
 
 echo > ./backend/.env
 
-CLUSTER_API_URL=`oc get infrastructure cluster -o jsonpath={.status.apiServerURL}`
-echo CLUSTER_API_URL=$CLUSTER_API_URL >> ./backend/.env
+API_SERVER_URL=`oc get infrastructure cluster -o jsonpath={.status.apiServerURL}`
+echo API_SERVER_URL=$API_SERVER_URL >> ./backend/.env
 
 OAUTH2_CLIENT_ID=multicloudingress
 echo OAUTH2_CLIENT_ID=$OAUTH2_CLIENT_ID >> ./backend/.env

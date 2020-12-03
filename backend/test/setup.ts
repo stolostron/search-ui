@@ -13,7 +13,7 @@ export async function setupBeforeAll(): Promise<void> {
     nock.enableNetConnect('127.0.0.1')
     nock.enableNetConnect('localhost')
 
-    nock(process.env.CLUSTER_API_URL).get('/.well-known/oauth-authorization-server').reply(200, {
+    nock(process.env.API_SERVER_URL).get('/.well-known/oauth-authorization-server').reply(200, {
         authorization_endpoint: 'https://example.com/auth',
         token_endpoint: 'https://example.com/token',
     })

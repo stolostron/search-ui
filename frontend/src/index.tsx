@@ -11,7 +11,6 @@ import { validateSession } from './lib/resource-request'
 config()
 
 // Validate session tokens - redirect to login if unauthorized
-console.log('hererereer')
 validateSession()
 
 ReactDOM.render(

@@ -65,7 +65,8 @@ export async function startServer(): Promise<FastifyInstance> {
         token: string,
         method: string,
         url: string,
-        data?: unknown
+        data?: unknown,
+        headers?: Record<string, string>
     ): Promise<AxiosResponse<T>> {
         let response: AxiosResponse<T>
         // eslint-disable-next-line no-constant-condition
@@ -77,7 +78,10 @@ export async function startServer(): Promise<FastifyInstance> {
                     method: method as Method,
                     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
                     headers: {
-                        Authorization: `Bearer ${token}`,
+                        ...{
+                            Authorization: `Bearer ${token}`,
+                        },
+                        ...headers,
                     },
                     responseType: 'json',
                     validateStatus: () => true,
@@ -124,7 +128,17 @@ export async function startServer(): Promise<FastifyInstance> {
                 url = url.substr(0, url.indexOf('?'))
             }
 
-            const result = await kubeRequest(token, req.method, process.env.CLUSTER_API_URL + url + query, req.body)
+            const result = await kubeRequest(
+                token,
+                req.method,
+                process.env.API_SERVER_URL + url + query,
+                req.body,
+                req.method === 'PATCH'
+                    ? {
+                          'Content-Type': 'application/merge-patch+json',
+                      }
+                    : undefined
+            )
             return res.code(result.status).send(result.data)
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
@@ -135,7 +149,7 @@ export async function startServer(): Promise<FastifyInstance> {
     // CONSOLE-HEADER
     /* istanbul ignore next */
     if (process.env.NODE_ENV === 'development') {
-        const acmUrl = process.env.CLUSTER_API_URL.replace('api', 'multicloud-console.apps').replace(':6443', '')
+        const acmUrl = process.env.API_SERVER_URL.replace('api', 'multicloud-console.apps').replace(':6443', '')
         await fastify.register(fastifyReplyFrom, {
             base: acmUrl,
         })
@@ -196,7 +210,7 @@ export async function startServer(): Promise<FastifyInstance> {
             }
 
             // Try the query at a cluster scope in case the use has permissions
-            const clusteredRequestPromise = kubeRequest(token, req.method, process.env.CLUSTER_API_URL + url + query)
+            const clusteredRequestPromise = kubeRequest(token, req.method, process.env.API_SERVER_URL + url + query)
 
             // Query the projects (namespaces) the user can see in parallel in case the above fails.
             const projectsRequestPromise = kubeRequest<{
@@ -204,7 +218,7 @@ export async function startServer(): Promise<FastifyInstance> {
             }>(
                 token,
                 req.method,
-                process.env.CLUSTER_API_URL + '/apis/project.openshift.io/v1/projects' + namespaceQuery
+                process.env.API_SERVER_URL + '/apis/project.openshift.io/v1/projects' + namespaceQuery
             )
 
             try {
@@ -220,7 +234,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 const plural = parts[parts.length - 1]
                 const path = parts.slice(0, parts.length - 1).join('/')
                 const finalUrl =
-                    process.env.CLUSTER_API_URL + path + '/namespaces/' + project.metadata.name + '/' + plural + query
+                    process.env.API_SERVER_URL + path + '/namespaces/' + project.metadata.name + '/' + plural + query
                 return kubeRequest<{ items: { metadata: { name: string } }[] }>(token, req.method, finalUrl)
             })
 
@@ -300,7 +314,7 @@ export async function startServer(): Promise<FastifyInstance> {
     if (!process.env.GENERATE) {
         // GET .well-known/oauth-authorization-server from the CLUSTER API for oauth
         const response = await Axios.get<{ authorization_endpoint: string; token_endpoint: string }>(
-            `${process.env.CLUSTER_API_URL}/.well-known/oauth-authorization-server`,
+            `${process.env.API_SERVER_URL}/.well-known/oauth-authorization-server`,
             {
                 httpsAgent: new https.Agent({ rejectUnauthorized: false }),
                 headers: { Accept: 'application/json' },
@@ -367,7 +381,7 @@ export async function startServer(): Promise<FastifyInstance> {
             const token = request.cookies['acm-access-token-cookie']
             if (token) {
                 await Axios.delete(
-                    `${process.env.CLUSTER_API_URL}/apis/oauth.openshift.io/v1/oauthaccesstokens/${token}`,
+                    `${process.env.API_SERVER_URL}/apis/oauth.openshift.io/v1/oauthaccesstokens/${token}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                     }
