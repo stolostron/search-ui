@@ -7,7 +7,7 @@ import App from './App'
 import './lib/acm-header'
 import { validateSession } from './lib/resource-request'
 
-// config loads .env file vars for use
+// config loads .env file vars
 config()
 
 // Validate session tokens - redirect to login if unauthorized
