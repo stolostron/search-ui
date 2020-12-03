@@ -7,3 +7,4 @@
 /public/
 .env
 schema.gql
+test-report.xml
