@@ -3,8 +3,8 @@ import { AcmButton, AcmPage, AcmPageHeader, AcmSearchbar } from '@open-cluster-m
 import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState } from 'react'
-import { searchClient } from '../search-sdk/search-client'
-import { useSearchSchemaQuery /*, useSearchCompleteQuery*/ } from '../search-sdk/search-sdk'
+import { searchClient } from '../../search-sdk/search-client'
+import { useSearchSchemaQuery /*, useSearchCompleteQuery*/ } from '../../search-sdk/search-sdk'
 import { /* convertStringToQuery,*/ formatSearchbarSuggestions } from './search-helper'
 
 function RenderSearchbar() {
@@ -14,6 +14,7 @@ function RenderSearchbar() {
     })
     if (error) {
         // TODO handle the error
+        console.log(error)
     }
     const schemaValues = _.get(data, 'searchSchema.allProperties', [])
     return (
@@ -40,7 +41,7 @@ function RenderSearchbar() {
     )
 }
 
-export function SearchPage() {
+export default function SearchPage() {
     return (
         <AcmPage>
             <AcmPageHeader title="Search" />

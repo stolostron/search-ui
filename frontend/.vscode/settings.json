@@ -1,0 +1,5 @@
+{
+    "jest.pathToJest": "./.vscode/jest-test.sh",
+    "typescript.preferences.quoteStyle": "single",
+    "typescript.tsdk": "node_modules/typescript/lib"
+}
