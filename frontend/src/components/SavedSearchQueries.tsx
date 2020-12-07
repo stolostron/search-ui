@@ -6,7 +6,6 @@ import { convertStringToQuery } from '../routes/SearchPage/search-helper'
 import SuggestQueryTemplates from './SuggestedQueryTemplates'
 import { AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
 import { updateBrowserUrl } from '../routes/SearchPage/urlQuery'
-// import SearchQueryCard from './SearchQueryCard'
 
 function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: any, setCurrentQuery: any): any {
     const { data, error, loading } = useSearchResultCountQuery({
@@ -84,7 +83,10 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         description: query.description,
                                         actions: [...suggestedSearchActions],
                                     }}
-                                    onCardClick={() => setCurrentQuery(query.searchText || '')}
+                                    onCardClick={() => {
+                                        setCurrentQuery(query.searchText)
+                                        updateBrowserUrl(query.searchText)
+                                    }}
                                     count={query.count}
                                     countTitle="Results"
                                 />
