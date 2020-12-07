@@ -5,6 +5,7 @@ import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } fro
 import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
+import fastifyHttpProxy from 'fastify-http-proxy'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
 import fastifyReplyFrom from 'fastify-reply-from'
 import fastifyStatic from 'fastify-static'
@@ -146,9 +147,41 @@ export async function startServer(): Promise<FastifyInstance> {
         }
     }
 
+    try {
+        logger.info(`Proxy: ${fastifyHttpProxy}`)
+        await fastify.register(fastifyHttpProxy, {
+            upstream: 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com/searchapi/graphql',
+            prefix: '/searchapi/graphql', // optional
+            http2: false // optional
+        })
+    } catch (e){
+        logger.error({ msg: `Error creating search-api proxy ${e} `})
+    }
+
+
+    // async function searchApiProxy(req: FastifyRequest, res: FastifyReply) {
+    //     logger.info({ msg: 'Proxy to search-api !!!'})
+    //     try {
+    //         const token = req.cookies['acm-access-token-cookie']
+    //         logger.debug({ msg: 'search API proxy token', token })
+
+    //         return res.code(200).send()
+            
+    //     } catch (err) {
+    //         logError('search-api proxy error', err, { method: req.method, url: req.url })
+    //         void res.code(500).send(err)
+    //     }
+    // }
+    // fastify.post('/searchapi/graphql', searchApiProxy)
+    // fastify.post('/searchapi/*', searchApiProxy)
+    // fastify.get('/searchapi/graphql', searchApiProxy)
+    // fastify.get('/searchapi/*', searchApiProxy)
+
+
+
     // CONSOLE-HEADER
     /* istanbul ignore next */
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') { 
         const acmUrl = process.env.API_SERVER_URL.replace('api', 'multicloud-console.apps').replace(':6443', '')
         await fastify.register(fastifyReplyFrom, {
             base: acmUrl,

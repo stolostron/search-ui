@@ -34,5 +34,8 @@ echo REACT_APP_API_SERVER_URL=$REACT_APP_API_SERVER_URL >> ./frontend/.env
 REACT_APP_SERVICEACCT_TOKEN=$(oc whoami -t)
 echo REACT_APP_SERVICEACCT_TOKEN=$REACT_APP_SERVICEACCT_TOKEN >> ./frontend/.env
 
-REACT_APP_SEARCH_API_URL=https://localhost:4010/searchapi
+# Create route to search-api service on the target cluster.
+oc create route passthrough search-api --service=search-search-api --insecure-policy=Redirect -n open-cluster-management
+
+REACT_APP_SEARCH_API_URL=https://localhost:4000/searchapi
 echo REACT_APP_SEARCH_API_URL=$REACT_APP_SEARCH_API_URL >> ./frontend/.env
