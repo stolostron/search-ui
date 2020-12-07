@@ -11,7 +11,7 @@ function App() {
         <Router>
             <Switch>
                 <Route path={'/search'} component={SearchPage} />
-                {/* <Route path={'/search/details'} component={DetailsPage} /> */}
+                {/* <Route path={'/details/:cluster'} component={DetailsPage} /> */}
                 <Route exact path="*">
                     <Redirect to={'/search'} />
                 </Route>
