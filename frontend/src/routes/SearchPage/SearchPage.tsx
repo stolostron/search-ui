@@ -4,16 +4,20 @@ import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
 import { searchClient } from '../../search-sdk/search-client'
+import SavedSearchQueries from '../../components/SavedSearchQueries'
 import { useSearchSchemaQuery, useSearchCompleteQuery } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 
-function RenderSearchBar(props: { currentQuery: string , setCurrentQuery: React.Dispatch<React.SetStateAction<string>> }) {
+function RenderSearchBar(props: {
+    currentQuery: string
+    setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
+}) {
     const { currentQuery, setCurrentQuery } = props
 
     const searchSchemaResults = useSearchSchemaQuery({
-        client: searchClient
-    });
+        client: searchClient,
+    })
     if (searchSchemaResults.error) {
         // TODO better error handling
         console.error('Search schema query error', searchSchemaResults.error)
@@ -27,9 +31,9 @@ function RenderSearchBar(props: { currentQuery: string , setCurrentQuery: React.
         client: searchClient,
         variables: {
             property: searchCompleteValue,
-            query: searchCompleteQuery
+            query: searchCompleteQuery,
         },
-    });
+    })
     // TODO dedupe searchComplete results from exidting filters
     if (searchCompleteResults.error) {
         // TODO better error handling
@@ -42,9 +46,16 @@ function RenderSearchBar(props: { currentQuery: string , setCurrentQuery: React.
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
                         queryString={currentQuery}
-                        suggestions={currentQuery === '' || !currentQuery.endsWith(':')
-                            ? formatSearchbarSuggestions(_.get(searchSchemaResults, 'data.searchSchema.allProperties', []), 'filter')
-                            : formatSearchbarSuggestions(_.get(searchCompleteResults, 'data.searchComplete', []), 'value')
+                        suggestions={
+                            currentQuery === '' || !currentQuery.endsWith(':')
+                                ? formatSearchbarSuggestions(
+                                      _.get(searchSchemaResults, 'data.searchSchema.allProperties', []),
+                                      'filter'
+                                  )
+                                : formatSearchbarSuggestions(
+                                      _.get(searchCompleteResults, 'data.searchComplete', []),
+                                      'value'
+                                  )
                         }
                         currentQueryCallback={(newQuery) => {
                             setCurrentQuery(newQuery)
@@ -66,10 +77,10 @@ function RenderSearchBar(props: { currentQuery: string , setCurrentQuery: React.
 }
 
 export default function SearchPage() {
-    const [currentQuery, setCurrentQuery] = useState('');
+    const [currentQuery, setCurrentQuery] = useState('')
     useEffect(() => {
         setCurrentQuery(currentQuery)
-    }, [currentQuery] )
+    }, [currentQuery])
     const {
         prefillSearchQuery: searchQuery = '',
         // preSelectedRelatedResources = [] // used to show any related resource on search page navigation
@@ -77,8 +88,13 @@ export default function SearchPage() {
 
     return (
         <AcmPage>
-            <AcmPageHeader title='Search' />
-            <RenderSearchBar currentQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
+            <AcmPageHeader title="Search" />
+            <Fragment>
+                <RenderSearchBar currentQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
+                <PageSection>
+                    <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
+                </PageSection>
+            </Fragment>
         </AcmPage>
     )
 }
