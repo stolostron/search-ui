@@ -72,6 +72,9 @@ function RenderSearchBar(props: {
                     </AcmButton>
                 </div>
             </PageSection>
+            <PageSection>
+                <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
+            </PageSection>
         </Fragment>
     )
 }
@@ -91,9 +94,6 @@ export default function SearchPage() {
             <AcmPageHeader title="Search" />
             <Fragment>
                 <RenderSearchBar currentQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
-                <PageSection>
-                    <SavedSearchQueries />
-                </PageSection>
             </Fragment>
         </AcmPage>
     )
