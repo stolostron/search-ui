@@ -152,10 +152,10 @@ export async function startServer(): Promise<FastifyInstance> {
         await fastify.register(fastifyHttpProxy, {
             upstream: 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com/searchapi/graphql',
             prefix: '/searchapi/graphql', // optional
-            http2: false // optional
+            http2: false, // optional
         })
-    } catch (e){
-        logger.error({ msg: `Error creating search-api proxy ${e} `})
+    } catch (e) {
+        logger.error({ msg: `Error creating search-api proxy ${e} ` })
     }
 
 
@@ -165,8 +165,7 @@ export async function startServer(): Promise<FastifyInstance> {
     //         const token = req.cookies['acm-access-token-cookie']
     //         logger.debug({ msg: 'search API proxy token', token })
 
-    //         return res.code(200).send()
-            
+    //         return res.code(200).send()            
     //     } catch (err) {
     //         logError('search-api proxy error', err, { method: req.method, url: req.url })
     //         void res.code(500).send(err)
@@ -176,8 +175,6 @@ export async function startServer(): Promise<FastifyInstance> {
     // fastify.post('/searchapi/*', searchApiProxy)
     // fastify.get('/searchapi/graphql', searchApiProxy)
     // fastify.get('/searchapi/*', searchApiProxy)
-
-
 
     // CONSOLE-HEADER
     /* istanbul ignore next */
