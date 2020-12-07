@@ -21,10 +21,6 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
     ]
     const suggestedSearchActions = [{ text: 'Share', handleAction: () => console.log('share action') }]
 
-    function handleCardClick() {
-        console.log('card clicked')
-    }
-
     if (loading) {
         return (
             <AcmExpandableWrapper withCount={false} expandable={false}>
@@ -60,9 +56,6 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         title: query.name,
                                         description: query.description,
                                         actions: [...savedSearchActions],
-                                        onActionClick: (e) => {
-                                            console.log('clicked')
-                                        },
                                     }}
                                     onCardClick={() => {
                                         setCurrentQuery(query.searchText)
@@ -90,9 +83,6 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         title: query.name,
                                         description: query.description,
                                         actions: [...suggestedSearchActions],
-                                        onActionClick: (e) => {
-                                            console.log(e.target)
-                                        },
                                     }}
                                     onCardClick={() => setCurrentQuery(query.searchText || '')}
                                     count={query.count}
