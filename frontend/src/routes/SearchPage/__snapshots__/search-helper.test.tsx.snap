@@ -23,6 +23,13 @@ Object {
 exports[`Correctly returns formatSearchbarSuggestions 1`] = `
 Array [
   Object {
+    "disabled": true,
+    "id": "id-suggestions-label",
+    "key": "key-suggestions-label",
+    "kind": "filter",
+    "name": "Filters",
+  },
+  Object {
     "id": "id-kind",
     "key": "key-kind",
     "kind": "filter",
@@ -42,3 +49,35 @@ Array [
   },
 ]
 `;
+
+exports[`Correctly returns formatSearchbarSuggestions 2`] = `
+Array [
+  Object {
+    "disabled": true,
+    "id": "id-suggestions-label",
+    "key": "key-suggestions-label",
+    "kind": "value",
+    "name": "Filter values",
+  },
+  Object {
+    "id": "id-name1",
+    "key": "key-name1",
+    "kind": "value",
+    "name": "name1",
+  },
+  Object {
+    "id": "id-name2",
+    "key": "key-name2",
+    "kind": "value",
+    "name": "name2",
+  },
+  Object {
+    "id": "id-name3",
+    "key": "key-name3",
+    "kind": "value",
+    "name": "name3",
+  },
+]
+`;
+
+exports[`Correctly returns getSearchCompleteString 1`] = `"kind"`;

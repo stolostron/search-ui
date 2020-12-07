@@ -1,5 +1,15 @@
 export function formatSearchbarSuggestions(data: string[], suggestionKind: 'label' | 'filter' | 'value') {
-    return data.map((field) => {
+    const labelTag = {
+        id: 'id-suggestions-label',
+        key: 'key-suggestions-label',
+        name: suggestionKind === 'filter' ? 'Filters' : 'Filter values',
+        kind: suggestionKind,
+        disabled: true
+    }
+    if (suggestionKind === 'value') {
+        // TODO - Remove any duplicate values
+    }
+    const suggestions = data.map((field) => {
         return {
             id: `id-${field}`,
             key: `key-${field}`,
@@ -7,6 +17,8 @@ export function formatSearchbarSuggestions(data: string[], suggestionKind: 'labe
             kind: suggestionKind,
         }
     })
+    suggestions.unshift(labelTag)
+    return suggestions
 }
 
 export const convertStringToQuery = (searchText: string) => {
@@ -25,4 +37,12 @@ export const convertStringToQuery = (searchText: string) => {
         keywords,
         filters,
     }
+}
+
+export const getSearchCompleteString = (searchQuery: string) => {
+    const queryTags = searchQuery.split(' ')
+    if (queryTags[queryTags.length - 1].endsWith(':')) {
+        return queryTags[queryTags.length - 1].replace(':', '')
+    }
+    return ''
 }
