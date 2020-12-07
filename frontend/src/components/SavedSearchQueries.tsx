@@ -33,7 +33,12 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         return (
             <Fragment>
                 {queriesResult.length > 0 && (
-                    <AcmExpandableWrapper headerLabel={'Saved searches'} withCount={true} expandable={true}>
+                    <AcmExpandableWrapper
+                        maxHeight={'16rem'}
+                        headerLabel={'Saved searches'}
+                        withCount={true}
+                        expandable={true}
+                    >
                         {queriesResult.map((query) => {
                             return <SearchQueryCard key={query.id} {...query} />
                         })}

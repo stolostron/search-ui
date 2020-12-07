@@ -49,6 +49,7 @@ export default function SearchQueryCard(props: any) {
     if (loading) {
         return <AcmCountCard loading />
     }
+    console.log(savedSearchCardActions)
     return (
         <AcmCountCard
             key={id}
@@ -56,7 +57,7 @@ export default function SearchQueryCard(props: any) {
                 hasIcon: hasIcon,
                 title: name,
                 description: description,
-                actions: { ...savedSearchCardActions },
+                actions: [...savedSearchCardActions],
                 onActionClick: (e) => {
                     console.log(e.target)
                 },

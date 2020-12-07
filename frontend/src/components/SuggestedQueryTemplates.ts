@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
     templates: [
