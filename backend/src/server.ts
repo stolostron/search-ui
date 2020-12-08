@@ -17,8 +17,8 @@ import * as querystring from 'querystring'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment @typescript-eslint/no-var-requires
-const fastifyHttpProxy = require('fastify-http-proxy') // import doesn't work for this.
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
+const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
 declare module 'fastify-reply-from' {
     export interface From {
