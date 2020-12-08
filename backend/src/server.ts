@@ -17,6 +17,7 @@ import * as querystring from 'querystring'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
+const fastifyHttpProxy = require('fastify-http-proxy') // import doesn't work for this.
 
 declare module 'fastify-reply-from' {
     export interface From {
@@ -146,9 +147,9 @@ export async function startServer(): Promise<FastifyInstance> {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    await fastify.register(require('fastify-http-proxy'), {
-        upstream: 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com',
+    // Proxy to SEARCH-API
+    await fastify.register(fastifyHttpProxy, {
+        upstream: process.env.SEARCH_API_URL,
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,

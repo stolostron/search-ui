@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+
+######################
+# configure Backend
+######################
 echo > ./backend/.env
 
 API_SERVER_URL=`oc get infrastructure cluster -o jsonpath={.status.apiServerURL}`
@@ -26,6 +30,15 @@ echo FRONTEND_URL=$FRONTEND_URL >> ./backend/.env
 REDIRECT_URIS=$(oc get OAuthClient $OAUTH2_CLIENT_ID -o json | jq -c "[.redirectURIs[], \"$OAUTH2_REDIRECT_URL\"] | unique")
 oc patch OAuthClient multicloudingress --type json -p "[{\"op\": \"add\", \"path\": \"/redirectURIs\", \"value\": ${REDIRECT_URIS}}]"
 
+# Create route to the search-api service on the target cluster.
+oc create route passthrough search-api --service=search-search-api --insecure-policy=Redirect -n open-cluster-management
+SEARCH_API_URL=https://$(oc get route search-api -n open-cluster-management |grep search-api | awk '{print $2}')
+echo SEARCH_API_URL=$SEARCH_API_URL >> ./backend/.env
+
+######################
+# Configure Frontend
+######################
+
 echo > ./frontend/.env
 
 REACT_APP_API_SERVER_URL=`oc get infrastructure cluster -o jsonpath={.status.apiServerURL}`
@@ -34,8 +47,5 @@ echo REACT_APP_API_SERVER_URL=$REACT_APP_API_SERVER_URL >> ./frontend/.env
 REACT_APP_SERVICEACCT_TOKEN=$(oc whoami -t)
 echo REACT_APP_SERVICEACCT_TOKEN=$REACT_APP_SERVICEACCT_TOKEN >> ./frontend/.env
 
-# Create route to search-api service on the target cluster.
-oc create route passthrough search-api --service=search-search-api --insecure-policy=Redirect -n open-cluster-management
-
-REACT_APP_SEARCH_API_URL=https://localhost:4000/searchapi
+REACT_APP_SEARCH_API_URL=$FRONTEND_URL/searchapi
 echo REACT_APP_SEARCH_API_URL=$REACT_APP_SEARCH_API_URL >> ./frontend/.env

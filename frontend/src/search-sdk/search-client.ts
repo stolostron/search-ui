@@ -2,8 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 export const searchClient = new ApolloClient({
     connectToDevTools: process.env.NODE_ENV === 'development',
-    //uri: `${process.env.REACT_APP_SEARCH_API_URL}/graphql`,
-    uri: 'http://localhost:3000/searchapi/graphql',
+    uri: `${process.env.REACT_APP_SEARCH_API_URL}/graphql`,
     cache: new InMemoryCache(),
     credentials: 'same-origin',
     defaultOptions: {
