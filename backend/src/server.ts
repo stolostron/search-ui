@@ -148,7 +148,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     try {
-        logger.info(`Proxy: ${fastifyHttpProxy}`)
+        logger.info('Proxy:', fastifyHttpProxy)
         await fastify.register(fastifyHttpProxy, {
             upstream:
                 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com/searchapi/graphql',
@@ -156,7 +156,7 @@ export async function startServer(): Promise<FastifyInstance> {
             http2: false, // optional
         })
     } catch (e) {
-        logger.error({ msg: `Error creating search-api proxy ${e} ` })
+        logger.error('Error creating search-api proxy', e)
     }
 
     // async function searchApiProxy(req: FastifyRequest, res: FastifyReply) {
