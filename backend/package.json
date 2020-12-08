@@ -26,6 +26,7 @@
         "fastify-cors": "^5.0.0",
         "fastify-etag": "^1.0.0",
         "fastify-helmet": "^5.0.3",
+        "fastify-http-proxy": "^4.0.4",
         "fastify-https-redirect": "^1.0.3",
         "fastify-oauth2": "^4.2.1",
         "fastify-reply-from": "^3.5.0",
