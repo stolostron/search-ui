@@ -150,7 +150,8 @@ export async function startServer(): Promise<FastifyInstance> {
     try {
         logger.info(`Proxy: ${fastifyHttpProxy}`)
         await fastify.register(fastifyHttpProxy, {
-            upstream: 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com/searchapi/graphql',
+            upstream:
+                'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com/searchapi/graphql',
             prefix: '/searchapi/graphql', // optional
             http2: false, // optional
         })
@@ -158,14 +159,12 @@ export async function startServer(): Promise<FastifyInstance> {
         logger.error({ msg: `Error creating search-api proxy ${e} ` })
     }
 
-
     // async function searchApiProxy(req: FastifyRequest, res: FastifyReply) {
     //     logger.info({ msg: 'Proxy to search-api !!!'})
     //     try {
     //         const token = req.cookies['acm-access-token-cookie']
     //         logger.debug({ msg: 'search API proxy token', token })
-
-    //         return res.code(200).send()            
+    //         return res.code(200).send()
     //     } catch (err) {
     //         logError('search-api proxy error', err, { method: req.method, url: req.url })
     //         void res.code(500).send(err)
@@ -178,7 +177,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
     // CONSOLE-HEADER
     /* istanbul ignore next */
-    if (process.env.NODE_ENV === 'development') { 
+    if (process.env.NODE_ENV === 'development') {
         const acmUrl = process.env.API_SERVER_URL.replace('api', 'multicloud-console.apps').replace(':6443', '')
         await fastify.register(fastifyReplyFrom, {
             base: acmUrl,
