@@ -149,7 +149,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     // Proxy to SEARCH-API
-    fastify.register(fastifyHttpProxy, {
+    await fastify.register(fastifyHttpProxy, {
         upstream: process.env.SEARCH_API_URL || 'https://search-search-api:4010',
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
