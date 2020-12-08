@@ -5,7 +5,6 @@ import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } fro
 import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
-import fastifyHttpProxy from 'fastify-http-proxy'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
 import fastifyReplyFrom from 'fastify-reply-from'
 import fastifyStatic from 'fastify-static'
@@ -148,17 +147,17 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     try {
-        logger.info('Proxy:', fastifyHttpProxy)
         await fastify.register(require('fastify-http-proxy'), {
             upstream:
                 'https://search-api-open-cluster-management.apps.jorge-dev.dev07.red-chesterfield.com',
             prefix: '/searchapi/graphql', // optional
+            rewritePrefix: '/searchapi/graphql',
             http2: false, // optional
-            // rewriteRequestHeaders: (originalReq: FastifyRequest, headers) => {
+            // rewriteRequestHeaders: (originalReq: FastifyRequest, headers: any) => {
             //     logger.info('setting proxy headers')
             //     logger.info('>>>  headers', headers)
             //     return originalReq.headers
-            // }
+            // },
         })
     } catch (e) {
         logger.error('Error creating search-api proxy', e)
