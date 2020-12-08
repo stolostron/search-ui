@@ -152,28 +152,8 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
-        // rewriteRequestHeaders: (originalReq: FastifyRequest, headers: any) => {
-        //     logger.info('setting proxy headers')
-        //     logger.info('>>>  headers', headers)
-        //     return originalReq.headers
-        // },
     })
 
-    // async function searchApiProxy(req: FastifyRequest, res: FastifyReply) {
-    //     logger.info({ msg: 'Proxy to search-api !!!'})
-    //     try {
-    //         const token = req.cookies['acm-access-token-cookie']
-    //         logger.debug({ msg: 'search API proxy token', token })
-    //         return res.code(200).send()
-    //     } catch (err) {
-    //         logError('search-api proxy error', err, { method: req.method, url: req.url })
-    //         void res.code(500).send(err)
-    //     }
-    // }
-    // fastify.post('/searchapi/graphql', searchApiProxy)
-    // fastify.post('/searchapi/*', searchApiProxy)
-    // fastify.get('/searchapi/graphql', searchApiProxy)
-    // fastify.get('/searchapi/*', searchApiProxy)
 
     // CONSOLE-HEADER
     /* istanbul ignore next */
