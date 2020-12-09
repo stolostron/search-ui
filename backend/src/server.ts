@@ -413,6 +413,8 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyStatic, {
         root: join(__dirname, 'public'),
         prefix: '/search/', // optional: default '/'
+        immutable: process.env.NODE_ENV === 'production',
+        maxAge: 60*60*1000,
     })
 
     fastify.addHook('onClose', (instance, done: () => void) => {
