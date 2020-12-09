@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
 import { searchClient } from '../../../search-sdk/search-client'
 import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../../../search-sdk/search-sdk'
@@ -20,10 +20,6 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
     const [saveSearch, setSaveSearch] = useState(undefined)
     const [shareSearch, setShareSearch] = useState(undefined)
     const [deleteSearch, setDeleteSearch] = useState(undefined)
-
-    useEffect(() => {
-        setSaveSearch(saveSearch)
-    }, [saveSearch])
 
     if (loading) {
         return (

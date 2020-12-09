@@ -2,7 +2,7 @@ import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useReducer, useEffect } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import { AcmModal, AcmButton, AcmForm, AcmTextInput, AcmTextArea } from '@open-cluster-management/ui-components'
-import { useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
+import { SavedSearchesDocument, useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
 
 type IState = {
@@ -26,6 +26,7 @@ export const SaveAndEditSearchModal = (props: any) => {
     const { searchName, searchDesc } = state
 
     const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
+    // TODO ERROR NOTIFICATION HANDLING
     if (error) {
         console.log('error', error)
     }
@@ -49,7 +50,7 @@ export const SaveAndEditSearchModal = (props: any) => {
         console.log('props in savesearch', props)
         let id = props.saveSearch.description ? props.saveSearch.id : Date.now().toString()
         // TODO handle when fresh save search
-        let searchText = props.saveSearch.description ? props.saveSearch.searchText : ''
+        let searchText = props.saveSearch.description ? props.saveSearch.searchText : '' // <=== handle fresh save search //
         saveSearchMutation({
             variables: {
                 resource: {
@@ -59,9 +60,8 @@ export const SaveAndEditSearchModal = (props: any) => {
                     searchText: searchText,
                 },
             },
+            refetchQueries: [{ query: SavedSearchesDocument }],
         })
-        // TODO FIX THIS TO ONLY RE-RENDER CARDS
-        window.location.reload()
         props.onClose()
         return null
     }

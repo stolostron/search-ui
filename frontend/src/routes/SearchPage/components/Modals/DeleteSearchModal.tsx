@@ -2,11 +2,12 @@ import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import { AcmModal, AcmButton } from '@open-cluster-management/ui-components'
-import { useDeleteSearchMutation } from '../../search-sdk/search-sdk'
-import { searchClient } from '../../search-sdk/search-client'
+import { SavedSearchesDocument, useDeleteSearchMutation } from '../../../../search-sdk/search-sdk'
+import { searchClient } from '../../../../search-sdk/search-client'
 
 export const DeleteSearchModal = (props: any) => {
     const [deleteSearchMutation, { error }] = useDeleteSearchMutation({ client: searchClient })
+    // TODO ERROR NOTIFICATION HANDLING
     if (error) {
         console.log('error', error)
     }
@@ -18,9 +19,8 @@ export const DeleteSearchModal = (props: any) => {
                     name: props.deleteSearch.name,
                 },
             },
+            refetchQueries: [{ query: SavedSearchesDocument }],
         })
-        // TODO FIX THIS TO ONLY RE-RENDER CARDS
-        window.location.reload()
         props.onClose()
         return null
     }
