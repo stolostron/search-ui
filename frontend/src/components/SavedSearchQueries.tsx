@@ -1,17 +1,14 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
 import { searchClient } from '../search-sdk/search-client'
-import {
-    useSavedSearchesQuery,
-    useSearchResultCountQuery,
-    UserSearch,
-    SavedSearchesDocument,
-} from '../search-sdk/search-sdk'
+import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../search-sdk/search-sdk'
 import { convertStringToQuery } from '../routes/SearchPage/search-helper'
 import SuggestQueryTemplates from './SuggestedQueryTemplates'
 import { AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
 import { updateBrowserUrl } from '../routes/SearchPage/urlQuery'
-import { SaveSearchModal, ShareSearchModal, DeleteSearchModal } from './Modals'
+import { SaveAndEditSearchModal } from './Modals/SaveAndEditSearchModal'
+import { DeleteSearchModal } from './Modals/DeleteSearchModal'
+import { ShareSearchModal } from './Modals/ShareSearchModal'
 
 function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: any, setCurrentQuery: any): any {
     const { data, error, loading } = useSearchResultCountQuery({
@@ -22,6 +19,10 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
     const [saveSearch, setSaveSearch] = useState(undefined)
     const [shareSearch, setShareSearch] = useState(undefined)
     const [deleteSearch, setDeleteSearch] = useState(undefined)
+
+    useEffect(() => {
+        setSaveSearch(saveSearch)
+    }, [saveSearch])
 
     if (loading) {
         return (
@@ -42,9 +43,10 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         })
         return (
             <Fragment>
-                <SaveSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
+                <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
+
                 {savedQueriesResult.length > 0 && (
                     <AcmExpandableWrapper
                         maxHeight={'16rem'}
