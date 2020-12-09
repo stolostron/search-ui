@@ -1,14 +1,15 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
-import { searchClient } from '../search-sdk/search-client'
-import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../search-sdk/search-sdk'
-import { convertStringToQuery } from '../routes/SearchPage/search-helper'
+import { searchClient } from '../../../search-sdk/search-client'
+import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../../../search-sdk/search-sdk'
+import { convertStringToQuery } from '../search-helper'
 import SuggestQueryTemplates from './SuggestedQueryTemplates'
 import { AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
-import { updateBrowserUrl } from '../routes/SearchPage/urlQuery'
+import { updateBrowserUrl } from '../urlQuery'
 import { SaveAndEditSearchModal } from './Modals/SaveAndEditSearchModal'
 import { DeleteSearchModal } from './Modals/DeleteSearchModal'
 import { ShareSearchModal } from './Modals/ShareSearchModal'
+import { PageSection } from '@patternfly/react-core'
 
 function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: any, setCurrentQuery: any): any {
     const { data, error, loading } = useSearchResultCountQuery({
@@ -26,11 +27,13 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
 
     if (loading) {
         return (
-            <AcmExpandableWrapper withCount={false} expandable={false}>
-                <AcmCountCard loading />
-                <AcmCountCard loading />
-                <AcmCountCard loading />
-            </AcmExpandableWrapper>
+            <PageSection>
+                <AcmExpandableWrapper withCount={false} expandable={false}>
+                    <AcmCountCard loading />
+                    <AcmCountCard loading />
+                    <AcmCountCard loading />
+                </AcmExpandableWrapper>
+            </PageSection>
         )
     } else if (error || !data || !data.searchResult) {
         return null
@@ -42,7 +45,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
             return { ...query, ...suggestedQueryTemplates[index] }
         })
         return (
-            <Fragment>
+            <PageSection>
                 <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
@@ -106,7 +109,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                         })}
                     </AcmExpandableWrapper>
                 )}
-            </Fragment>
+            </PageSection>
         )
     }
 }

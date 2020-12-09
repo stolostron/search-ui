@@ -17,6 +17,8 @@ import * as querystring from 'querystring'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
+const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
 declare module 'fastify-reply-from' {
     export interface From {
@@ -145,6 +147,14 @@ export async function startServer(): Promise<FastifyInstance> {
             void res.code(500).send(err)
         }
     }
+
+    // Proxy to SEARCH-API
+    await fastify.register(fastifyHttpProxy, {
+        upstream: process.env.SEARCH_API_URL || 'https://search-search-api:4010',
+        prefix: '/searchapi/graphql',
+        rewritePrefix: '/searchapi/graphql',
+        http2: false,
+    })
 
     // CONSOLE-HEADER
     /* istanbul ignore next */

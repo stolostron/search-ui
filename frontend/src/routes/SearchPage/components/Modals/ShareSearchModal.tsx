@@ -1,5 +1,5 @@
 import '@patternfly/react-core/dist/styles/base.css'
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment } from 'react'
 import { ModalVariant } from '@patternfly/react-core'
 import { AcmCodeSnippet, AcmModal } from '@open-cluster-management/ui-components'
 

@@ -4,37 +4,39 @@ import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
 import { searchClient } from '../../search-sdk/search-client'
-import SavedSearchQueries from '../../components/SavedSearchQueries'
+import SavedSearchQueries from './components/SavedSearchQueries'
+import SearchResults from './components/SearchResults'
 import { useSearchSchemaQuery, useSearchCompleteQuery } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 
 function RenderSearchBar(props: {
-    currentQuery: string
+    searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
 }) {
-    const { currentQuery, setCurrentQuery } = props
+    const { searchQuery, setCurrentQuery } = props
 
     const searchSchemaResults = useSearchSchemaQuery({
+        skip: searchQuery.endsWith(':'),
         client: searchClient,
     })
     if (searchSchemaResults.error) {
         // TODO better error handling
         console.error('Search schema query error', searchSchemaResults.error)
     }
-    const searchCompleteValue = getSearchCompleteString(currentQuery)
-    const searchCompleteQuery = convertStringToQuery(currentQuery)
+    const searchCompleteValue = getSearchCompleteString(searchQuery)
+    const searchCompleteQuery = convertStringToQuery(searchQuery)
     searchCompleteQuery.filters = searchCompleteQuery.filters.filter((filter) => {
         return filter.property !== searchCompleteValue
     })
     const searchCompleteResults = useSearchCompleteQuery({
+        skip: !searchQuery.endsWith(':'),
         client: searchClient,
         variables: {
             property: searchCompleteValue,
             query: searchCompleteQuery,
         },
     })
-    // TODO dedupe searchComplete results from exidting filters
     if (searchCompleteResults.error) {
         // TODO better error handling
         console.error('Search complete query error', searchCompleteResults.error)
@@ -45,16 +47,18 @@ function RenderSearchBar(props: {
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
-                        queryString={currentQuery}
+                        queryString={searchQuery}
                         suggestions={
-                            currentQuery === '' || !currentQuery.endsWith(':')
+                            searchQuery === '' || !searchQuery.endsWith(':')
                                 ? formatSearchbarSuggestions(
                                       _.get(searchSchemaResults, 'data.searchSchema.allProperties', []),
-                                      'filter'
+                                      'filter',
+                                      '' // Dont need to de-dupe filters
                                   )
                                 : formatSearchbarSuggestions(
                                       _.get(searchCompleteResults, 'data.searchComplete', []),
-                                      'value'
+                                      'value',
+                                      searchQuery // pass current search query in order to de-dupe already selected values
                                   )
                         }
                         currentQueryCallback={(newQuery) => {
@@ -77,24 +81,28 @@ function RenderSearchBar(props: {
 }
 
 export default function SearchPage() {
-    const [currentQuery, setCurrentQuery] = useState('')
+    // Only using setCurrentQuery to trigger a re-render
+    // useEffect using window.location to trigger re-render doesn't work cause react hooks can't use window
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const {
+        prefillSearchQuery: searchQuery = '',
+        preSelectedRelatedResources = [] // used to show any related resource on search page navigation
+    } = transformBrowserUrlToSearchString(window.location.search || '')
+    const [currentQuery, setCurrentQuery] = useState(searchQuery)
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
-    const {
-        prefillSearchQuery: searchQuery = '',
-        // preSelectedRelatedResources = [] // used to show any related resource on search page navigation
-    } = transformBrowserUrlToSearchString(window.location.search || '')
 
+    const query = convertStringToQuery(searchQuery)
     return (
         <AcmPage>
             <AcmPageHeader title="Search" />
-            <Fragment>
-                <RenderSearchBar currentQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
-                <PageSection>
-                    <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
-                </PageSection>
-            </Fragment>
+            {/* </AcmPageHeader> Include children above for dropdown and launch link OR use SecondaryNav? */}
+            <RenderSearchBar searchQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
+            {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0)
+                ? <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
+                : <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
+            }
         </AcmPage>
     )
 }

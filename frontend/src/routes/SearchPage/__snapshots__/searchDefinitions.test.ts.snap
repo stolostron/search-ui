@@ -1,0 +1,98 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Correctly returns createDashboardLink 1`] = `
+<a
+  href="http://dashboard"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  Launch health view
+</a>
+`;
+
+exports[`Correctly returns createDetailsLink - ACM-Application 1`] = `
+<a
+  href="/multicloud/applications/testApplicationNamespace/testApplicationName"
+>
+  testApplicationName
+</a>
+`;
+
+exports[`Correctly returns createDetailsLink - Cluster 1`] = `
+<a
+  href="/cluster-management/cluster-management/clusters/testClusterNamespace/testClusterName"
+>
+  testClusterName
+</a>
+`;
+
+exports[`Correctly returns createDetailsLink - Default 1`] = `
+<Link
+  to={
+    Object {
+      "pathname": "search/details/testCluster/self/link",
+    }
+  }
+>
+  testPodName
+</Link>
+`;
+
+exports[`Correctly returns createDetailsLink - HUB-Policy 1`] = `
+<a
+  href="/multicloud/policies/all/testPolicyName"
+>
+  testPolicyName
+</a>
+`;
+
+exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
+<a
+  href="search/details/testCluster/self/link"
+>
+  testPolicyName
+</a>
+`;
+
+exports[`Correctly returns createDetailsLink - NON-Application 1`] = `
+<a
+  href="search/details/testCluster/self/link"
+>
+  testApplicationName
+</a>
+`;
+
+exports[`Correctly returns createExternalLink from clusterip 1`] = `"http://clusterip"`;
+
+exports[`Correctly returns createExternalLink from consoleURL 1`] = `
+<a
+  href="http://consoleurl"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  Launch
+</a>
+`;
+
+exports[`Correctly returns empty createDashboardLink 1`] = `"-"`;
+
+exports[`Correctly returns empty createExternalLink 1`] = `"-"`;
+
+exports[`Correctly returns empty labels 1`] = `"-"`;
+
+exports[`Correctly returns formatSearchbarSuggestions no timestamp 1`] = `"-"`;
+
+exports[`Correctly returns formatSearchbarSuggestions with T in timestamp 1`] = `"3 days ago"`;
+
+exports[`Correctly returns formatSearchbarSuggestions without T in timestamp 1`] = `"3 days ago"`;
+
+exports[`Correctly returns label components 1`] = `
+<AcmLabels
+  labels={
+    Array [
+      "testlabel=label1",
+      "testlabel=label2",
+    ]
+  }
+/>
+`;
