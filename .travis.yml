@@ -22,8 +22,8 @@ before_script:
 
 jobs:
     include:
-        - stage: test lint check
-          name: 'Run tests lint and prettier check'
+        - stage: Build and test
+          name: 'Run tests, lint, and prettier check'
           if: type != cron
           language: node_js
           node_js: '12'
@@ -35,9 +35,7 @@ jobs:
               - npm test
               # - make sonar/js/jest-init
               # - make sonar/js
-
-        - stage: build push
-          name: 'Build the test image and push it'
+        - name: 'Build docker image and push it to quay'
           if: type != cron
           script:
               - set -e
