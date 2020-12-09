@@ -5,21 +5,34 @@ import { AcmModal, AcmButton, AcmForm, AcmTextInput, AcmTextArea } from '@open-c
 import { useSaveSearchMutation } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 
+type IState = {
+    searchName: string
+    searchDesc: string
+}
+
+type ActionType = {
+    field: string
+    value: string
+}
+
+const initState = {
+    searchName: '',
+    searchDesc: '',
+}
+
 export const SaveAndEditSearchModal = (props: any) => {
-    interface IState {
-        searchName: string
-        searchDesc: string
-    }
+    const [state, dispatch] = useReducer(reducer, initState)
 
-    type ActionType = {
-        field: string
-        value: string
-    }
+    const { searchName, searchDesc } = state
 
-    const initState = {
-        searchName: '',
-        searchDesc: '',
+    const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
+    if (error) {
+        console.log('error', error)
     }
+    useEffect(() => {
+        dispatch({ field: 'searchName', value: props.saveSearch?.name ?? '' })
+        dispatch({ field: 'searchDesc', value: props.saveSearch?.description ?? '' })
+    }, [props.saveSearch])
 
     function reducer(state: IState, { field, value }: ActionType) {
         return {
@@ -27,37 +40,28 @@ export const SaveAndEditSearchModal = (props: any) => {
             [field]: value,
         }
     }
-    const [state, dispatch] = useReducer(reducer, initState)
-    const { searchName, searchDesc } = state
 
-    const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
-    if (error) {
-        console.log('error', error)
-    }
-
-    const onChange = (value: string, e: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
+    function onChange(value: string, e: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
         dispatch({ field: e.currentTarget.name, value: value })
     }
 
-    useEffect(() => {
-        dispatch({ field: 'searchName', value: props.saveSearch?.name ?? '' })
-        dispatch({ field: 'searchDesc', value: props.saveSearch?.description ?? '' })
-    }, [props.saveSearch])
-
     function SaveSearch() {
+        console.log('props in savesearch', props)
         let id = props.saveSearch.description ? props.saveSearch.id : Date.now().toString()
-        // let searchText = props.saveSearch.description
+        // TODO handle when fresh save search
+        let searchText = props.saveSearch.description ? props.saveSearch.searchText : ''
         saveSearchMutation({
             variables: {
                 resource: {
                     id: id,
                     name: searchName,
                     description: searchDesc,
-                    searchText: props.saveSearch.searchText,
+                    searchText: searchText,
                 },
             },
         })
-
+        // TODO FIX THIS TO ONLY RE-RENDER CARDS
+        window.location.reload()
         props.onClose()
         return null
     }
