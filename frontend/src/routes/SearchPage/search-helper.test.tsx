@@ -2,13 +2,13 @@ import { formatSearchbarSuggestions, convertStringToQuery, getSearchCompleteStri
 
 test('Correctly returns formatSearchbarSuggestions', () => {
     const testData = ['kind', 'cluster', 'deployment']
-    const result = formatSearchbarSuggestions(testData, 'filter')
+    const result = formatSearchbarSuggestions(testData, 'filter', '')
     expect(result).toMatchSnapshot()
 })
 
 test('Correctly returns formatSearchbarSuggestions', () => {
     const testData = ['name1', 'name2', 'name3']
-    const result = formatSearchbarSuggestions(testData, 'value')
+    const result = formatSearchbarSuggestions(testData, 'value', 'name:name1 name:')
     expect(result).toMatchSnapshot()
 })
 

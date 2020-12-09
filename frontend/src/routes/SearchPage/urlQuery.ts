@@ -16,7 +16,7 @@ export function transformBrowserUrlToSearchString(urlQuery: string) {
     // Example browser url string
     // .../search?filters={"textsearch":"kind%3Adeployment%20name%3Asearch-prod-df8fa-search-api"}&showrelated=pod
     const prefillSearchQuery = ''
-    const preSelectedRelatedResources = ''
+    const preSelectedRelatedResources: string[] = []
     if (urlQuery !== '') {
         const paramString = queryString.parse(urlQuery)
 

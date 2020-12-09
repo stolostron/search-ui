@@ -1,4 +1,5 @@
-export function formatSearchbarSuggestions(data: string[], suggestionKind: 'label' | 'filter' | 'value') {
+export function formatSearchbarSuggestions(data: string[], suggestionKind: 'label' | 'filter' | 'value', searchQuery: string) {
+    let valuesToRemoveFromSuggestions: string[] = []
     const labelTag = {
         id: 'id-suggestions-label',
         key: 'key-suggestions-label',
@@ -7,9 +8,20 @@ export function formatSearchbarSuggestions(data: string[], suggestionKind: 'labe
         disabled: true
     }
     if (suggestionKind === 'value') {
-        // TODO - Remove any duplicate values
+        // Get a list of duplicate values to remove from suggestions dropdown
+        const searchTokens = searchQuery.split(' ')
+        const searchCompleteFilter = searchTokens[searchTokens.length - 1].replace(':', '')
+
+        const query = convertStringToQuery(searchQuery)
+        query.filters.forEach(filter => {
+            if (filter.property === searchCompleteFilter) {
+                valuesToRemoveFromSuggestions = filter.values.filter(value => data.indexOf(value) > 0)
+            }
+        })
     }
-    const suggestions = data.map((field) => {
+    const suggestions = data.filter(suggestion => {
+        return valuesToRemoveFromSuggestions.indexOf(suggestion) === -1
+    }).map((field) => {
         return {
             id: `id-${field}`,
             key: `key-${field}`,
