@@ -1,10 +1,8 @@
-// import { getAge } from '../../lib/shared/resource-helper'
-// import { createDashboardLink } from './hcm-applications'
-// import { /*getStatusIcon as getClusterStatusIcon,*/ getExternalLink } from './hcm-clusters'
-// import StatusField from '../components/common/StatusField'
-// import Labels from '../components/common/Labels'
 import _ from 'lodash'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
+import { AcmLabels } from '@open-cluster-management/ui-components'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 const searchDefinitions: any = {
@@ -13,7 +11,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -24,21 +24,23 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // {
-            //     header: 'Dashboard',
-            //     sort: 'dashboard',
-            //     cell: 'dashboard',
-            //     transform: createDashboardLink,
-            // },
-            // {
-            //     header: 'Label',
-            //     sort: 'labels',
-            //     cell: 'labels',
-            //     transform: formatLabels,
-            // }
+            {
+                header: 'Dashboard',
+                sort: 'dashboard',
+                cell: ((item: any) => {
+                    return createDashboardLink(item)
+                }),
+            },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     applicationrelationship: {
@@ -46,7 +48,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -72,10 +76,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-//       { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     cluster: {
@@ -83,7 +93,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Available',
@@ -120,14 +132,20 @@ const searchDefinitions: any = {
                 sort: 'memory',
                 cell: 'memory',
             },
-            // {
-            //     header: 'Console URL',
-            //     sort: 'consoleURL',
-            //     cell: (item: any) => {
-            //         return getExternalLink(item)
-            //     },
-            // },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Console URL',
+                sort: 'consoleURL',
+                cell: (item: any) => {
+                    return createExternalLink(item)
+                },
+            },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     channel: {
@@ -135,7 +153,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -161,10 +181,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     configmap: {
@@ -172,7 +198,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -188,10 +216,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     cronjob: {
@@ -199,7 +233,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -226,15 +262,27 @@ const searchDefinitions: any = {
                 sort: 'active',
                 cell: 'active',
             },
-            // { key: 'lastSchedule', transform: (item) => getAge({ created: item.lastSchedule }) },
+            {
+                header: 'Last schedule',
+                sort: 'lastSchedule',
+                cell: (item: any) => {
+                    return getAge(item, 'lastSchedule')
+                },
+            },
             {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     daemonset: {
@@ -242,7 +290,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -283,10 +333,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     deployable: {
@@ -294,7 +350,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -315,10 +373,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     deployment: {
@@ -326,7 +390,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -362,10 +428,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-        //   { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     genericresource: {
@@ -373,7 +445,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -389,10 +463,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-        //   { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     helmrelease: { // This is the Application Helm CR.
@@ -400,7 +480,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -436,10 +518,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     job: {
@@ -447,7 +535,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -478,10 +568,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     namespace: {
@@ -489,7 +585,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Cluster',
@@ -505,10 +603,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     node: {
@@ -516,7 +620,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Cluster',
@@ -547,10 +653,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     persistentvolume: {
@@ -558,7 +670,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Cluster',
@@ -604,10 +718,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     persistentvolumeclaim: {
@@ -615,7 +735,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -651,10 +773,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     placementbinding: {
@@ -662,7 +790,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -683,10 +813,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     placementpolicy: {
@@ -694,7 +830,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -715,10 +853,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     placementrule: {
@@ -726,7 +870,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -747,10 +893,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     pod: {
@@ -758,7 +910,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -794,10 +948,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     policy: {
@@ -805,7 +965,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -822,7 +984,14 @@ const searchDefinitions: any = {
                 sort: 'disabled',
                 cell: 'disabled',
             },
-            // { key: 'compliant', transform: getPolicyStatusIcon },
+            {
+                header: 'Compliant',
+                sort: 'compliant',
+                cell: (item: any) => {
+                    // TODO -Show a status icon based on compliance
+                    return item.compliant ? item.compliant : '-'
+                },
+            },
             {
                 header: 'Remediation action',
                 sort: 'remediationAction',
@@ -832,10 +1001,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     release: {
@@ -843,7 +1018,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -870,7 +1047,13 @@ const searchDefinitions: any = {
                 sort: 'chartVersion',
                 cell: 'chartVersion',
             },
-            // { key: 'updated', transform: (item) => getAge({ created: item.updated }) }
+            {
+                header: 'Updated',
+                sort: 'updated',
+                cell: (item: any) => {
+                    return getAge(item, 'updated')
+                },
+            },
         ],
     },
     replicaset: {
@@ -878,7 +1061,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -904,10 +1089,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     secret: {
@@ -915,7 +1106,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -936,10 +1129,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     service: {
@@ -947,7 +1146,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -978,10 +1179,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     statefulset: {
@@ -989,7 +1196,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -1015,10 +1224,16 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
     subscription: {
@@ -1026,7 +1241,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: 'name',
+                cell: ((item: any) => {
+                    return createDetailsLink(item)
+                }),
             },
             {
                 header: 'Namespace',
@@ -1062,16 +1279,22 @@ const searchDefinitions: any = {
                 header: 'Created',
                 sort: 'created',
                 cell: (item: any) => {
-                    return getAge(item)
+                    return getAge(item, 'created')
                 },
             },
-            // { key: 'label', msgKey: 'labels', transform: formatLabels },
+            {
+                header: 'Labels',
+                sort: 'label',
+                cell: (item: any) => {
+                    return formatLabels(item)
+                },
+            }
         ],
     },
 }
 
-export function getAge(item: any) {
-    const createdTime = _.get(item, 'created')
+export function getAge(item: any, key: string) {
+    const createdTime = _.get(item, key)
     if (createdTime && createdTime.includes('T')) {
       return moment(createdTime, 'YYYY-MM-DDTHH:mm:ssZ').fromNow()
     } else if (createdTime) {
@@ -1080,30 +1303,49 @@ export function getAge(item: any) {
     return '-'
 }
 
-// function formatLabels(item){
-//   const labels = item && item.label && item.label.split('; ')
-//   const formattedLabels = {}
-//   if (labels) {
-//     labels.forEach(label => {
-//       if (label && label.indexOf('=') > -1) {
-//         const [key, value] = label.split('=')
-//         formattedLabels[key] = value
-//       }
-//     })
-//   }
+export function createDetailsLink(item: any) {
+    switch (item.kind){
+    case 'cluster':
+        return <a href={`/cluster-management/cluster-management/clusters/${item.namespace}/${item.name}`}>{item.name}</a>
+    case 'application':
+        if (item.apigroup === 'app.k8s.io') {
+            // only redirect to apps page if it is an ACM application
+            return <a href={`/multicloud/applications/${item.namespace}/${item.name}`}>{item.name}</a>
+        }
+        return <a href={`search/details/${item.cluster}${item.selfLink}`}>{item.name}</a>
+    case 'policy':
+        // Redirects to the policy page if the policy is a hub cluster resource.
+        // If the policy is not, it will redirect and just show the yaml.
+        if (item._hubClusterResource && item.apigroup === 'policy.open-cluster-management.io') {
+            return <a href={`/multicloud/policies/all/${item.name}`}>{item.name}</a>
+        }
+        return <a href={`search/details/${item.cluster}${item.selfLink}`}>{item.name}</a>
+    default:
+        return <Link to={{ pathname: `search/details/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
+    }
+}
 
-//   return <Labels item={{metadata: {labels: formattedLabels}}} labelTags={Object.keys(formattedLabels).slice(0,2)}></Labels>
-// }
+export function createDashboardLink(item: any) {
+    if (item.dashboard !== null && item.dashboard !== '') {
+        return <a target="_blank" rel="noopener noreferrer" href={item.dashboard}>{'Launch health view'}</a>
+    }
+    return '-'
+}
 
-// export function getPolicyStatusIcon(item, locale) {
-//   if (item.compliant){
-//     if (item.compliant.toLowerCase() === 'compliant') {
-//       return <StatusField status='ok' text={msgs.get('policy.status.compliant', locale)} />
-//     } else {
-//       return <StatusField status='critical' text={msgs.get('policy.status.noncompliant', locale)} />
-//     }
-//   }
-//   return '-'
-// }
+export function createExternalLink(item: any) {
+    if (item.consoleURL) {
+      return <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>{'Launch'}</a>
+    } else if (item.clusterip) {
+      return item.clusterip
+    }
+    return '-'
+  }
+
+export function formatLabels(item: any) {
+    if (item.label) {
+        return <AcmLabels labels={item.label.split('; ')} />
+    }
+    return '-'
+}
 
 export default searchDefinitions
