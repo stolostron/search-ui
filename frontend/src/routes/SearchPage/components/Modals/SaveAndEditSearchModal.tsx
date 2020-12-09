@@ -2,8 +2,8 @@ import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useReducer, useEffect } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import { AcmModal, AcmButton, AcmForm, AcmTextInput, AcmTextArea } from '@open-cluster-management/ui-components'
-import { useSaveSearchMutation } from '../../search-sdk/search-sdk'
-import { searchClient } from '../../search-sdk/search-client'
+import { useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
+import { searchClient } from '../../../../search-sdk/search-client'
 
 type IState = {
     searchName: string
