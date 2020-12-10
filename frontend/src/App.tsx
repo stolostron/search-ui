@@ -5,11 +5,13 @@ import { lazy } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
 
 const SearchPage = lazy(() => import('./routes/SearchPage/SearchPage'))
+const OverviewPage = lazy(() => import('./routes/Overview/OverviewPage'))
 
 function App() {
     return (
         <Router>
             <Switch>
+                <Route path={'/overview'} component={OverviewPage} />
                 <Route path={'/search'} component={SearchPage} />
                 {/* <Route path={'/details/:cluster'} component={DetailsPage} /> */}
                 <Route exact path="*">
