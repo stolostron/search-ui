@@ -32,17 +32,10 @@ oc patch OAuthClient multicloudingress --type json -p "[{\"op\": \"add\", \"path
 
 # Create route to the search-api service on the target cluster.
 oc create route passthrough search-api --service=search-search-api --insecure-policy=Redirect -n open-cluster-management
-SEARCH_API_URL=https://$(oc get route search-api -n open-cluster-management |grep search-api | awk '{print $2}')
+SEARCH_API_URL=https://$(oc get route search-api -n open-cluster-management | grep search-api | awk '{print $2}')
 echo SEARCH_API_URL=$SEARCH_API_URL >> ./backend/.env
 
-######################
-# Configure Frontend
-######################
-
-echo > ./frontend/.env
-
-REACT_APP_API_SERVER_URL=`oc get infrastructure cluster -o jsonpath={.status.apiServerURL}`
-echo REACT_APP_API_SERVER_URL=$REACT_APP_API_SERVER_URL >> ./frontend/.env
-
-REACT_APP_SERVICEACCT_TOKEN=$(oc whoami -t)
-echo REACT_APP_SERVICEACCT_TOKEN=$REACT_APP_SERVICEACCT_TOKEN >> ./frontend/.env
+# Create route to the console-api service on the target cluster.
+oc create route passthrough console-api --service=console-api --insecure-policy=Redirect -n open-cluster-management
+CONSOLE_API_URL=https://$(oc get route console-api -n open-cluster-management | grep console-api | awk '{print $2}')
+echo CONSOLE_API_URL=$CONSOLE_API_URL >> ./backend/.env
