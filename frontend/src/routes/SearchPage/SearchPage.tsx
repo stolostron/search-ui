@@ -6,8 +6,7 @@ import {
     AcmPage,
     AcmPageHeader,
     AcmSearchbar,
-    AcmSecondaryNav,
-    AcmSecondaryNavItem,
+    AcmActionGroup,
 } from '@open-cluster-management/ui-components'
 import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
@@ -27,11 +26,11 @@ import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchMod
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
-    divider: {
-        position: 'relative',
-        height: '1.4rem',
-        top: '.5rem',
-        borderLeft: '1px solid #dfe6eb',
+    actionGroup: {
+        backgroundColor: 'var(--pf-global--BackgroundColor--100)',
+        paddingRight: 'var(--pf-c-page__main-section--PaddingRight)',
+        paddingLeft: 'var(--pf-c-page__main-section--PaddingLeft)',
+        paddingBottom: 'var(--pf-c-page__header-sidebar-toggle__c-button--PaddingBottom)',
     },
 })
 
@@ -107,41 +106,38 @@ function RenderSearchBar(props: {
 }
 
 function RenderDropDownAndNewTab(props: any) {
+    const classes = useStyles()
+
     const { data } = useSavedSearchesQuery({
         client: searchClient,
     })
 
-    console.log(props)
-
     const queries = data?.items ?? ([] as UserSearch[])
-    console.log('queries', queries)
-    const onHover = () => console.log('hovered')
-    console.log('props', props)
 
-    const dropdownItems: any[] = queries.map((query) => {
-        return { id: query!.id, text: query!.name, searchtext: query!.searchText }
-    })
-    const [active, setActive] = useState('first')
-    const classes = useStyles()
+    const SavedSearchDropdown = () => {
+        const dropdownItems: any[] = queries.map((query) => {
+            return { id: query!.id, text: query!.name, searchtext: query!.searchText }
+        })
+        const onSelect = (id: string) => console.log('clicked ', id)
+        return (
+            <AcmDropdown
+                isDisabled={false}
+                id="dropdown"
+                onSelect={onSelect}
+                text={'Saved searches'}
+                dropdownItems={dropdownItems}
+                isKebab={false}
+            />
+        )
+    }
+
     return (
-        <AcmSecondaryNav>
-            <AcmSecondaryNavItem isActive={active === 'first'} onClick={() => setActive('first')}>
-                <AcmDropdown
-                    onHover={onHover}
-                    isDisabled={false}
-                    tooltip={'default tooltip'}
-                    id="dropdown"
-                    onSelect={(id) => console.log(id)}
-                    text={'test'}
-                    dropdownItems={dropdownItems}
-                    isKebab={false}
-                />
-            </AcmSecondaryNavItem>
-            <div className={classes.divider} />
-            <AcmSecondaryNavItem isActive={active === 'second'} onClick={() => setActive('second')}>
+        <div className={classes.actionGroup}>
+            <AcmActionGroup>
+                <SavedSearchDropdown />
                 <AcmLaunchLink links={[{ id: 'search', text: 'Open new search tab', href: '/search' }]} />
-            </AcmSecondaryNavItem>
-        </AcmSecondaryNav>
+            </AcmActionGroup>
+        </div>
     )
 }
 
