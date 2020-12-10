@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AcmDonutChart, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
+import { AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
 
 
 export default function OverviewPage() {
@@ -8,9 +8,11 @@ export default function OverviewPage() {
     const [complianceData, setComplianceData ] = useState<any>([])
     const [podData, setpodData ] = useState<any>([])
     const [clusterData, setClusterData ] = useState<any>([])
+    const [loading, setLoading] = useState(true)
     
     useEffect(() => {
-        fetchData()
+        
+        setTimeout(fetchData, 3000)
 
       }, []);
     
@@ -47,13 +49,21 @@ export default function OverviewPage() {
             { key: 'Ready', value: 2, isPrimary: true },
             { key: 'Offline', value: 0, isDanger: true },
         ])
+
+        setLoading(false)
     }
 
-    
+    if (loading){
+        return (
+            <AcmPage>
+                <AcmPageHeader title="Overview" />
+                <AcmLoadingPage />
+            </AcmPage>    
+            )
+    }
     return (
         <AcmPage>
             <AcmPageHeader title="Overview" />
-            {/* <div><p>Summary count: { summary } </p></div> */}
 
             <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
                 <AcmOverviewProviders providers={providers} />
