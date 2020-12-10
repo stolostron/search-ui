@@ -58,12 +58,6 @@ export default function OverviewPage() {
         return (
             <AcmPage>
                 <AcmPageHeader title="Overview" />
-                <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
-                    {/* <AcmOverviewProviders providers={providers} /> */}
-                    <AcmCountCard loading />
-                    <AcmCountCard loading />
-                    <AcmCountCard loading />
-                </div>
                 <AcmLoadingPage />
             </AcmPage>    
             )
