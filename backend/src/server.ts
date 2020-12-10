@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Axios, { AxiosResponse, Method } from 'axios'
+import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
@@ -13,7 +13,6 @@ import { STATUS_CODES } from 'http'
 import * as https from 'https'
 import * as path from 'path'
 import { join } from 'path'
-import * as querystring from 'querystring'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
@@ -63,90 +62,21 @@ export async function startServer(): Promise<FastifyInstance> {
         await res.code(200).send()
     })
 
-    async function kubeRequest<T = unknown>(
-        token: string,
-        method: string,
-        url: string,
-        data?: unknown,
-        headers?: Record<string, string>
-    ): Promise<AxiosResponse<T>> {
-        let response: AxiosResponse<T>
-        // eslint-disable-next-line no-constant-condition
-        let tries = method === 'GET' ? 3 : 1
-        while (tries-- > 0) {
-            try {
-                response = await Axios.request<T>({
-                    url,
-                    method: method as Method,
-                    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-                    headers: {
-                        ...{
-                            Authorization: `Bearer ${token}`,
-                        },
-                        ...headers,
-                    },
-                    responseType: 'json',
-                    validateStatus: () => true,
-                    data,
-                    // timeout - defaults to unlimited
-                })
-                switch (response.status) {
-                    case 429:
-                        if (tries > 0) {
-                            await new Promise((resolve) => setTimeout(resolve, 100))
-                        }
-                        break
-                    default:
-                        return response
-                }
-            } catch (err) {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-                const code = err.code as string
-                switch (code) {
-                    case 'ETIMEDOUT':
-                        logger.warn({ msg: 'ETIMEDOUT', method, url })
-                        break
-                    case 'ECONNRESET':
-                        logger.warn({ msg: 'ECONNRESET', method, url })
-                        break
-                    default:
-                        throw err
-                }
-            }
-        }
-        return response
-    }
-
     async function proxy(req: FastifyRequest, res: FastifyReply) {
         try {
             const token = req.cookies['acm-access-token-cookie']
             logger.debug({ msg: 'proxy token', token })
-            if (!token) return res.code(401).send()
-
-            let url = req.url.substr('/search/proxy'.length)
-            let query = ''
-            if (url.includes('?')) {
-                query = url.substr(url.indexOf('?'))
-                url = url.substr(0, url.indexOf('?'))
+            if (!token) {
+                return res.code(401).send()
             }
-
-            const result = await kubeRequest(
-                token,
-                req.method,
-                process.env.API_SERVER_URL + url + query,
-                req.body,
-                req.method === 'PATCH'
-                    ? {
-                          'Content-Type': 'application/merge-patch+json',
-                      }
-                    : undefined
-            )
-            return res.code(result.status).send(result.data)
+            return res.code(200).send()
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
             void res.code(500).send(err)
         }
     }
+
+    fastify.get('/search/proxy', proxy)
 
     // Proxy to SEARCH-API
     await fastify.register(fastifyHttpProxy, {
@@ -190,71 +120,6 @@ export async function startServer(): Promise<FastifyInstance> {
             return res.code(headerResponse.status).send(headerResponse?.data)
         })
     }
-
-    fastify.get('/search/proxy', proxy)
-    fastify.get('/search/proxy/*', proxy)
-    fastify.put('/search/proxy/*', proxy)
-    fastify.post('/search/proxy/*', proxy)
-    fastify.patch('/search/proxy/*', proxy)
-    fastify.delete('/search/proxy/*', proxy)
-
-    fastify.get('/search/namespaced/*', async (req, res) => {
-        try {
-            const token = req.cookies['acm-access-token-cookie']
-            if (!token) return res.code(401).send()
-
-            let url = req.url.substr('/search/namespaced'.length)
-            let query = ''
-            let namespaceQuery = ''
-            if (url.includes('?')) {
-                query = url.substr(url.indexOf('?'))
-                url = url.substr(0, url.indexOf('?'))
-
-                // in certain cases we only want to query managed namespaces only for performance
-                const parsedQuery = querystring.parse(query)
-                if (parsedQuery['managedNamespacesOnly']) {
-                    namespaceQuery = '?labelSelector="cluster.open-cluster-management.io/managedCluster"'
-                    delete parsedQuery['managedNamespacesOnly']
-                    query = querystring.stringify(parsedQuery)
-                }
-            }
-
-            // Try the query at a cluster scope in case the use has permissions
-            const clusteredRequestPromise = kubeRequest(token, req.method, process.env.API_SERVER_URL + url + query)
-
-            // Query the projects (namespaces) the user can see in parallel in case the above fails.
-            const projectsRequestPromise = kubeRequest<{
-                items: { metadata: { name: string } }[]
-            }>(
-                token,
-                req.method,
-                process.env.API_SERVER_URL + '/apis/project.openshift.io/v1/projects' + namespaceQuery
-            )
-
-            try {
-                const clusteredRequest = await clusteredRequestPromise
-                if (clusteredRequest.status < 400) return res.code(clusteredRequest.status).send(clusteredRequest.data)
-            } catch {
-                // DO NOTHING - WILL QUERY BY PROJECTS
-            }
-
-            const projectsRequest = await projectsRequestPromise
-            const promises = projectsRequest.data.items.map((project) => {
-                const parts = url.split('/')
-                const plural = parts[parts.length - 1]
-                const path = parts.slice(0, parts.length - 1).join('/')
-                const finalUrl =
-                    process.env.API_SERVER_URL + path + '/namespaces/' + project.metadata.name + '/' + plural + query
-                return kubeRequest<{ items: { metadata: { name: string } }[] }>(token, req.method, finalUrl)
-            })
-
-            const results = await Promise.all(promises)
-            return res.code(200).send({ items: results.flatMap((r) => r.data.items).filter((i) => i != null) })
-        } catch (err) {
-            logError('namespaced error', err, { method: req.method, url: req.url })
-            void res.code(500).send()
-        }
-    })
 
     await fastify.register(fastifyCookie)
     fastify.addHook('onRequest', (request, reply, done) => {
@@ -321,6 +186,7 @@ export async function startServer(): Promise<FastifyInstance> {
         done()
     })
 
+    // VALIDATE AUTH
     if (!process.env.GENERATE) {
         // GET .well-known/oauth-authorization-server from the CLUSTER API for oauth
         const response = await Axios.get<{ authorization_endpoint: string; token_endpoint: string }>(
