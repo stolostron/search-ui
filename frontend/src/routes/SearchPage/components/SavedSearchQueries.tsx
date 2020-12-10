@@ -17,7 +17,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         client: searchClient,
     })
 
-    const [saveSearch, setSaveSearch] = useState(undefined)
+    const [editSearch, setEditSearch] = useState(undefined)
     const [shareSearch, setShareSearch] = useState(undefined)
     const [deleteSearch, setDeleteSearch] = useState(undefined)
 
@@ -42,7 +42,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         })
         return (
             <PageSection>
-                <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
+                <SaveAndEditSearchModal editSearch={editSearch} onClose={() => setEditSearch(undefined)} />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
 
@@ -62,7 +62,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         title: query.name,
                                         description: query.description,
                                         actions: [
-                                            { text: 'Edit', handleAction: () => setSaveSearch(query) },
+                                            { text: 'Edit', handleAction: () => setEditSearch(query) },
                                             { text: 'Share', handleAction: () => setShareSearch(query) },
                                             { text: 'Delete', handleAction: () => setDeleteSearch(query) },
                                         ],

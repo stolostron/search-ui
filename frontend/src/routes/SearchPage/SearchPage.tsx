@@ -9,13 +9,14 @@ import SearchResults from './components/SearchResults'
 import { useSearchSchemaQuery, useSearchCompleteQuery } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
+import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
 
 function RenderSearchBar(props: {
     searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
 }) {
     const { searchQuery, setCurrentQuery } = props
-
+    const [saveSearch, setSaveSearch] = useState<string>()
     const searchSchemaResults = useSearchSchemaQuery({
         skip: searchQuery.endsWith(':'),
         client: searchClient,
@@ -44,6 +45,7 @@ function RenderSearchBar(props: {
     return (
         <Fragment>
             <PageSection>
+                <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
@@ -69,7 +71,7 @@ function RenderSearchBar(props: {
                     />
                     <AcmButton
                         style={{ marginLeft: '1rem' }}
-                        onClick={() => console.log('Save search click')}
+                        onClick={() => setSaveSearch(searchQuery)}
                         isDisabled={false}
                     >
                         {'Save search'}
@@ -86,7 +88,7 @@ export default function SearchPage() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
         prefillSearchQuery: searchQuery = '',
-        preSelectedRelatedResources = [] // used to show any related resource on search page navigation
+        preSelectedRelatedResources = [], // used to show any related resource on search page navigation
     } = transformBrowserUrlToSearchString(window.location.search || '')
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
     useEffect(() => {
@@ -99,10 +101,11 @@ export default function SearchPage() {
             <AcmPageHeader title="Search" />
             {/* </AcmPageHeader> Include children above for dropdown and launch link OR use SecondaryNav? */}
             <RenderSearchBar searchQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
-            {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0)
-                ? <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
-                : <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
-            }
+            {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
+                <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
+            ) : (
+                <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
+            )}
         </AcmPage>
     )
 }
