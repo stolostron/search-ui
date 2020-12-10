@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
+import { AcmCountCard, AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
 
 
 export default function OverviewPage() {
-    const [summary, setSummary] = useState([{ isPrimary: true, description: 'Applications', count: 0, href: '/search?query=apps' }]);
-    const [providers, setProviders] = useState([{ provider: Provider.aws, clusterCount: 0, onClick: fetchData}] )
-    const [complianceData, setComplianceData ] = useState<any>([])
-    const [podData, setpodData ] = useState<any>([])
-    const [clusterData, setClusterData ] = useState<any>([])
-    const [loading, setLoading] = useState(true)
+    const [providers, setProviders] = useState<Array<any>>([{ provider: Provider.other, clusterCount: 0, onClick: fetchData}] )
+    const [summary, setSummary] = useState<Array<any>>([{ isPrimary: true, description: 'Applications', count: 0, href: '/search?query=apps' }]);
+    
+    const [complianceData, setComplianceData ] = useState<Array<any>>([])
+    const [podData, setpodData ] = useState<Array<any>>([])
+    const [clusterData, setClusterData ] = useState<Array<any>>([])
+    const [loading, setLoading] = useState<boolean>(true)
     
     useEffect(() => {
         
@@ -57,6 +58,12 @@ export default function OverviewPage() {
         return (
             <AcmPage>
                 <AcmPageHeader title="Overview" />
+                <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
+                    {/* <AcmOverviewProviders providers={providers} /> */}
+                    <AcmCountCard loading />
+                    <AcmCountCard loading />
+                    <AcmCountCard loading />
+                </div>
                 <AcmLoadingPage />
             </AcmPage>    
             )
