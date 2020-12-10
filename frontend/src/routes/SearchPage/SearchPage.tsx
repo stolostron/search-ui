@@ -72,7 +72,7 @@ function RenderSearchBar(props: {
                     <AcmButton
                         style={{ marginLeft: '1rem' }}
                         onClick={() => setSaveSearch(searchQuery)}
-                        isDisabled={false}
+                        isDisabled={searchQuery === ''}
                     >
                         {'Save search'}
                     </AcmButton>
