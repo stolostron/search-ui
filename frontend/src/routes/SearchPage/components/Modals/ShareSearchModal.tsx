@@ -4,12 +4,9 @@ import { ModalVariant } from '@patternfly/react-core'
 import { AcmCodeSnippet, AcmModal } from '@open-cluster-management/ui-components'
 
 export const ShareSearchModal = (props: any) => {
-    console.log('share props', props)
-
     function GetUrl() {
         let url = decodeURIComponent(window.location.origin + window.location.pathname)
         let search = props.shareSearch ? props.shareSearch.searchText : ''
-
         return (url += `?filters={"textsearch":"${encodeURIComponent(search)}}`)
     }
 

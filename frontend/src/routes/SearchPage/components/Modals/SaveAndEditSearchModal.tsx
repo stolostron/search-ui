@@ -47,7 +47,6 @@ export const SaveAndEditSearchModal = (props: any) => {
     }
 
     function SaveSearch() {
-        console.log('props in savesearch', props)
         let id = props.saveSearch.description ? props.saveSearch.id : Date.now().toString()
         // TODO handle when fresh save search
         let searchText = props.saveSearch.description ? props.saveSearch.searchText : '' // <=== handle fresh save search //
