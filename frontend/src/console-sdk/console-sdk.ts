@@ -944,6 +944,40 @@ export type GetLogsQueryVariables = Exact<{
 
 export type GetLogsQuery = Pick<Query, 'logs'>
 
+export type GetOverviewQueryVariables = Exact<{
+    demoMode?: Maybe<Scalars['Boolean']>
+}>
+
+export type GetOverviewQuery = {
+    overview?: Maybe<
+        Pick<Overview, 'timestamp'> & {
+            clusters?: Maybe<
+                Array<
+                    Maybe<
+                        Pick<ClusterOverview, 'consoleURL' | 'status'> & {
+                            metadata?: Maybe<Pick<Metadata, 'name' | 'namespace' | 'labels' | 'uid'>>
+                        }
+                    >
+                >
+            >
+            applications?: Maybe<
+                Array<
+                    Maybe<
+                        Pick<ApplicationOverview, 'raw' | 'selector'> & {
+                            metadata?: Maybe<Pick<Metadata, 'name' | 'namespace'>>
+                        }
+                    >
+                >
+            >
+            compliances?: Maybe<
+                Array<
+                    Maybe<Pick<ComplianceOverview, 'raw'> & { metadata?: Maybe<Pick<Metadata, 'name' | 'namespace'>> }>
+                >
+            >
+        }
+    >
+}
+
 export const GetResourceDocument = gql`
     query getResource($kind: String, $name: String, $namespace: String, $cluster: String, $selfLink: String) {
         getResource(kind: $kind, name: $name, namespace: $namespace, cluster: $cluster, selfLink: $selfLink)
@@ -1165,3 +1199,65 @@ export function useGetLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetLogsQueryHookResult = ReturnType<typeof useGetLogsQuery>
 export type GetLogsLazyQueryHookResult = ReturnType<typeof useGetLogsLazyQuery>
 export type GetLogsQueryResult = Apollo.QueryResult<GetLogsQuery, GetLogsQueryVariables>
+export const GetOverviewDocument = gql`
+    query getOverview($demoMode: Boolean) {
+        overview(demoMode: $demoMode) {
+            clusters {
+                metadata {
+                    name
+                    namespace
+                    labels
+                    uid
+                }
+                consoleURL
+                status
+            }
+            applications {
+                metadata {
+                    name
+                    namespace
+                }
+                raw
+                selector
+            }
+            compliances {
+                metadata {
+                    name
+                    namespace
+                }
+                raw
+            }
+            timestamp
+        }
+    }
+`
+
+/**
+ * __useGetOverviewQuery__
+ *
+ * To run a query within a React component, call `useGetOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOverviewQuery({
+ *   variables: {
+ *      demoMode: // value for 'demoMode'
+ *   },
+ * });
+ */
+export function useGetOverviewQuery(
+    baseOptions?: Apollo.QueryHookOptions<GetOverviewQuery, GetOverviewQueryVariables>
+) {
+    return Apollo.useQuery<GetOverviewQuery, GetOverviewQueryVariables>(GetOverviewDocument, baseOptions)
+}
+export function useGetOverviewLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<GetOverviewQuery, GetOverviewQueryVariables>
+) {
+    return Apollo.useLazyQuery<GetOverviewQuery, GetOverviewQueryVariables>(GetOverviewDocument, baseOptions)
+}
+export type GetOverviewQueryHookResult = ReturnType<typeof useGetOverviewQuery>
+export type GetOverviewLazyQueryHookResult = ReturnType<typeof useGetOverviewLazyQuery>
+export type GetOverviewQueryResult = Apollo.QueryResult<GetOverviewQuery, GetOverviewQueryVariables>

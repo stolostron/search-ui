@@ -14,14 +14,14 @@
         "test:watch": "react-scripts test --watch",
         "lint": "eslint --ext tsx src",
         "generate:searchapi": "graphql-codegen --config src/search-sdk/search-sdk.yml",
-        "generate:consoleapi": "graphql-codegen --config src/console-sdk/console-sdk.yml",
+        "generate:consoleapi": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config src/console-sdk/console-sdk.yml",
         "update": "rm -rf package-lock.json node_modules && npx npm-check-updates -u && npm install && npm audit fix && npm dedup && npm test && npm run lint && npm run check",
         "docker:build": "docker build -t search .",
         "docker:run": "docker run --rm -p 5000:5000 search"
     },
     "dependencies": {
         "@apollo/client": "^3.3.4",
-        "@open-cluster-management/ui-components": "^0.1.104",
+        "@open-cluster-management/ui-components": "^0.1.110",
         "@patternfly/react-core": "^4.79.2",
         "@types/node": "^14.14.11",
         "@types/react": "^17.0.0",
