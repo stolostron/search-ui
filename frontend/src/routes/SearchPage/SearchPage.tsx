@@ -24,16 +24,6 @@ import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteStri
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
-import { makeStyles } from '@material-ui/styles'
-
-const useStyles = makeStyles({
-    actionGroup: {
-        backgroundColor: 'var(--pf-global--BackgroundColor--100)',
-        paddingRight: 'var(--pf-c-page__main-section--PaddingRight)',
-        paddingLeft: 'var(--pf-c-page__main-section--PaddingLeft)',
-        paddingBottom: 'var(--pf-c-page__header-sidebar-toggle__c-button--PaddingBottom)',
-    },
-})
 
 function RenderSearchBar(props: {
     searchQuery: string
