@@ -5,8 +5,44 @@ import {
     useGetOverviewQuery,
 } from '../../console-sdk/console-sdk'
 
+// TODO: Need to verify correct spelling for all these labels.
+function mapProviderFromLabel(provider: string): Provider {
+    switch (provider) {
+        case 'Amazon':
+            return Provider.aws
+        case 'Azure':
+            return Provider.azure
+        case 'Baremetal':
+            return Provider.baremetal
+        case 'Google':
+            return Provider.gcp
+        case 'IBM':
+            return Provider.ibm
+        case 'RedHat':
+            return Provider.redhatcloud
+        case 'VMware':
+            return Provider.vmware
+        default:
+            return Provider.other
+    }
+}
+function getProvidersData(clusters: any){
+    // TODO: A reducer is better here.
+    const providers: any = {}
+    clusters.forEach((cluster: { metadata: { labels: { cloud: any; }; }; }) => {
+        const cloud = cluster.metadata?.labels?.cloud || 'other'
+        providers[cloud] = providers[cloud] ? providers[cloud] + 1 : 1
+    })
+
+    return Object.keys(providers).map((key: string) => (
+        { provider: mapProviderFromLabel(key),
+            clusterCount: providers[key],
+            onClick: ()=>{console.log(`clicked cluster ${key}`)}}
+    ))
+}
+
+
 export default function OverviewPage() {
-    
     const { data, loading, error } = useGetOverviewQuery({client: consoleClient})
     if (loading){
         return (
@@ -26,11 +62,12 @@ export default function OverviewPage() {
         return (<p>Error getting data.</p>)
     }
 
-    const providers = [
-        { provider: Provider.aws, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')}}, 
-        { provider: Provider.azure, clusterCount: 99, onClick: ()=>{console.log('clicked Azure')}}, 
-        { provider: Provider.ibm, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')} }, 
-        ]
+    const providers = getProvidersData(data?.overview?.clusters || [])
+    // const providers = [
+    //     { provider: Provider.aws, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')}}, 
+    //     { provider: Provider.azure, clusterCount: 99, onClick: ()=>{console.log('clicked Azure')}}, 
+    //     { provider: Provider.ibm, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')} }, 
+    //     ]
 
     const summary = [
         { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: '/search?query=apps' },
