@@ -23,6 +23,7 @@ import {
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
+import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
@@ -40,6 +41,8 @@ function RenderSearchBar(props: {
 }) {
     const { searchQuery, setCurrentQuery } = props
     const [saveSearch, setSaveSearch] = useState<string>()
+    const [open, toggleOpen] = useState<boolean>(false)
+    const toggle = () => toggleOpen(!open)
     const searchSchemaResults = useSearchSchemaQuery({
         skip: searchQuery.endsWith(':'),
         client: searchClient,
@@ -69,6 +72,7 @@ function RenderSearchBar(props: {
         <Fragment>
             <PageSection>
                 <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
+                <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
@@ -90,7 +94,7 @@ function RenderSearchBar(props: {
                             setCurrentQuery(newQuery)
                             updateBrowserUrl(newQuery)
                         }}
-                        toggleInfoModal={() => console.log('toggle info modal')}
+                        toggleInfoModal={toggle}
                     />
                     <AcmButton
                         style={{ marginLeft: '1rem' }}
@@ -105,7 +109,7 @@ function RenderSearchBar(props: {
     )
 }
 
-function RenderDropDownAndNewTab(props: any) {
+function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.SetStateAction<string>> }) {
     const classes = useStyles()
 
     const { data } = useSavedSearchesQuery({
@@ -118,12 +122,17 @@ function RenderDropDownAndNewTab(props: any) {
         const dropdownItems: any[] = queries.map((query) => {
             return { id: query!.id, text: query!.name, searchtext: query!.searchText }
         })
-        const onSelect = (id: string) => console.log('clicked ', id)
+        console.log('dropdown', dropdownItems)
+
         return (
             <AcmDropdown
                 isDisabled={false}
                 id="dropdown"
-                onSelect={onSelect}
+                onSelect={() => {
+                    console.log('selected')
+                    props.setCurrentQuery('kind:pod')
+                    // updateBrowserUrl()
+                }}
                 text={'Saved searches'}
                 dropdownItems={dropdownItems}
                 isKebab={false}
