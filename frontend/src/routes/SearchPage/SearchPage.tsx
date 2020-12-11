@@ -10,6 +10,7 @@ import { useSearchSchemaQuery, useSearchCompleteQuery } from '../../search-sdk/s
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
+import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 
 function RenderSearchBar(props: {
     searchQuery: string
@@ -17,6 +18,8 @@ function RenderSearchBar(props: {
 }) {
     const { searchQuery, setCurrentQuery } = props
     const [saveSearch, setSaveSearch] = useState<string>()
+    const [open, toggleOpen] = useState<boolean>(false)
+    const toggle = () => toggleOpen(!open)
     const searchSchemaResults = useSearchSchemaQuery({
         skip: searchQuery.endsWith(':'),
         client: searchClient,
@@ -46,6 +49,7 @@ function RenderSearchBar(props: {
         <Fragment>
             <PageSection>
                 <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
+                <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
@@ -67,7 +71,7 @@ function RenderSearchBar(props: {
                             setCurrentQuery(newQuery)
                             updateBrowserUrl(newQuery)
                         }}
-                        toggleInfoModal={() => console.log('toggle info modal')}
+                        toggleInfoModal={toggle}
                     />
                     <AcmButton
                         style={{ marginLeft: '1rem' }}
