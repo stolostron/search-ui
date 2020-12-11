@@ -38,43 +38,47 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setD
     return (
         selectedKinds.map(kind => {
             const items = relatedResultItems[0]?.items.filter((item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind )
-            return (
-                <AcmPageCard key={`related-table-${kind}`} >
-                    <AcmExpandableSection label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`} expanded={true}>
-                        <AcmTable
-                            plural=""
-                            items={items}
-                            columns={_.get(searchDefinitions, `[${kind}].columns`, searchDefinitions['genericresource'].columns)}
-                            keyFn={(item: any) => item._uid.toString()}
-                            tableActions={[]}
-                            rowActions={(kind !== 'cluster' && kind !== 'release')
-                                ? [
-                                    {
-                                        id: 'delete',
-                                        title: `Delete ${kind}`,
-                                        click: (item: any) => {
-                                            setDeleteResource({
-                                                open: true,
-                                                close: () => setDeleteResource(ClosedDeleteModalProps),
-                                                resource: item,
-                                            })
+            if (items && items.length > 0) {
+                return (
+                    <AcmPageCard key={`related-table-${kind}`} >
+                        <AcmExpandableSection label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`} expanded={true}>
+                            <AcmTable
+                                plural=""
+                                items={items}
+                                columns={_.get(searchDefinitions, `[${kind}].columns`, searchDefinitions['genericresource'].columns)}
+                                keyFn={(item: any) => item._uid.toString()}
+                                tableActions={[]}
+                                rowActions={(kind !== 'cluster' && kind !== 'release')
+                                    ? [
+                                        {
+                                            id: 'delete',
+                                            title: `Delete ${kind}`,
+                                            click: (item: any) => {
+                                                setDeleteResource({
+                                                    open: true,
+                                                    close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                    resource: item,
+                                                    currentQuery,
+                                                    relatedResource: true
+                                                })
+                                            },
                                         },
-                                    },
-                                ]
-                                : []
-                            }
-                            bulkActions={[]}
-                        />
-                    </AcmExpandableSection>
-                </AcmPageCard>
-            )
+                                    ]
+                                    : []
+                                }
+                                bulkActions={[]}
+                            />
+                        </AcmExpandableSection>
+                    </AcmPageCard>
+                )
+            }
+            return null
         })
     )
 }
 
 function RenderRelatedTiles(currentQuery: string, selectedKinds: string[], setSelected: React.Dispatch<React.SetStateAction<string[]>>) {
     const { data, error, loading } = useSearchResultRelatedCountQuery({
-        // TODO skip: ??
         client: searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)]
@@ -123,7 +127,6 @@ function RenderRelatedTiles(currentQuery: string, selectedKinds: string[], setSe
 
 function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>) {
     const { data, error, loading } = useSearchResultItemsQuery({
-        // TODO skip: ??
         client: searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)]
@@ -163,6 +166,8 @@ function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispa
                                             open: true,
                                             close: () => setDeleteResource(ClosedDeleteModalProps),
                                             resource: item,
+                                            currentQuery,
+                                            relatedResource: false
                                         })
                                     },
                                 },
@@ -188,7 +193,9 @@ export default function SearchResults(props: { currentQuery: string, preSelected
             <DeleteResourceModal
                 open={deleteResource.open}
                 close={deleteResource.close}
-                resource={deleteResource.resource} />
+                resource={deleteResource.resource}
+                currentQuery={deleteResource.currentQuery}
+                relatedResource={deleteResource.relatedResource} />
             {RenderRelatedTiles(currentQuery, selected, setSelected)}
             {RenderRelatedTables(currentQuery, selected, setDeleteResource)}
             {RenderSearchTables(currentQuery, setDeleteResource)}
