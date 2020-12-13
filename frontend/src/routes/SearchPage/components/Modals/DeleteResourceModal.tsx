@@ -149,9 +149,8 @@ export const DeleteResourceModal = (props: any) => {
                                 searchResult: [{
                                     __typename: 'SearchResult',
                                     items: currentSearchResults.searchResult[0].items.filter((item: any) => {
-                                        return !item._uid.includes(resource._uid)
+                                        return item._uid !== resource._uid
                                             && item.name !== resource.name
-                                            && item.cluster !== resource.cluster
                                     })
                                 }]
                             }
