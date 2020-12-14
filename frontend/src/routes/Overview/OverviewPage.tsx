@@ -82,14 +82,13 @@ export default function OverviewPage() {
     const providers = getProvidersData(data?.overview?.clusters || [])
 
     // TODO: Get data from API.
-    // TODO: Fix links.
     const summary = [
-        { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: '/search?query=apps' },
-        { isPrimary: false, description: 'Clusters', count: data?.overview?.clusters?.length || 0, href: '/search?query=clusters' },
-        { isPrimary: false, description: 'Kubernetes type', count: 99, href: '/search' },
-        { isPrimary: false, description: 'Region', count: 99, href: '/search' },
-        { isPrimary: false, description: 'Nodes', count: 99, href: '/search?query=nodes' },
-        { isPrimary: false, description: 'Pods', count: 99, href: '/search?query=pods' },
+        { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: 'search?filters={"textsearch":"kind%3Aapplication"}' },
+        { isPrimary: false, description: 'Clusters', count: data?.overview?.clusters?.length || 0, href: 'search?filters={"textsearch":"kind%3Acluster"}' },
+        { isPrimary: false, description: 'Kubernetes type', count: 99 },
+        { isPrimary: false, description: 'Region', count: 99 },
+        { isPrimary: false, description: 'Nodes', count: 99, href: '/search?filters={"textsearch":"kind%3Anode"}' },
+        { isPrimary: false, description: 'Pods', count: 99, href: '/search?filters={"textsearch":"kind%3Apod"}' },
     ]
 
     // TODO: Get data from API.
