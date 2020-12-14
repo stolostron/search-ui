@@ -118,20 +118,27 @@ function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.
 
     const queries = data?.items ?? ([] as UserSearch[])
 
+    // use id to filter
+    const selectQuery = (id: string) => {
+        const queries = data!.items!.filter((query) => query!.id === id)
+        queries.map((query) => {
+            const selectedQuery: string = query!.searchText!
+            props.setCurrentQuery(selectedQuery)
+            updateBrowserUrl(selectedQuery)
+        })
+    }
+
     const SavedSearchDropdown = () => {
         const dropdownItems: any[] = queries.map((query) => {
-            return { id: query!.id, text: query!.name, searchtext: query!.searchText }
+            return { id: query!.id, text: query!.name }
         })
-        console.log('dropdown', dropdownItems)
 
         return (
             <AcmDropdown
                 isDisabled={false}
                 id="dropdown"
-                onSelect={() => {
-                    console.log('selected')
-                    props.setCurrentQuery('kind:pod')
-                    // updateBrowserUrl()
+                onSelect={(id) => {
+                    selectQuery(id)
                 }}
                 text={'Saved searches'}
                 dropdownItems={dropdownItems}
