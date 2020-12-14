@@ -1,13 +1,15 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client'
 
 export const searchClient = new ApolloClient({
     connectToDevTools: process.env.NODE_ENV === 'development',
-    uri: 'searchapi/graphql',
+    link: new HttpLink({
+        uri: 'searchapi/graphql',
+    }),
     cache: new InMemoryCache(),
     credentials: 'same-origin',
     defaultOptions: {
         watchQuery: {
-            fetchPolicy: 'network-only',
+            // fetchPolicy: defaults to 'cache-first'
             errorPolicy: 'all',
         },
         query: {
