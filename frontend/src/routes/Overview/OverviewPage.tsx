@@ -54,11 +54,13 @@ export default function OverviewPage() {
                     <AcmSummaryList key="summary-list-loading" loading title="Summary" list={[]}/>
                 </div>
 
-                <AcmChartGroup>
-                    <AcmDonutChart loading title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
-                    <AcmDonutChart loading title="Pods" description="Overview of pod count and status" data={[]} />
-                    <AcmDonutChart loading title="Cluster status" description="Overview of cluster status" data={[]} />
-                </AcmChartGroup>
+                <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
+                    <AcmChartGroup>
+                        <AcmDonutChart loading key="chart-loading-1" title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
+                        <AcmDonutChart loading key="chart-loading-2" title="Pods" description="Overview of pod count and status" data={[]} />
+                        <AcmDonutChart loading key="chart-loading-3" title="Cluster status" description="Overview of cluster status" data={[]} />
+                    </AcmChartGroup>
+                </div>
             </AcmPage>    
             )
     }
