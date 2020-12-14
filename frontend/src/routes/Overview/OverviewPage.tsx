@@ -1,5 +1,5 @@
 import React from 'react';
-import { AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
+import { AcmChartGroup, AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
 import { consoleClient } from '../../console-sdk/console-client'
 import {
     useGetOverviewQuery,
@@ -53,6 +53,12 @@ export default function OverviewPage() {
                 <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
                     <AcmSummaryList key="summary-list-loading" loading title="Summary" list={[]}/>
                 </div>
+
+                <AcmChartGroup>
+                    <AcmDonutChart loading title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
+                    <AcmDonutChart loading title="Pods" description="Overview of pod count and status" data={[]} />
+                    <AcmDonutChart loading title="Cluster status" description="Overview of cluster status" data={[]} />
+                </AcmChartGroup>
             </AcmPage>    
             )
     }
@@ -63,11 +69,6 @@ export default function OverviewPage() {
     }
 
     const providers = getProvidersData(data?.overview?.clusters || [])
-    // const providers = [
-    //     { provider: Provider.aws, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')}}, 
-    //     { provider: Provider.azure, clusterCount: 99, onClick: ()=>{console.log('clicked Azure')}}, 
-    //     { provider: Provider.ibm, clusterCount: 99, onClick: ()=>{console.log('clicked AWS')} }, 
-    //     ]
 
     const summary = [
         { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: '/search?query=apps' },
@@ -101,16 +102,18 @@ export default function OverviewPage() {
             <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
                 <AcmOverviewProviders providers={providers} />
             </div>
-
                       
             <div style={{ margin: "1rem 2rem 1rem 2rem" }}>
                 <AcmSummaryList title="Summary" list={summary}/>
             </div>
         
-            <div style={{ margin: "1rem 1rem 1rem 2rem", display: "flex" }}>
+
+            <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
+            <AcmChartGroup>
                 <AcmDonutChart title="Cluster compliance" description="Overview of policy compliance status" data={complianceData} />
                 <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
                 <AcmDonutChart title="Cluster status" description="Overview of cluster status" data={clusterData} />
+            </AcmChartGroup>
             </div>
         </AcmPage>
     )
