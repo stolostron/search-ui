@@ -1,9 +1,15 @@
 import React from 'react';
-import { AcmChartGroup, AcmDonutChart, AcmLoadingPage, AcmPage, AcmPageHeader, AcmOverviewProviders, AcmSummaryList, Provider } from '@open-cluster-management/ui-components'
+import { AcmChartGroup,
+    AcmDonutChart,
+    AcmLoadingPage,
+    AcmPage,
+    AcmPageHeader,
+    AcmOverviewProviders,
+    AcmSummaryList,
+    Provider,
+} from '@open-cluster-management/ui-components'
 import { consoleClient } from '../../console-sdk/console-client'
-import {
-    useGetOverviewQuery,
-} from '../../console-sdk/console-sdk'
+import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
 
 // TODO: Need to verify correct spelling for all these labels.
 function mapProviderFromLabel(provider: string): Provider {
@@ -49,8 +55,10 @@ export default function OverviewPage() {
             <AcmPage>
                 <AcmPageHeader title="Overview" />
                 
-                <AcmLoadingPage />
-                <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
+                <div style={{ marginLeft: "1rem" }}>
+                    <AcmLoadingPage />
+                </div>
+                <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
                     <AcmSummaryList key="summary-list-loading" loading title="Summary" list={[]}/>
                 </div>
 
