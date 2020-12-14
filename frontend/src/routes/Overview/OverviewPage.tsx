@@ -57,6 +57,7 @@ export default function OverviewPage() {
                 
                 {/* TODO: Use material-ui styles instead of inline. */}
                 <div style={{ marginLeft: "1rem" }}>
+                    {/* TODO: Use skeleton component */}
                     <AcmLoadingPage />
                 </div>
                 <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
@@ -124,7 +125,7 @@ export default function OverviewPage() {
             </div>
         
 
-            <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
+            <div style={{ margin: "1rem 2rem 1rem 2rem" }}>
                 <AcmChartGroup>
                     <AcmDonutChart title="Cluster compliance" description="Overview of policy compliance status" data={complianceData} />
                     <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
