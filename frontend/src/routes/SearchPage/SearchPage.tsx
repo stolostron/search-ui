@@ -33,6 +33,11 @@ const useStyles = makeStyles({
         paddingLeft: 'var(--pf-c-page__main-section--PaddingLeft)',
         paddingBottom: 'var(--pf-c-page__header-sidebar-toggle__c-button--PaddingBottom)',
     },
+    dropdown: {
+        '& ul': {
+            right: 'unset !important',
+        },
+    },
 })
 
 function RenderSearchBar(props: {
@@ -112,20 +117,24 @@ function RenderSearchBar(props: {
 function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.SetStateAction<string>> }) {
     const classes = useStyles()
 
+    const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const { data } = useSavedSearchesQuery({
         client: searchClient,
     })
 
     const queries = data?.items ?? ([] as UserSearch[])
 
-    // use id to filter
-    const selectQuery = (id: string) => {
-        const queries = data!.items!.filter((query) => query!.id === id)
-        queries.map((query) => {
-            const selectedQuery: string = query!.searchText!
-            props.setCurrentQuery(selectedQuery)
-            updateBrowserUrl(selectedQuery)
-        })
+    const SelectQuery = (id: string) => {
+        if (id === 'savedSearchesID') {
+            props.setCurrentQuery('')
+            updateBrowserUrl('')
+            setSelectedSearch('Saved searches')
+        } else {
+            const selectedQuery = queries!.filter((query) => query!.id === id)
+            props.setCurrentQuery(selectedQuery[0]!.searchText || '')
+            updateBrowserUrl(selectedQuery[0]!.searchText || '')
+            setSelectedSearch(selectedQuery[0]!.name || '')
+        }
     }
 
     const SavedSearchDropdown = () => {
@@ -133,17 +142,21 @@ function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.
             return { id: query!.id, text: query!.name }
         })
 
+        dropdownItems.unshift({ id: 'savedSearchesID', text: 'Saved searches', searchText: '' })
+
         return (
-            <AcmDropdown
-                isDisabled={false}
-                id="dropdown"
-                onSelect={(id) => {
-                    selectQuery(id)
-                }}
-                text={'Saved searches'}
-                dropdownItems={dropdownItems}
-                isKebab={false}
-            />
+            <div className={classes.dropdown}>
+                <AcmDropdown
+                    isDisabled={false}
+                    id="dropdown"
+                    onSelect={(id) => {
+                        SelectQuery(id)
+                    }}
+                    text={selectedSearch}
+                    dropdownItems={dropdownItems}
+                    isKebab={false}
+                />
+            </div>
         )
     }
 
