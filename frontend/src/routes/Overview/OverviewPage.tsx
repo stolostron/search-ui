@@ -55,6 +55,7 @@ export default function OverviewPage() {
             <AcmPage>
                 <AcmPageHeader title="Overview" />
                 
+                {/* TODO: Use material-ui styles instead of inline. */}
                 <div style={{ marginLeft: "1rem" }}>
                     <AcmLoadingPage />
                 </div>
@@ -80,6 +81,8 @@ export default function OverviewPage() {
 
     const providers = getProvidersData(data?.overview?.clusters || [])
 
+    // TODO: Get data from API.
+    // TODO: Fix links.
     const summary = [
         { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: '/search?query=apps' },
         { isPrimary: false, description: 'Clusters', count: data?.overview?.clusters?.length || 0, href: '/search?query=clusters' },
@@ -89,17 +92,20 @@ export default function OverviewPage() {
         { isPrimary: false, description: 'Pods', count: 99, href: '/search?query=pods' },
     ]
 
+    // TODO: Get data from API.
     const complianceData = [
         { key: 'Compliant', value: 99, isPrimary: true },
         { key: 'Non-compliant', value: 99, isDanger: true },
     ]
 
+    // TODO: Get data from API.
     const podData = [
         { key: 'Running', value: 99, isPrimary: true },
         { key: 'Pending', value: 99 },
         { key: 'Failed', value: 99, isDanger: true },
     ]
 
+    // TODO: Get data from API.
     const clusterData = [
         { key: 'Ready', value: 99, isPrimary: true },
         { key: 'Offline', value: 99, isDanger: true },
@@ -109,6 +115,7 @@ export default function OverviewPage() {
         <AcmPage>  
             <AcmPageHeader title="Overivew" />
 
+            {/* TODO: Use material-ui styles instead of inline. */}
             <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
                 <AcmOverviewProviders providers={providers} />
             </div>
@@ -119,11 +126,11 @@ export default function OverviewPage() {
         
 
             <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
-            <AcmChartGroup>
-                <AcmDonutChart title="Cluster compliance" description="Overview of policy compliance status" data={complianceData} />
-                <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
-                <AcmDonutChart title="Cluster status" description="Overview of cluster status" data={clusterData} />
-            </AcmChartGroup>
+                <AcmChartGroup>
+                    <AcmDonutChart title="Cluster compliance" description="Overview of policy compliance status" data={complianceData} />
+                    <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
+                    <AcmDonutChart title="Cluster status" description="Overview of cluster status" data={clusterData} />
+                </AcmChartGroup>
             </div>
         </AcmPage>
     )
