@@ -1,5 +1,7 @@
 import React from 'react';
-import { AcmChartGroup,
+import { 
+    AcmAlert,
+    AcmChartGroup,
     AcmDonutChart,
     AcmLoadingPage,
     AcmPage,
@@ -8,6 +10,7 @@ import { AcmChartGroup,
     AcmSummaryList,
     Provider,
 } from '@open-cluster-management/ui-components'
+import { PageSection } from '@patternfly/react-core'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
@@ -80,8 +83,16 @@ export default function OverviewPage() {
     const searchResult = searchData?.searchResult || []
 
     if (error || searchError){
-        // TODO: need better error message.
-        return (<p>Error getting data.</p>)
+        return (
+        <PageSection>
+            <AcmAlert
+                noClose={true}
+                variant={'danger'}
+                isInline={true}
+                title="An unexpected error occurred. Try again."
+                subtitle="" />
+        </PageSection>
+        )
     }
 
     const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
