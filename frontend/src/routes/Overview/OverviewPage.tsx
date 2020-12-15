@@ -10,6 +10,8 @@ import { AcmChartGroup,
 } from '@open-cluster-management/ui-components'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
+import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
+import { searchClient } from '../../search-sdk/search-client';
 
 // TODO: Need to verify correct spelling for all these labels.
 function mapProviderFromLabel(provider: string): Provider {
@@ -32,25 +34,50 @@ function mapProviderFromLabel(provider: string): Provider {
             return Provider.other
     }
 }
-function getProvidersData(clusters: any){
-    // TODO: A reducer is better here.
-    const providers: any = {}
-    clusters.forEach((cluster: { metadata: { labels: { cloud: any; }; }; }) => {
-        const cloud = cluster.metadata?.labels?.cloud || 'other'
-        providers[cloud] = providers[cloud] ? providers[cloud] + 1 : 1
-    })
 
-    return Object.keys(providers).map((key: string) => (
-        { provider: mapProviderFromLabel(key),
-            clusterCount: providers[key],
-            onClick: ()=>{console.log(`clicked cluster ${key}`)}}
-    ))
+function getClusterSummary(clusters: any) {
+    const clusterSummary = clusters.reduce((prev: any, curr: any , index: number, []) => {
+        // Data for Providers section.
+        const cloud = curr.metadata?.labels?.cloud || 'other'
+        const provider = prev.providers.find((p: any) => p.provider === mapProviderFromLabel(cloud))
+        if (provider) {
+            provider.clusterCount = provider.clusterCount + 1
+        } else {
+            prev.providers.push({ provider: mapProviderFromLabel(cloud),
+                clusterCount: 1,
+                onClick: ()=>{console.log(`Execute action for cluster provider: ${cloud}`)}})
+        }
+
+        // Data for Summary section.
+        prev.kubernetesTypes.add(curr.metadata.labels.vendor)
+        prev.regions.add(curr.metadata.labels.region)
+        
+        // Data for Cluster status pie chart.
+        if (curr.status === 'ok'){
+            prev.ready = prev.ready + 1
+        } else{
+            prev.offline = prev.offline + 1
+        }
+        return prev
+    }, { kubernetesTypes: new Set(), regions: new Set(), ready: 0, offline: 0, providerCounts: {}, providers: [] })
+
+    return clusterSummary
 }
 
+const searchInput = [
+    { keywords: [], filters: [{property: 'kind', values:['node']}]},
+    { keywords: [], filters: [{property: 'kind', values:['pod']}]},
+    { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Running', 'Completed']} ]},
+    { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Pending', 'ContainerCreating', 'Waiting', 'Terminating']} ]},
+    { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Failed', 'CrashLoopBackOff', 'ImagePullBackOff', 'Terminated', 'OOMKilled', 'Unknown']} ]},
+]
 
 export default function OverviewPage() {
     const { data, loading, error } = useGetOverviewQuery({client: consoleClient})
-    if (loading){
+    const { data: searchData, loading: searchLoading, error: searchError} = useSearchResultCountQuery({ client: searchClient, variables: {input: searchInput }})
+    const searchResult = searchData?.searchResult || []
+
+    if (loading || searchLoading){
         return (
             <AcmPage>
                 <AcmPageHeader title="Overview" />
@@ -75,21 +102,20 @@ export default function OverviewPage() {
             )
     }
 
-    if (error){
+    if (error || searchError){
         // TODO: need better error message.
         return (<p>Error getting data.</p>)
     }
 
-    const providers = getProvidersData(data?.overview?.clusters || [])
-
-    // TODO: Get data from API.
+    const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
+    
     const summary = [
         { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: 'search?filters={"textsearch":"kind%3Aapplication"}' },
         { isPrimary: false, description: 'Clusters', count: data?.overview?.clusters?.length || 0, href: 'search?filters={"textsearch":"kind%3Acluster"}' },
-        { isPrimary: false, description: 'Kubernetes type', count: 99 },
-        { isPrimary: false, description: 'Region', count: 99 },
-        { isPrimary: false, description: 'Nodes', count: 99, href: '/search?filters={"textsearch":"kind%3Anode"}' },
-        { isPrimary: false, description: 'Pods', count: 99, href: '/search?filters={"textsearch":"kind%3Apod"}' },
+        { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes.size },
+        { isPrimary: false, description: 'Region', count: regions.size },
+        { isPrimary: false, description: 'Nodes', count: searchResult[0]?.count || 0, href: '/search?filters={"textsearch":"kind%3Anode"}' },
+        { isPrimary: false, description: 'Pods', count: searchResult[1]?.count || 0, href: '/search?filters={"textsearch":"kind%3Apod"}' },
     ]
 
     // TODO: Get data from API.
@@ -98,17 +124,15 @@ export default function OverviewPage() {
         { key: 'Non-compliant', value: 99, isDanger: true },
     ]
 
-    // TODO: Get data from API.
     const podData = [
-        { key: 'Running', value: 99, isPrimary: true },
-        { key: 'Pending', value: 99 },
-        { key: 'Failed', value: 99, isDanger: true },
+        { key: 'Running', value: searchResult[2]?.count || 0, isPrimary: true },
+        { key: 'Pending', value: searchResult[3]?.count || 0 },
+        { key: 'Failed', value: searchResult[4]?.count || 0, isDanger: true },
     ]
 
-    // TODO: Get data from API.
     const clusterData = [
-        { key: 'Ready', value: 99, isPrimary: true },
-        { key: 'Offline', value: 99, isDanger: true },
+        { key: 'Ready', value: ready, isPrimary: true },
+        { key: 'Offline', value: offline, isDanger: true },
     ]
 
     return (
@@ -120,7 +144,7 @@ export default function OverviewPage() {
                 <AcmOverviewProviders providers={providers} />
             </div>
                       
-            <div style={{ margin: "1rem 2rem 1rem 2rem" }}>
+            <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
                 <AcmSummaryList title="Summary" list={summary}/>
             </div>
         
