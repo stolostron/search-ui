@@ -61,11 +61,10 @@ export default function DetailsPage() {
                             <Link replace to={`/resources/${cluster}${selfLink}`}>YAML</Link>
                         </AcmSecondaryNavItem>
                         {kind === 'pods'
-                            ? <AcmSecondaryNavItem
+                            && <AcmSecondaryNavItem
                                 isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
                                 <Link replace to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
-                            </AcmSecondaryNavItem>
-                            : null}
+                            </AcmSecondaryNavItem>}
                     </AcmSecondaryNav>
                 } />
             <Switch>

@@ -1343,7 +1343,6 @@ export function createExternalLink(item: any) {
 
 export function formatLabels(item: any) {
     if (item.label) {
-        // TODO new redis handles lists - need to have a check if the label is list or string
         return <AcmLabels labels={item.label.split(', ')} />
     }
     return '-'

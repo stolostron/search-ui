@@ -1,6 +1,6 @@
 
 import { PageSection } from '@patternfly/react-core'
-import { AcmAlert, AcmSpinnerBackdrop } from '@open-cluster-management/ui-components'
+import { AcmAlert, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { ApolloError } from '@apollo/client'
 import MonacoEditor, { monaco } from 'react-monaco-editor'
 import { makeStyles } from '@material-ui/styles'
@@ -88,7 +88,7 @@ export default function YAMLPage(props: {
     if (loading) {
         return (
             <PageSection>
-                <AcmSpinnerBackdrop />
+                <AcmLoadingPage />
             </PageSection>
         )
     }
