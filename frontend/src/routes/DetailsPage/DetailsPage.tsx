@@ -1,11 +1,20 @@
 import React from 'react'
-import { Switch, Route, Link, useLocation } from 'react-router-dom'
-import { AcmPage, AcmPageHeader, AcmSecondaryNav, AcmSecondaryNavItem } from '@open-cluster-management/ui-components'
+import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
+import { AcmButton, AcmPage, AcmPageHeader, AcmSecondaryNav, AcmSecondaryNavItem } from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
+import { makeStyles } from '@material-ui/styles'
 import YAMLPage from './YAMLPage'
 import LogsPage from './LogsPage'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetResourceQuery } from '../../console-sdk/console-sdk'
+
+const useStyles = makeStyles({
+    customBreadcrumb: {
+        padding: '8px 0 0 8px',
+        marginBottom: '-20px',
+        backgroundColor: 'var(--pf-global--palette--white)',
+    },
+})
 
 function getResourceData() {
     const baseSegments = window.location.pathname.split('/').slice(2)
@@ -24,6 +33,7 @@ function getResourceData() {
 
 export default function DetailsPage() {
     const { cluster, selfLink, namespace, kind, name } = getResourceData()
+    const classes = useStyles()
     const getResourceResponse = useGetResourceQuery({
         client: consoleClient,
         variables: {
@@ -35,23 +45,25 @@ export default function DetailsPage() {
         },
     });
     const location = useLocation()
+    const history = useHistory()
 
     return (
         <AcmPage>
-            {/* TODO - can we go back to previous search? instead of search hompage?  */}
+            <div className={classes.customBreadcrumb}>
+                <AcmButton variant={'link'} onClick={() => history.goBack()}>Search</AcmButton>
+            </div>
             <AcmPageHeader
                 title={name}
-                breadcrumb={[ { text: 'Search', to: '/search' } ]}
                 navigation={
                     <AcmSecondaryNav>
                         <AcmSecondaryNavItem
                             isActive={location.pathname === `/resources/${cluster}${selfLink}`} >
-                            <Link to={`/resources/${cluster}${selfLink}`}>YAML</Link>
+                            <Link replace to={`/resources/${cluster}${selfLink}`}>YAML</Link>
                         </AcmSecondaryNavItem>
                         {kind === 'pods'
                             ? <AcmSecondaryNavItem
                                 isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
-                                <Link to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
+                                <Link replace to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
                             </AcmSecondaryNavItem>
                             : null}
                     </AcmSecondaryNav>

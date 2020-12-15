@@ -47,19 +47,27 @@ exports[`Correctly returns createDetailsLink - HUB-Policy 1`] = `
 `;
 
 exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
-<a
-  href="/resources/testCluster/self/link"
+<Link
+  to={
+    Object {
+      "pathname": "/resources/testCluster/self/link",
+    }
+  }
 >
   testPolicyName
-</a>
+</Link>
 `;
 
 exports[`Correctly returns createDetailsLink - NON-Application 1`] = `
-<a
-  href="/resources/testCluster/self/link"
+<Link
+  to={
+    Object {
+      "pathname": "/resources/testCluster/self/link",
+    }
+  }
 >
   testApplicationName
-</a>
+</Link>
 `;
 
 exports[`Correctly returns createExternalLink from clusterip 1`] = `"http://clusterip"`;
