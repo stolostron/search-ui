@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
 import { searchClient } from '../../../search-sdk/search-client'
 import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../../../search-sdk/search-sdk'
@@ -6,6 +6,9 @@ import { convertStringToQuery } from '../search-helper'
 import SuggestQueryTemplates from './SuggestedQueryTemplates'
 import { AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
 import { updateBrowserUrl } from '../urlQuery'
+import { SaveAndEditSearchModal } from './Modals/SaveAndEditSearchModal'
+import { DeleteSearchModal } from './Modals/DeleteSearchModal'
+import { ShareSearchModal } from './Modals/ShareSearchModal'
 import { PageSection } from '@patternfly/react-core'
 
 function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: any, setCurrentQuery: any): any {
@@ -14,12 +17,9 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         client: searchClient,
     })
 
-    const savedSearchActions = [
-        { text: 'Edit', handleAction: () => console.log('edit action') },
-        { text: 'Share', handleAction: () => console.log('share action') },
-        { text: 'Delete', handleAction: () => console.log('delete action') },
-    ]
-    const suggestedSearchActions = [{ text: 'Share', handleAction: () => console.log('share action') }]
+    const [editSearch, setEditSearch] = useState(undefined)
+    const [shareSearch, setShareSearch] = useState(undefined)
+    const [deleteSearch, setDeleteSearch] = useState(undefined)
 
     if (loading) {
         return (
@@ -42,6 +42,10 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         })
         return (
             <PageSection>
+                <SaveAndEditSearchModal editSearch={editSearch} onClose={() => setEditSearch(undefined)} />
+                <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
+                <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
+
                 {savedQueriesResult.length > 0 && (
                     <AcmExpandableWrapper
                         maxHeight={'16rem'}
@@ -57,7 +61,11 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         hasIcon: false,
                                         title: query.name,
                                         description: query.description,
-                                        actions: [...savedSearchActions],
+                                        actions: [
+                                            { text: 'Edit', handleAction: () => setEditSearch(query) },
+                                            { text: 'Share', handleAction: () => setShareSearch(query) },
+                                            { text: 'Delete', handleAction: () => setDeleteSearch(query) },
+                                        ],
                                     }}
                                     onCardClick={() => {
                                         setCurrentQuery(query.searchText)
@@ -84,7 +92,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                         hasIcon: true,
                                         title: query.name,
                                         description: query.description,
-                                        actions: [...suggestedSearchActions],
+                                        actions: [{ text: 'Share', handleAction: () => setShareSearch(query) }],
                                     }}
                                     onCardClick={() => {
                                         setCurrentQuery(query.searchText)

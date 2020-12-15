@@ -1,10 +1,8 @@
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { V1Status } from '@kubernetes/client-node'
-import { getResourceApiPath, getResourceName, getResourceNameApiPath, IResource } from './resource'
 
 const baseUrl = process.env.REACT_APP_BACKEND ?? ''
 export const apiProxyUrl = `/search/proxy`
-export const apiNamespacedUrl = `/search/namespaced`
 
 export const StatusApiVersion = 'v1'
 export type StatusApiVersionType = 'v1'
@@ -62,89 +60,6 @@ export function validateSession() {
     return axiosRequest({
         ...{ url, method: 'GET', validateStatus: (status) => true },
         ...{ retries: 2 },
-    })
-}
-
-export function createResource<Resource extends IResource, ResultType = Resource>(
-    resource: Resource,
-    options?: IRequestOptions
-): IRequestResult<ResultType> {
-    const url = baseUrl + apiProxyUrl + getResourceApiPath(resource)
-    return postRequest<Resource, ResultType>(url, resource, options)
-}
-
-export function patchResource<Resource extends IResource, ResultType = Resource>(
-    resource: Resource,
-    data: unknown,
-    options?: IRequestOptions
-): IRequestResult<ResultType> {
-    const url = baseUrl + apiProxyUrl + getResourceNameApiPath(resource)
-    return patchRequest<Resource, ResultType>(url, data, options)
-}
-
-export function deleteResource<Resource extends IResource>(
-    resource: Resource,
-    options?: IRequestOptions
-): IRequestResult {
-    if (getResourceName(resource) === undefined)
-        throw new ResourceError('Resource name is required.', ResourceErrorCode.BadRequest)
-    const url = baseUrl + apiProxyUrl + getResourceNameApiPath(resource)
-    return deleteRequest(url, options)
-}
-
-export function getResource<Resource extends IResource>(
-    resource: Resource,
-    options?: IRequestOptions
-): IRequestResult<Resource> {
-    if (getResourceName(resource) === undefined)
-        throw new ResourceError('Resource name is required.', ResourceErrorCode.BadRequest)
-    const url = baseUrl + apiProxyUrl + getResourceNameApiPath(resource)
-    return getRequest<Resource>(url, { ...{ retries: 2 }, ...options })
-}
-
-function getRequest<ResourceType, ResultType = ResourceType>(
-    url: string,
-    options?: IRequestOptions
-): IRequestResult<ResultType> {
-    return axiosRequest<ResultType>({
-        ...{ url, method: 'GET', validateStatus: (status) => true },
-        ...{ retries: 2 },
-        ...options,
-    })
-}
-
-function postRequest<ResourceType, ResultType = ResourceType>(
-    url: string,
-    data: ResourceType,
-    options?: IRequestOptions
-): IRequestResult<ResultType> {
-    return axiosRequest<ResultType>({
-        ...{ url, method: 'POST', validateStatus: (status) => true, data },
-        ...options,
-    })
-}
-
-function patchRequest<ResourceType, ResultType = ResourceType>(
-    url: string,
-    data: unknown,
-    options?: IRequestOptions
-): IRequestResult<ResultType> {
-    return axiosRequest<ResultType>({
-        ...{
-            url,
-            method: 'PATCH',
-            validateStatus: (status) => true,
-            headers: { 'Content-Type': 'application/json' },
-            data,
-        },
-        ...options,
-    })
-}
-
-function deleteRequest(url: string, options?: IRequestOptions): IRequestResult {
-    return axiosRequest({
-        ...{ url, method: 'DELETE', validateStatus: (status) => true },
-        ...options,
     })
 }
 
