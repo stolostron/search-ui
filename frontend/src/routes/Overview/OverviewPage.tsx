@@ -79,31 +79,6 @@ export default function OverviewPage() {
     const { data: searchData, loading: searchLoading, error: searchError} = useSearchResultCountQuery({ client: searchClient, variables: {input: searchInput }})
     const searchResult = searchData?.searchResult || []
 
-    if (loading || searchLoading){
-        return (
-            <AcmPage>
-                <AcmPageHeader title="Overview" />
-                
-                {/* TODO: Use material-ui styles instead of inline. */}
-                <div style={{ marginLeft: ".5rem" }}>
-                    {/* TODO: Use skeleton card component */}
-                    <AcmLoadingPage />
-                </div>
-                <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
-                    <AcmSummaryList key="summary-list-loading" loading title="Summary" list={[]}/>
-                </div>
-
-                <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
-                    <AcmChartGroup>
-                        <AcmDonutChart loading key="chart-loading-1" title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
-                        <AcmDonutChart loading key="chart-loading-2" title="Pods" description="Overview of pod count and status" data={[]} />
-                        <AcmDonutChart loading key="chart-loading-3" title="Cluster status" description="Overview of cluster status" data={[]} />
-                    </AcmChartGroup>
-                </div>
-            </AcmPage>    
-            )
-    }
-
     if (error || searchError){
         // TODO: need better error message.
         return (<p>Error getting data.</p>)
@@ -111,7 +86,7 @@ export default function OverviewPage() {
 
     const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
     
-    const summary = [
+    const summary = loading || searchLoading? [] : [
         { isPrimary: true, description: 'Applications', count: data?.overview?.applications?.length || 0, href: 'search?filters={"textsearch":"kind%3Aapplication"}' },
         { isPrimary: false, description: 'Clusters', count: data?.overview?.clusters?.length || 0, href: 'search?filters={"textsearch":"kind%3Acluster"}' },
         { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes.size },
@@ -120,18 +95,18 @@ export default function OverviewPage() {
         { isPrimary: false, description: 'Pods', count: searchResult[1]?.count || 0, href: '/search?filters={"textsearch":"kind%3Apod"}' },
     ]
 
-    const podData = [
+    const podData = loading || searchLoading? [] : [
         { key: 'Running', value: searchResult[2]?.count || 0, isPrimary: true },
         { key: 'Pending', value: searchResult[3]?.count || 0 },
         { key: 'Failed', value: searchResult[4]?.count || 0, isDanger: true },
     ]
 
-    const complianceData = [
+    const complianceData = loading || searchLoading? [] : [
         { key: 'Compliant', value: searchResult[5]?.count || 0, isPrimary: true },
         { key: 'Non-compliant', value: searchResult[6]?.count || 0, isDanger: true },
     ]
 
-    const clusterData = [
+    const clusterData = loading || searchLoading? [] : [
         { key: 'Ready', value: ready, isPrimary: true },
         { key: 'Offline', value: offline, isDanger: true },
     ]
@@ -141,21 +116,37 @@ export default function OverviewPage() {
             <AcmPageHeader title="Overivew" />
 
             {/* TODO: Use material-ui styles instead of inline. */}
+            {loading? 
+            <div key="1" style={{ marginLeft: ".5rem" }}>
+                <AcmLoadingPage />
+            </div>
+            :
             <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
                 <AcmOverviewProviders providers={providers} />
             </div>
+            }
                       
             <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
-                <AcmSummaryList title="Summary" list={summary}/>
+                {loading || searchLoading ?
+                <AcmSummaryList key="loading" loading title="Summary" list={summary}/>
+                :
+                <AcmSummaryList title="Summary" list={summary}/>}
             </div>
         
 
             <div style={{ margin: "1rem 2rem 1rem 2rem" }}>
+                {loading || searchLoading ?
+                <AcmChartGroup>
+                    <AcmDonutChart loading key="chart-loading-1" title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
+                    <AcmDonutChart loading key="chart-loading-2" title="Pods" description="Overview of pod count and status" data={[]} />
+                    <AcmDonutChart loading key="chart-loading-3" title="Cluster status" description="Overview of cluster status" data={[]} />
+                </AcmChartGroup>
+                :
                 <AcmChartGroup>
                     <AcmDonutChart title="Cluster compliance" description="Overview of policy compliance status" data={complianceData} />
                     <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
                     <AcmDonutChart title="Cluster status" description="Overview of cluster status" data={clusterData} />
-                </AcmChartGroup>
+                </AcmChartGroup>}
             </div>
         </AcmPage>
     )
