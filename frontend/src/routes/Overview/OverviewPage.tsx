@@ -36,7 +36,7 @@ function mapProviderFromLabel(provider: string): Provider {
 }
 
 function getClusterSummary(clusters: any) {
-    const clusterSummary = clusters.reduce((prev: any, curr: any , index: number, []) => {
+    const clusterSummary = clusters.reduce((prev: any, curr: any , index: number) => {
         // Data for Providers section.
         const cloud = curr.metadata?.labels?.cloud || 'other'
         const provider = prev.providers.find((p: any) => p.provider === mapProviderFromLabel(cloud))
@@ -70,6 +70,8 @@ const searchInput = [
     { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Running', 'Completed']} ]},
     { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Pending', 'ContainerCreating', 'Waiting', 'Terminating']} ]},
     { keywords: [], filters: [{property: 'kind', values:['pod']}, { property: 'status', values:['Failed', 'CrashLoopBackOff', 'ImagePullBackOff', 'Terminated', 'OOMKilled', 'Unknown']} ]},
+    { keywords: [], filters: [{property: 'apigroup', values:['policy.open-cluster-management.io']}, {property: 'kind', values:['policy']}, { property: 'compliant', values:['Compliant']} ]},
+    { keywords: [], filters: [{property: 'apigroup', values:['policy.open-cluster-management.io']}, {property: 'kind', values:['policy']}, { property: 'compliant', values:['NonCompliant']} ]},
 ]
 
 export default function OverviewPage() {
@@ -84,7 +86,7 @@ export default function OverviewPage() {
                 
                 {/* TODO: Use material-ui styles instead of inline. */}
                 <div style={{ marginLeft: "1rem" }}>
-                    {/* TODO: Use skeleton component */}
+                    {/* TODO: Use skeleton card component */}
                     <AcmLoadingPage />
                 </div>
                 <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
@@ -118,16 +120,15 @@ export default function OverviewPage() {
         { isPrimary: false, description: 'Pods', count: searchResult[1]?.count || 0, href: '/search?filters={"textsearch":"kind%3Apod"}' },
     ]
 
-    // TODO: Get data from API.
-    const complianceData = [
-        { key: 'Compliant', value: 99, isPrimary: true },
-        { key: 'Non-compliant', value: 99, isDanger: true },
-    ]
-
     const podData = [
         { key: 'Running', value: searchResult[2]?.count || 0, isPrimary: true },
         { key: 'Pending', value: searchResult[3]?.count || 0 },
         { key: 'Failed', value: searchResult[4]?.count || 0, isDanger: true },
+    ]
+
+    const complianceData = [
+        { key: 'Compliant', value: searchResult[5]?.count || 0, isPrimary: true },
+        { key: 'Non-compliant', value: searchResult[6]?.count || 0, isDanger: true },
     ]
 
     const clusterData = [
