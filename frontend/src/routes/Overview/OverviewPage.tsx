@@ -85,7 +85,7 @@ export default function OverviewPage() {
                 <AcmPageHeader title="Overview" />
                 
                 {/* TODO: Use material-ui styles instead of inline. */}
-                <div style={{ marginLeft: "1rem" }}>
+                <div style={{ marginLeft: ".5rem" }}>
                     {/* TODO: Use skeleton card component */}
                     <AcmLoadingPage />
                 </div>
