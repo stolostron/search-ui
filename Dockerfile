@@ -7,6 +7,7 @@ COPY frontend/package.json frontend/package-lock.json ./frontend/
 RUN npm run postinstall
 COPY ./ ./
 RUN npm run build
+RUN cd frontend/build && gzip * -k -r --best
 RUN rm -rf backend/node_modules
 RUN cd backend && npm ci --only=production --no-optional
 
