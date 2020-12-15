@@ -30,7 +30,7 @@ exports[`Correctly returns createDetailsLink - Default 1`] = `
 <Link
   to={
     Object {
-      "pathname": "/details/testCluster/self/link",
+      "pathname": "/resources/testCluster/self/link",
     }
   }
 >
@@ -48,7 +48,7 @@ exports[`Correctly returns createDetailsLink - HUB-Policy 1`] = `
 
 exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
 <a
-  href="/details/testCluster/self/link"
+  href="/resources/testCluster/self/link"
 >
   testPolicyName
 </a>
@@ -56,7 +56,7 @@ exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
 
 exports[`Correctly returns createDetailsLink - NON-Application 1`] = `
 <a
-  href="/details/testCluster/self/link"
+  href="/resources/testCluster/self/link"
 >
   testApplicationName
 </a>

@@ -45,19 +45,19 @@ export default function DetailsPage() {
                 navigation={
                     <AcmSecondaryNav>
                         <AcmSecondaryNavItem
-                            isActive={location.pathname === `/details/${cluster}${selfLink}`} >
-                            <Link to={`/details/${cluster}${selfLink}`}>YAML</Link>
+                            isActive={location.pathname === `/resources/${cluster}${selfLink}`} >
+                            <Link to={`/resources/${cluster}${selfLink}`}>YAML</Link>
                         </AcmSecondaryNavItem>
                         {kind === 'pods'
                             ? <AcmSecondaryNavItem
-                                isActive={location.pathname === `/details/${cluster}${selfLink}/logs`} >
-                                <Link to={`/details/${cluster}${selfLink}/logs`}>Logs</Link>
+                                isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
+                                <Link to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
                             </AcmSecondaryNavItem>
                             : null}
                     </AcmSecondaryNav>
                 } />
             <Switch>
-                <Route exact path={`/details/${cluster}${selfLink}`}>
+                <Route exact path={`/resources/${cluster}${selfLink}`}>
                     <YAMLPage
                         resource={getResourceResponse.data}
                         loading={getResourceResponse.loading}
@@ -66,9 +66,9 @@ export default function DetailsPage() {
                         cluster={cluster}
                         namespace={namespace} />
                 </Route>
-                <Route path={`/details/${cluster}${selfLink}/logs`}>
+                <Route path={`/resources/${cluster}${selfLink}/logs`}>
                     <LogsPage
-                        containers={getResourceResponse.data?.getResource.spec.containers.map((container: any) => container.name) || []}
+                        containers={getResourceResponse.data?.getResource?.spec.containers.map((container: any) => container.name) || []}
                         cluster={cluster}
                         namespace={namespace}
                         name={name} />

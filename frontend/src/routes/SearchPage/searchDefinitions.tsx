@@ -1312,16 +1312,16 @@ export function createDetailsLink(item: any) {
             // only redirect to apps page if it is an ACM application
             return <a href={`/multicloud/applications/${item.namespace}/${item.name}`}>{item.name}</a>
         }
-        return <a href={`/details/${item.cluster}${item.selfLink}`}>{item.name}</a>
+        return <a href={`/resources/${item.cluster}${item.selfLink}`}>{item.name}</a>
     case 'policy':
         // Redirects to the policy page if the policy is a hub cluster resource.
         // If the policy is not, it will redirect and just show the yaml.
         if (item._hubClusterResource && item.apigroup === 'policy.open-cluster-management.io') {
             return <a href={`/multicloud/policies/all/${item.name}`}>{item.name}</a>
         }
-        return <a href={`/details/${item.cluster}${item.selfLink}`}>{item.name}</a>
+        return <a href={`/resources/${item.cluster}${item.selfLink}`}>{item.name}</a>
     default:
-        return <Link to={{ pathname: `/details/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
+        return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
     }
 }
 
