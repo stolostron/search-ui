@@ -68,7 +68,6 @@ export const SaveAndEditSearchModal = (props: any) => {
             },
             refetchQueries: [{ query: SavedSearchesDocument }],
         }).then((res) => {
-            console.log('res', res)
             if (res.errors) {
                 setIsError(true)
                 return null
