@@ -30,25 +30,25 @@ monaco.editor.setTheme('console')
 const useStyles = makeStyles({
     headerContainer: {
         display: 'flex',
-        backgroundColor: '#212427',
+        backgroundColor: 'var(--pf-global--palette--black-850)',
         fontSize: '14px',
     },
     spacer: {
-        borderRight: '1px solid #4f5255',
+        borderRight: '1px solid var(--pf-global--palette--black-700)',
         paddingLeft: '1rem',
     },
     textTitle: {
-        color: '#d2d2d2',
+        color: 'var(--pf-global--palette--black-300)',
         padding: '1rem',
     },
     textContent: {
-        color: '#FFF',
+        color: 'var(--pf-global--palette--white)',
         padding: '1rem 0',
         fontWeight: 700,
     },
     editButtonContainer: {
         display: 'flex',
-        color: '#FFF',
+        color: 'var(--pf-global--palette--white)',
         alignItems: 'center',
         margin: '0 10px 0 auto'
     },
