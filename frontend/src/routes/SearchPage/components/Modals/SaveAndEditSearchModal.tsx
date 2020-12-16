@@ -105,14 +105,14 @@ export const SaveAndEditSearchModal = (props: any) => {
                 {'Name your search and provide a description so that you can access it in the future.'}
                 {props.saveSearch === '' && !props.editSearch && (
                     <AcmAlert
-                        noClose={true}
+                        noClose
                         variant={'danger'}
                         isInline={true}
                         title={'Error'}
                         subtitle={'Enter search text'}
                     />
                 )}
-                {isError ? <AcmAlert noClose={true} variant={'danger'} title={error!.message} /> : null}
+                {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
                 <AcmForm>
                     <AcmTextInput
                         id="add-query-name"

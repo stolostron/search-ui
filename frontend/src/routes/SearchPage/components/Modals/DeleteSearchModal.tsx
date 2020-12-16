@@ -47,7 +47,7 @@ export const DeleteSearchModal = (props: any) => {
                     </AcmButton>,
                 ]}
             >
-                {isError ? <AcmAlert noClose={true} variant={'danger'} title={error!.message} /> : null}
+                {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
                 <p>This action is irreversible. Are you sure that you want to continue?</p>
             </AcmModal>
         </Fragment>
