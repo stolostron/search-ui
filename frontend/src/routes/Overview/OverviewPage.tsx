@@ -84,14 +84,17 @@ export default function OverviewPage() {
 
     if (error || searchError){
         return (
-        <PageSection>
-            <AcmAlert
-                noClose
-                variant={'danger'}
-                isInline
-                title="An unexpected error occurred. Try again."
-                subtitle="" />
-        </PageSection>
+            <AcmPage>  
+                <AcmPageHeader title="Overview" />
+                <PageSection>
+                    <AcmAlert
+                        noClose
+                        isInline
+                        variant={'danger'}
+                        title="An unexpected error occurred. Try again."
+                        subtitle="The backend service is unavailable." />
+                </PageSection>
+            </AcmPage>
         )
     }
 
@@ -124,7 +127,7 @@ export default function OverviewPage() {
 
     return (
         <AcmPage>  
-            <AcmPageHeader title="Overivew" />
+            <AcmPageHeader title="Overview" />
             
             {loading || searchLoading? 
             <AcmLoadingPage />
