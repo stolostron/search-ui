@@ -60,11 +60,10 @@ export default function DetailsPage() {
                             isActive={location.pathname === `/resources/${cluster}${selfLink}`} >
                             <Link replace to={`/resources/${cluster}${selfLink}`}>YAML</Link>
                         </AcmSecondaryNavItem>
-                        {kind === 'pods'
-                            && <AcmSecondaryNavItem
-                                isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
-                                <Link replace to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
-                            </AcmSecondaryNavItem>}
+                        {kind === 'pods' && <AcmSecondaryNavItem
+                            isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
+                            <Link replace to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
+                        </AcmSecondaryNavItem>}
                     </AcmSecondaryNav>
                 } />
             <Switch>
@@ -77,13 +76,13 @@ export default function DetailsPage() {
                         cluster={cluster}
                         namespace={namespace} />
                 </Route>
-                <Route path={`/resources/${cluster}${selfLink}/logs`}>
+                {kind === 'pods' && <Route path={`/resources/${cluster}${selfLink}/logs`}>
                     <LogsPage
                         containers={getResourceResponse.data?.getResource?.spec.containers.map((container: any) => container.name) || []}
                         cluster={cluster}
                         namespace={namespace}
                         name={name} />
-                </Route>
+                </Route>}
             </Switch>
         </AcmPage>
     )
