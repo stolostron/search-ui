@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import {
+    AcmAlert,
     AcmButton,
     AcmDropdown,
     AcmLaunchLink,
@@ -25,6 +26,7 @@ import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
 import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
+import { ApolloError } from '@apollo/client'
 
 const useStyles = makeStyles({
     actionGroup: {
@@ -40,6 +42,28 @@ const useStyles = makeStyles({
     },
 })
 
+// Adds AcmAlert to page if there's errors from the Apollo queries.
+function HandleErrors(schemaError: ApolloError|undefined, completeError: ApolloError|undefined){
+    if (schemaError) {
+        console.error('Search schema query error.', schemaError)
+    }
+    if (completeError) {
+        console.error('Search complete query error.', completeError)
+    }
+    if (schemaError || completeError){
+        return (
+            <div style={{ marginBottom: "1rem" }}>
+                <AcmAlert
+                    noClose
+                    variant={'danger'}
+                    isInline
+                    title="An unexpected error occurred."
+                    subtitle="The search service is unavailable." />
+            </div>
+        )
+    }
+}
+
 function RenderSearchBar(props: {
     searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
@@ -52,10 +76,7 @@ function RenderSearchBar(props: {
         skip: searchQuery.endsWith(':'),
         client: searchClient,
     })
-    if (searchSchemaResults.error) {
-        // TODO better error handling
-        console.error('Search schema query error', searchSchemaResults.error)
-    }
+  
     const searchCompleteValue = getSearchCompleteString(searchQuery)
     const searchCompleteQuery = convertStringToQuery(searchQuery)
     searchCompleteQuery.filters = searchCompleteQuery.filters.filter((filter) => {
@@ -69,15 +90,13 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
-    if (searchCompleteResults.error) {
-        // TODO better error handling
-        console.error('Search complete query error', searchCompleteResults.error)
-    }
+
     return (
         <Fragment>
             <PageSection>
                 <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
                 <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
+                { HandleErrors(searchSchemaResults.error, searchCompleteResults.error) }
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
