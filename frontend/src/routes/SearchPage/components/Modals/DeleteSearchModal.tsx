@@ -17,7 +17,7 @@ export const DeleteSearchModal = (props: any) => {
         deleteSearchMutation({
             variables: {
                 resource: {
-                    name: 'dfadf',
+                    name: props.deleteSearch.name,
                 },
             },
             refetchQueries: [{ query: SavedSearchesDocument }],
