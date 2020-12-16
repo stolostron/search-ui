@@ -1,29 +1,36 @@
 import '@patternfly/react-core/dist/styles/base.css'
-import React, { Fragment } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
-import { AcmModal, AcmButton } from '@open-cluster-management/ui-components'
+import { AcmModal, AcmButton, AcmAlert } from '@open-cluster-management/ui-components'
 import { SavedSearchesDocument, useDeleteSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
 
 export const DeleteSearchModal = (props: any) => {
     const [deleteSearchMutation, { error }] = useDeleteSearchMutation({ client: searchClient })
-    // TODO ERROR NOTIFICATION HANDLING
-    if (error) {
-        console.log('error', error)
-    }
+    const [isError, setIsError] = useState<boolean>(false)
 
-    function deleteSearch() {
+    useEffect(() => {
+        setIsError(false)
+    }, [props.deleteSearch])
+
+    const deleteSearch = () => {
         deleteSearchMutation({
             variables: {
                 resource: {
-                    name: props.deleteSearch.name,
+                    name: 'dfadf',
                 },
             },
             refetchQueries: [{ query: SavedSearchesDocument }],
+        }).then((res) => {
+            if (res.errors) {
+                setIsError(true)
+                return null
+            }
+            props.onClose()
+            return null
         })
-        props.onClose()
-        return null
     }
+
     return (
         <Fragment>
             <AcmModal
@@ -40,6 +47,7 @@ export const DeleteSearchModal = (props: any) => {
                     </AcmButton>,
                 ]}
             >
+                {isError ? <AcmAlert noClose={true} variant={'danger'} title={error!.message} /> : null}
                 <p>This action is irreversible. Are you sure that you want to continue?</p>
             </AcmModal>
         </Fragment>
