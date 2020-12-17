@@ -16,11 +16,19 @@ import {
     useSearchResultRelatedItemsQuery,
 } from '../../../search-sdk/search-sdk'
 import { convertStringToQuery } from '../search-helper'
-import { DeleteResourceModal, IDeleteModalProps, ClosedDeleteModalProps } from '../components/Modals/DeleteResourceModal'
+import {
+    DeleteResourceModal,
+    IDeleteModalProps,
+    ClosedDeleteModalProps,
+} from '../components/Modals/DeleteResourceModal'
 import { PageSection } from '@patternfly/react-core'
 import searchDefinitions from '../searchDefinitions'
 
-function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>) {
+function RenderRelatedTables(
+    currentQuery: string,
+    selectedKinds: string[],
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+) {
     const { data, loading, error } = useSearchResultRelatedItemsQuery({
         skip: selectedKinds.length === 0,
         client: searchClient,
@@ -46,46 +54,54 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setD
     }
 
     const relatedResultItems = data.searchResult[0]?.related || []
-    return (
-        selectedKinds.map(kind => {
-            const items = relatedResultItems[0]?.items.filter((item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind )
-            if (items && items.length > 0) {
-                return (
-                    <AcmPageCard key={`related-table-${kind}`} >
-                        <AcmExpandableSection label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`} expanded={true}>
-                            <AcmTable
-                                plural=""
-                                items={items}
-                                columns={_.get(searchDefinitions, `[${kind}].columns`, searchDefinitions['genericresource'].columns)}
-                                keyFn={(item: any) => item._uid.toString()}
-                                tableActions={[]}
-                                rowActions={(kind !== 'cluster' && kind !== 'release')
+    return selectedKinds.map((kind) => {
+        const items = relatedResultItems[0]?.items.filter(
+            (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
+        )
+        if (items && items.length > 0) {
+            return (
+                <AcmPageCard key={`related-table-${kind}`}>
+                    <AcmExpandableSection
+                        label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
+                        expanded={true}
+                    >
+                        <AcmTable
+                            plural=""
+                            items={items}
+                            columns={_.get(
+                                searchDefinitions,
+                                `[${kind}].columns`,
+                                searchDefinitions['genericresource'].columns
+                            )}
+                            keyFn={(item: any) => item._uid.toString()}
+                            tableActions={[]}
+                            rowActions={
+                                kind !== 'cluster' && kind !== 'release'
                                     ? [
-                                        {
-                                            id: 'delete',
-                                            title: `Delete ${kind}`,
-                                            click: (item: any) => {
-                                                setDeleteResource({
-                                                    open: true,
-                                                    close: () => setDeleteResource(ClosedDeleteModalProps),
-                                                    resource: item,
-                                                    currentQuery,
-                                                    relatedResource: true
-                                                })
-                                            },
-                                        },
-                                    ]
+                                          {
+                                              id: 'delete',
+                                              title: `Delete ${kind}`,
+                                              click: (item: any) => {
+                                                  setDeleteResource({
+                                                      open: true,
+                                                      close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                      resource: item,
+                                                      currentQuery,
+                                                      relatedResource: true,
+                                                  })
+                                              },
+                                          },
+                                      ]
                                     : []
-                                }
-                                bulkActions={[]}
-                            />
-                        </AcmExpandableSection>
-                    </AcmPageCard>
-                )
-            }
-            return null
-        })
-    )
+                            }
+                            bulkActions={[]}
+                        />
+                    </AcmExpandableSection>
+                </AcmPageCard>
+            )
+        }
+        return null
+    })
 }
 
 function RenderRelatedTiles(
@@ -141,7 +157,10 @@ function RenderRelatedTiles(
     )
 }
 
-function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>) {
+function RenderSearchTables(
+    currentQuery: string,
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+) {
     const { data, error, loading } = useSearchResultItemsQuery({
         client: searchClient,
         variables: {
@@ -163,43 +182,51 @@ function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispa
     const searchResultItems = data.searchResult[0]?.items || []
     const uniqueKinds: string[] = _.uniq(searchResultItems.map((item: { kind: string }) => item.kind))
 
-    return (
-        uniqueKinds.map((kind: string ) => {
-            const items = searchResultItems.filter((item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind )
-            return (
-                <AcmPageCard key={`results-table-${kind}`} >
-                    <AcmExpandableSection label={`${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`} expanded={true}>
-                        <AcmTable
-                            plural=""
-                            items={items}
-                            columns={_.get(searchDefinitions, `[${kind}].columns`, searchDefinitions['genericresource'].columns)}
-                            keyFn={(item: any) => item._uid.toString()}
-                            tableActions={[]}
-                            rowActions={(kind !== 'cluster' && kind !== 'release')
-                            ? [
-                                {
-                                    id: 'delete',
-                                    title: `Delete ${kind}`,
-                                    click: (item: any) => {
-                                        setDeleteResource({
-                                            open: true,
-                                            close: () => setDeleteResource(ClosedDeleteModalProps),
-                                            resource: item,
-                                            currentQuery,
-                                            relatedResource: false
-                                        })
-                                    },
-                                },
-                            ]
-                            : []
+    return uniqueKinds.map((kind: string) => {
+        const items = searchResultItems.filter(
+            (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
+        )
+        return (
+            <AcmPageCard key={`results-table-${kind}`}>
+                <AcmExpandableSection
+                    label={`${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
+                    expanded={true}
+                >
+                    <AcmTable
+                        plural=""
+                        items={items}
+                        columns={_.get(
+                            searchDefinitions,
+                            `[${kind}].columns`,
+                            searchDefinitions['genericresource'].columns
+                        )}
+                        keyFn={(item: any) => item._uid.toString()}
+                        tableActions={[]}
+                        rowActions={
+                            kind !== 'cluster' && kind !== 'release'
+                                ? [
+                                      {
+                                          id: 'delete',
+                                          title: `Delete ${kind}`,
+                                          click: (item: any) => {
+                                              setDeleteResource({
+                                                  open: true,
+                                                  close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                  resource: item,
+                                                  currentQuery,
+                                                  relatedResource: false,
+                                              })
+                                          },
+                                      },
+                                  ]
+                                : []
                         }
-                            bulkActions={[]}
-                        />
-                    </AcmExpandableSection>
-                </AcmPageCard>
-            )
-        })
-    )
+                        bulkActions={[]}
+                    />
+                </AcmExpandableSection>
+            </AcmPageCard>
+        )
+    })
 }
 
 export default function SearchResults(props: { currentQuery: string; preSelectedRelatedResources: string[] }) {
@@ -214,7 +241,8 @@ export default function SearchResults(props: { currentQuery: string; preSelected
                 close={deleteResource.close}
                 resource={deleteResource.resource}
                 currentQuery={deleteResource.currentQuery}
-                relatedResource={deleteResource.relatedResource} />
+                relatedResource={deleteResource.relatedResource}
+            />
             {RenderRelatedTiles(currentQuery, selected, setSelected)}
             {RenderRelatedTables(currentQuery, selected, setDeleteResource)}
             {RenderSearchTables(currentQuery, setDeleteResource)}
