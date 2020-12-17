@@ -65,7 +65,7 @@ export const SaveAndEditSearchModal = (props: any) => {
     function SaveSearch() {
         let id = props.editSearch ? props.editSearch.id : Date.now().toString()
         let searchText = props.editSearch ? props.editSearch.searchText : props.saveSearch
-        props.setSelectedSearch(searchName)
+        props.editSearch ?? props.setSelectedSearch(searchName)
         saveSearchMutation({
             variables: {
                 resource: {

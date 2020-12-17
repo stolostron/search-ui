@@ -48,7 +48,11 @@ function SearchResultCount(
         })
         return (
             <PageSection>
-                <SaveAndEditSearchModal editSearch={editSearch} onClose={() => setEditSearch(undefined)} />
+                <SaveAndEditSearchModal
+                    setSelectedSearch={setSelectedSearch}
+                    editSearch={editSearch}
+                    onClose={() => setEditSearch(undefined)}
+                />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
 
