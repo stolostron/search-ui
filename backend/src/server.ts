@@ -274,7 +274,6 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-
     fastify.setNotFoundHandler((request, response) => {
         if (!path.extname(request.url)) {
             void response.code(200).sendFile('index.html', join(__dirname, 'public'))
