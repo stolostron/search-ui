@@ -10,9 +10,9 @@ export COMPONENT_SCRIPTS_PATH = $(BUILD_DIR)
 
 export GIT_REMOTE_URL  = $(shell git config --get remote.origin.url)
 export DOCKER_IMAGE  ?= $(COMPONENT_NAME)
-export IMAGE_DESCRIPTION ?= Web console for Search
-export IMAGE_MAINTAINER ?= acm-contact@redhat.com
-export IMAGE_VENDOR ?= Red Hat
+export IMAGE_DESCRIPTION ?=Web console for Search
+export IMAGE_MAINTAINER ?=acm-contact@redhat.com
+export IMAGE_VENDOR ?=Red Hat
 export DOCKER_BUILD_TAG  ?= latest
 export DOCKER_BUILD_OPTS  = --build-arg VCS_REF=$(VCS_REF) \
 	--build-arg VCS_URL=$(GIT_REMOTE_URL) \
