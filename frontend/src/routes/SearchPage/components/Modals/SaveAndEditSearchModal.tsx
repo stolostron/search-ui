@@ -11,6 +11,7 @@ import {
 } from '@open-cluster-management/ui-components'
 import { SavedSearchesDocument, useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
+import { makeStyles } from '@material-ui/styles'
 
 type IState = {
     searchName: string
@@ -27,11 +28,18 @@ const initState = {
     searchDesc: '',
 }
 
+const useStyles = makeStyles({
+    prompt: {
+        paddingBottom: '1.5rem',
+    },
+})
+
 export const SaveAndEditSearchModal = (props: any) => {
     const [state, dispatch] = useReducer(reducer, initState)
     const { searchName, searchDesc } = state
     const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
     const [isError, setIsError] = useState<boolean>(false)
+    const classes = useStyles()
 
     useEffect(() => {
         dispatch({ field: 'searchName', value: props.editSearch?.name ?? '' })
@@ -89,9 +97,6 @@ export const SaveAndEditSearchModal = (props: any) => {
                 title={'Save Search'}
                 onClose={props.onClose}
                 actions={[
-                    <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
-                        Cancel
-                    </AcmButton>,
                     <AcmButton
                         isDisabled={isSubmitDisabled()}
                         key="confirm"
@@ -100,9 +105,16 @@ export const SaveAndEditSearchModal = (props: any) => {
                     >
                         Save
                     </AcmButton>,
+                    <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
+                        Cancel
+                    </AcmButton>,
                 ]}
             >
-                {'Name your search and provide a description so that you can access it in the future.'}
+                {
+                    <p className={classes.prompt}>
+                        Name your search and provide a description so that you can access it in the future.
+                    </p>
+                }
                 {props.saveSearch === '' && !props.editSearch && (
                     <AcmAlert
                         noClose
@@ -125,11 +137,11 @@ export const SaveAndEditSearchModal = (props: any) => {
                     <AcmTextArea
                         id="add-query-desc"
                         name="searchDesc"
-                        label="Description (140 character limit)"
+                        label="Description (120 character limit)"
                         value={searchDesc}
                         onChange={onChange}
                         required
-                        maxLength={140}
+                        maxLength={120}
                     />
                 </AcmForm>
             </AcmModal>
