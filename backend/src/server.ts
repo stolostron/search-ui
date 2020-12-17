@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
@@ -275,8 +274,6 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(fastifyCompress)
-
     fastify.setNotFoundHandler((request, response) => {
         if (!path.extname(request.url)) {
             void response.code(200).sendFile('index.html', join(__dirname, 'public'))
@@ -287,6 +284,8 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyStatic, {
         root: join(__dirname, 'public'),
         prefix: '/search/', // optional: default '/'
+        immutable: true,
+        maxAge: 60 * 60 * 1000,
     })
 
     fastify.addHook('onClose', (instance, done: () => void) => {

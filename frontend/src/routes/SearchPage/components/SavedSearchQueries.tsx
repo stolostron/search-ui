@@ -48,7 +48,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
 
                 {savedQueriesResult.length > 0 && (
                     <AcmExpandableWrapper
-                        maxHeight={'16rem'}
+                        maxHeight={'16.5rem'}
                         headerLabel={'Saved searches'}
                         withCount={true}
                         expandable={true}
