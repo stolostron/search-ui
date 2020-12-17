@@ -5,13 +5,10 @@ import { AcmAlert, AcmModal, AcmButton } from '@open-cluster-management/ui-compo
 import {
     SearchResultItemsDocument,
     SearchResultRelatedCountDocument,
-    SearchResultRelatedItemsDocument
+    SearchResultRelatedItemsDocument,
 } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
-import {
-    useUserAccessQuery,
-    useDeleteResourceMutation
-} from '../../../../console-sdk/console-sdk'
+import { useUserAccessQuery, useDeleteResourceMutation } from '../../../../console-sdk/console-sdk'
 import { consoleClient } from '../../../../console-sdk/console-client'
 import { convertStringToQuery } from '../../search-helper'
 
@@ -28,7 +25,7 @@ export const ClosedDeleteModalProps: IDeleteModalProps = {
     close: () => {},
     resource: undefined,
     currentQuery: '',
-    relatedResource: false
+    relatedResource: false,
 }
 
 export const DeleteResourceModal = (props: any) => {
@@ -48,7 +45,7 @@ export const DeleteResourceModal = (props: any) => {
             namespace: resource?.namespace,
             name: resource?.name,
             apiGroup,
-        }
+        },
     })
 
     function deleteResourceFn() {
@@ -67,66 +64,78 @@ export const DeleteResourceModal = (props: any) => {
                     const relatedItemsResult = searchClient.readQuery({
                         query: SearchResultRelatedItemsDocument,
                         variables: {
-                            input: [{
-                                ...convertStringToQuery(currentQuery),
-                                relatedKinds: [resource.kind]
-                            }]
-                        }
+                            input: [
+                                {
+                                    ...convertStringToQuery(currentQuery),
+                                    relatedKinds: [resource.kind],
+                                },
+                            ],
+                        },
                     })
                     if (relatedItemsResult && relatedItemsResult.searchResult) {
                         searchClient.writeQuery({
                             query: SearchResultRelatedItemsDocument,
                             variables: {
-                                input: [{
-                                    ...convertStringToQuery(currentQuery),
-                                    relatedKinds: [resource.kind]
-                                }]
+                                input: [
+                                    {
+                                        ...convertStringToQuery(currentQuery),
+                                        relatedKinds: [resource.kind],
+                                    },
+                                ],
                             },
                             data: {
-                                searchResult: [{
-                                    __typename: 'SearchResult',
-                                    related: relatedItemsResult.searchResult[0].related.map((item: any) => {
-                                        if (item.kind === resource.kind) {
-                                            return {
-                                                items: item.items.filter((i: any) => {
-                                                    return i.cluster !== resource.cluster
-                                                        || i.namespace !== resource.namespace
-                                                        || i.kind !== resource.kind
-                                                        || i.name !== resource.name
-                                                }),
-                                                kind: item.kind
+                                searchResult: [
+                                    {
+                                        __typename: 'SearchResult',
+                                        related: relatedItemsResult.searchResult[0].related.map((item: any) => {
+                                            if (item.kind === resource.kind) {
+                                                return {
+                                                    items: item.items.filter((i: any) => {
+                                                        return (
+                                                            i.cluster !== resource.cluster ||
+                                                            i.namespace !== resource.namespace ||
+                                                            i.kind !== resource.kind ||
+                                                            i.name !== resource.name
+                                                        )
+                                                    }),
+                                                    kind: item.kind,
+                                                }
                                             }
-                                        }
-                                        return item
-                                    })
-                                }]
-                            }
+                                            return item
+                                        }),
+                                    },
+                                ],
+                            },
                         })
                     }
+                    console.log(searchClient.cache)
                     const relatedCountResult: any = searchClient.readQuery({
                         query: SearchResultRelatedCountDocument,
                         variables: {
-                            input: [convertStringToQuery(currentQuery)]
-                        }
+                            input: [convertStringToQuery(currentQuery)],
+                        },
                     })
+                    console.log(relatedCountResult)
                     if (relatedCountResult && relatedCountResult.searchResult) {
                         searchClient.writeQuery({
                             query: SearchResultRelatedCountDocument,
                             variables: {
-                                input: [convertStringToQuery(currentQuery)]
+                                input: [convertStringToQuery(currentQuery)],
                             },
                             data: {
-                                searchResult: [{
-                                    __typename: 'SearchResult',
-                                    related: relatedCountResult.searchResult[0].related.map((item: any) => {
-                                    if (item.kind === resource.kind) {
-                                        item.count = item.count - 1
-                                        return item
-                                    }
-                                    return item
-                                    })
-                                }]
-                            }
+                                searchResult: [
+                                    {
+                                        __typename: 'SearchResult',
+                                        related: relatedCountResult.searchResult[0].related.map((item: any) => {
+                                            if (item.kind === resource.kind) {
+                                                item.count = item.count - 1
+                                                return item
+                                            }
+                                            return item
+                                        }),
+                                    },
+                                ],
+                            },
                         })
                     }
                     close()
@@ -135,30 +144,31 @@ export const DeleteResourceModal = (props: any) => {
                     const currentSearchResults = searchClient.readQuery({
                         query: SearchResultItemsDocument,
                         variables: {
-                            input: [convertStringToQuery(currentQuery)]
-                        }
+                            input: [convertStringToQuery(currentQuery)],
+                        },
                     })
                     if (currentSearchResults && currentSearchResults.searchResult) {
                         // Remove deleted resource from search query results - this removes the resource from UI
                         searchClient.writeQuery({
                             query: SearchResultItemsDocument,
                             variables: {
-                                input: [convertStringToQuery(currentQuery)]
+                                input: [convertStringToQuery(currentQuery)],
                             },
                             data: {
-                                searchResult: [{
-                                    __typename: 'SearchResult',
-                                    items: currentSearchResults.searchResult[0].items.filter((item: any) => {
-                                        return item._uid !== resource._uid
-                                            && item.name !== resource.name
-                                    })
-                                }]
-                            }
+                                searchResult: [
+                                    {
+                                        __typename: 'SearchResult',
+                                        items: currentSearchResults.searchResult[0].items.filter((item: any) => {
+                                            return item._uid !== resource._uid && item.name !== resource.name
+                                        }),
+                                    },
+                                ],
+                            },
                         })
                     }
                     close()
                 }
-            }
+            },
         })
     }
 
@@ -174,24 +184,34 @@ export const DeleteResourceModal = (props: any) => {
                         Cancel
                     </AcmButton>,
                     <AcmButton
-                        isDisabled={userAccessResponse.loading || (userAccessResponse.data && !userAccessResponse.data.userAccess.allowed)}
+                        isDisabled={
+                            userAccessResponse.loading ||
+                            (userAccessResponse.data && !userAccessResponse.data.userAccess.allowed)
+                        }
                         key="confirm"
                         variant={ButtonVariant.danger}
-                        onClick={() => deleteResourceFn()} >
+                        onClick={() => deleteResourceFn()}
+                    >
                         Delete
                     </AcmButton>,
                 ]}
             >
-                {userAccessResponse.error
-                    ? <AcmAlert noClose={true} variant={'danger'} title={userAccessResponse.error} />
-                    : null}
-                {!userAccessResponse.loading && !userAccessResponse?.data?.userAccess.allowed
-                    ? <AcmAlert noClose={true} variant={'danger'} title={'You are not authorized to delete this resource.'} />
-                    : null}
-                {deleteResourceResults.error
-                    ? <AcmAlert noClose={true} variant={'danger'} title={deleteResourceResults.error.message} />
-                    : null}
-                <div style={{ paddingTop: '1rem' }} >{`Removing ${resource?.name} is irreversible. Are you sure that you want to continue?`}</div>
+                {userAccessResponse.error ? (
+                    <AcmAlert noClose={true} variant={'danger'} title={userAccessResponse.error} />
+                ) : null}
+                {!userAccessResponse.loading && !userAccessResponse?.data?.userAccess.allowed ? (
+                    <AcmAlert
+                        noClose={true}
+                        variant={'danger'}
+                        title={'You are not authorized to delete this resource.'}
+                    />
+                ) : null}
+                {deleteResourceResults.error ? (
+                    <AcmAlert noClose={true} variant={'danger'} title={deleteResourceResults.error.message} />
+                ) : null}
+                <div
+                    style={{ paddingTop: '1rem' }}
+                >{`Removing ${resource?.name} is irreversible. Are you sure that you want to continue?`}</div>
             </AcmModal>
         </Fragment>
     )
