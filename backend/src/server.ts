@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import fastifyCompress from 'fastify-compress'
+// import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
@@ -275,7 +275,7 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(fastifyCompress)
+    await fastify.register(require('fastify-compress'))
 
     fastify.setNotFoundHandler((request, response) => {
         if (!path.extname(request.url)) {
