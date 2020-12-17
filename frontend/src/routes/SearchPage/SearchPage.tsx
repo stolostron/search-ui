@@ -43,22 +43,23 @@ const useStyles = makeStyles({
 })
 
 // Adds AcmAlert to page if there's errors from the Apollo queries.
-function HandleErrors(schemaError: ApolloError|undefined, completeError: ApolloError|undefined){
+function HandleErrors(schemaError: ApolloError | undefined, completeError: ApolloError | undefined) {
     if (schemaError) {
         console.error('Search schema query error.', schemaError)
     }
     if (completeError) {
         console.error('Search complete query error.', completeError)
     }
-    if (schemaError || completeError){
+    if (schemaError || completeError) {
         return (
-            <div style={{ marginBottom: "1rem" }}>
+            <div style={{ marginBottom: '1rem' }}>
                 <AcmAlert
                     noClose
                     variant={'danger'}
                     isInline
                     title="An unexpected error occurred."
-                    subtitle="The search service is unavailable." />
+                    subtitle="The search service is unavailable."
+                />
             </div>
         )
     }
@@ -76,7 +77,7 @@ function RenderSearchBar(props: {
         skip: searchQuery.endsWith(':'),
         client: searchClient,
     })
-  
+
     const searchCompleteValue = getSearchCompleteString(searchQuery)
     const searchCompleteQuery = convertStringToQuery(searchQuery)
     searchCompleteQuery.filters = searchCompleteQuery.filters.filter((filter) => {
@@ -96,7 +97,7 @@ function RenderSearchBar(props: {
             <PageSection>
                 <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
                 <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
-                { HandleErrors(searchSchemaResults.error, searchCompleteResults.error) }
+                {HandleErrors(searchSchemaResults.error, searchCompleteResults.error)}
                 <div style={{ display: 'flex' }}>
                     <AcmSearchbar
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}

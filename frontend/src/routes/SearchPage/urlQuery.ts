@@ -4,10 +4,12 @@ import queryString from 'query-string'
 export function updateBrowserUrl(currentQuery: string) {
     if (currentQuery === '') {
         // on clear search query
-        window.history.pushState({}, '', window.location.pathname);
+        window.history.pushState({}, '', window.location.pathname)
     } else {
-        const url = `${window.location.pathname}?filters={"textsearch":${encodeURIComponent(JSON.stringify(currentQuery))}}`
-        window.history.pushState({}, '', url);
+        const url = `${window.location.pathname}?filters={"textsearch":${encodeURIComponent(
+            JSON.stringify(currentQuery)
+        )}}`
+        window.history.pushState({}, '', url)
     }
 }
 
@@ -33,7 +35,7 @@ export function transformBrowserUrlToSearchString(urlQuery: string) {
 
         return {
             prefillSearchQuery: filterString,
-            preSelectedRelatedResources: relatedArray
+            preSelectedRelatedResources: relatedArray,
         }
     }
     return { prefillSearchQuery, preSelectedRelatedResources }

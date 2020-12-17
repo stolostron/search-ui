@@ -20,4 +20,4 @@ ReactDOM.render(
         </React.Suspense>
     </React.StrictMode>,
     document.getElementById('root')
-);
+)

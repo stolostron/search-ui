@@ -4,7 +4,7 @@ import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetLogsQuery } from '../../console-sdk/console-sdk'
 
-export default function LogsPage(props: { containers: string[], cluster: string, namespace: string, name: string }) {
+export default function LogsPage(props: { containers: string[]; cluster: string; namespace: string; name: string }) {
     const { containers, cluster, namespace, name } = props
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
@@ -14,9 +14,9 @@ export default function LogsPage(props: { containers: string[], cluster: string,
             containerName: container,
             podName: name,
             podNamespace: namespace,
-            clusterName: cluster
+            clusterName: cluster,
         },
-    });
+    })
     if (error) {
         return (
             <PageSection>
@@ -25,7 +25,8 @@ export default function LogsPage(props: { containers: string[], cluster: string,
                     variant={'danger'}
                     isInline={true}
                     title={`Error querying for resource: ${name}`}
-                    subtitle={error.message} />
+                    subtitle={error.message}
+                />
             </PageSection>
         )
     }
@@ -46,7 +47,8 @@ export default function LogsPage(props: { containers: string[], cluster: string,
                 initialContainer={container}
                 onSwitchContainer={(newContainer: string | undefined) => setContainer(newContainer || container)}
                 containers={containers}
-                logs={data?.logs || ''} />
+                logs={data?.logs || ''}
+            />
         </PageSection>
     )
 }
