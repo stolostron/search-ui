@@ -1,11 +1,15 @@
-export function formatSearchbarSuggestions(data: string[], suggestionKind: 'label' | 'filter' | 'value', searchQuery: string) {
+export function formatSearchbarSuggestions(
+    data: string[],
+    suggestionKind: 'label' | 'filter' | 'value',
+    searchQuery: string
+) {
     let valuesToRemoveFromSuggestions: string[] = []
     const labelTag = {
         id: 'id-suggestions-label',
         key: 'key-suggestions-label',
         name: suggestionKind === 'filter' ? 'Filters' : 'Filter values',
         kind: suggestionKind,
-        disabled: true
+        disabled: true,
     }
     if (suggestionKind === 'value') {
         // Get a list of duplicate values to remove from suggestions dropdown
@@ -13,22 +17,24 @@ export function formatSearchbarSuggestions(data: string[], suggestionKind: 'labe
         const searchCompleteFilter = searchTokens[searchTokens.length - 1].replace(':', '')
 
         const query = convertStringToQuery(searchQuery)
-        query.filters.forEach(filter => {
+        query.filters.forEach((filter) => {
             if (filter.property === searchCompleteFilter) {
-                valuesToRemoveFromSuggestions = filter.values.filter(value => data.indexOf(value) > 0)
+                valuesToRemoveFromSuggestions = filter.values.filter((value) => data.indexOf(value) > 0)
             }
         })
     }
-    const suggestions = data.filter(suggestion => {
-        return valuesToRemoveFromSuggestions.indexOf(suggestion) === -1
-    }).map((field) => {
-        return {
-            id: `id-${field}`,
-            key: `key-${field}`,
-            name: field,
-            kind: suggestionKind,
-        }
-    })
+    const suggestions = data
+        .filter((suggestion) => {
+            return valuesToRemoveFromSuggestions.indexOf(suggestion) === -1
+        })
+        .map((field) => {
+            return {
+                id: `id-${field}`,
+                key: `key-${field}`,
+                name: field,
+                kind: suggestionKind,
+            }
+        })
     suggestions.unshift(labelTag)
     return suggestions
 }
