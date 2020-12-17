@@ -57,7 +57,7 @@ Array [
     "id": "id-suggestions-label",
     "key": "key-suggestions-label",
     "kind": "value",
-    "name": "Filter values",
+    "name": "name values",
   },
   Object {
     "id": "id-name1",
