@@ -21,9 +21,6 @@ echo OAUTH2_REDIRECT_URL=$OAUTH2_REDIRECT_URL >> ./backend/.env
 NODE_TLS_REJECT_UNAUTHORIZED=0
 echo NODE_TLS_REJECT_UNAUTHORIZED=$NODE_TLS_REJECT_UNAUTHORIZED >> ./backend/.env
 
-BACKEND_URL=http://localhost:4000
-echo BACKEND_URL=$BACKEND_URL >> ./backend/.env
-
 FRONTEND_URL=http://localhost:3000
 echo FRONTEND_URL=$FRONTEND_URL >> ./backend/.env
 
