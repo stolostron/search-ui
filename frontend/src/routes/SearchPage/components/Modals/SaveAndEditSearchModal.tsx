@@ -1,5 +1,5 @@
 import '@patternfly/react-core/dist/styles/base.css'
-import React, { Fragment, useReducer, useEffect } from 'react'
+import React, { Fragment, useReducer, useEffect, useState } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import {
     AcmModal,
@@ -29,14 +29,9 @@ const initState = {
 
 export const SaveAndEditSearchModal = (props: any) => {
     const [state, dispatch] = useReducer(reducer, initState)
-
     const { searchName, searchDesc } = state
-
     const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
-    // TODO ERROR NOTIFICATION HANDLING
-    if (error) {
-        console.log('error', error)
-    }
+    const [isError, setIsError] = useState<boolean>(false)
 
     useEffect(() => {
         dispatch({ field: 'searchName', value: props.editSearch?.name ?? '' })
@@ -72,9 +67,14 @@ export const SaveAndEditSearchModal = (props: any) => {
                 },
             },
             refetchQueries: [{ query: SavedSearchesDocument }],
+        }).then((res) => {
+            if (res.errors) {
+                setIsError(true)
+                return null
+            }
+            props.onClose()
+            return null
         })
-        props.onClose()
-        return null
     }
 
     const isSubmitDisabled = () => {
@@ -105,13 +105,14 @@ export const SaveAndEditSearchModal = (props: any) => {
                 {'Name your search and provide a description so that you can access it in the future.'}
                 {props.saveSearch === '' && !props.editSearch && (
                     <AcmAlert
-                        noClose={true}
+                        noClose
                         variant={'danger'}
                         isInline={true}
                         title={'Error'}
                         subtitle={'Enter search text'}
                     />
                 )}
+                {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
                 <AcmForm>
                     <AcmTextInput
                         id="add-query-name"
