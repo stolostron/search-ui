@@ -114,7 +114,6 @@ export const DeleteResourceModal = (props: any) => {
                             input: [convertStringToQuery(currentQuery)],
                         },
                     })
-                    console.log('relatedCountResult: ', relatedCountResult)
                     if (relatedCountResult && relatedCountResult.searchResult) {
                         searchClient.writeQuery({
                             query: SearchResultRelatedCountDocument,
@@ -146,7 +145,6 @@ export const DeleteResourceModal = (props: any) => {
                             input: [convertStringToQuery(currentQuery)],
                         },
                     })
-                    console.log('currentSearchResults: ', currentSearchResults)
                     if (currentSearchResults && currentSearchResults.searchResult) {
                         // Remove deleted resource from search query results - this removes the resource from UI
                         searchClient.writeQuery({
