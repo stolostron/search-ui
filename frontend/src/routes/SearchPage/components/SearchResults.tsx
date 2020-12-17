@@ -1,7 +1,7 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import _ from 'lodash'
 import { Fragment, useState } from 'react'
-import { AcmExpandableSection, AcmTable, AcmPageCard, AcmTile, AcmExpandableWrapper } from '@open-cluster-management/ui-components'
+import { AcmExpandableSection, AcmTable, AcmPageCard, AcmTile, AcmExpandableWrapper, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { searchClient } from '../../../search-sdk/search-client'
 import {
     useSearchResultItemsQuery,
@@ -26,8 +26,11 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setD
         return null
     }
     if (loading) {
-        // Return loading table
-        return <PageSection>{'Loading related resources'}</PageSection>
+        return (
+            <PageSection>
+                <AcmLoadingPage />
+            </PageSection>
+        )
     } else if (error || !data || !data.searchResult) {
         // TODO better error handling
         console.error(error)
@@ -134,8 +137,11 @@ function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispa
     })
 
     if (loading) {
-        // Return loading table
-        return <PageSection>{'Loading search results'}</PageSection>
+        return (
+            <PageSection>
+                <AcmLoadingPage />
+            </PageSection>
+        )
     } else if (error || !data || !data.searchResult) {
         // TODO better error handling
         console.error(error)
