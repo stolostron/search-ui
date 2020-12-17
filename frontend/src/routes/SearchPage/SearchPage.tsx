@@ -96,7 +96,11 @@ function RenderSearchBar(props: {
     return (
         <Fragment>
             <PageSection>
-                <SaveAndEditSearchModal saveSearch={saveSearch} onClose={() => setSaveSearch(undefined)} />
+                <SaveAndEditSearchModal
+                    setSelectedSearch={props.setSelectedSearch}
+                    saveSearch={saveSearch}
+                    onClose={() => setSaveSearch(undefined)}
+                />
                 <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
                 {HandleErrors(searchSchemaResults.error, searchCompleteResults.error)}
                 <div style={{ display: 'flex' }}>
@@ -227,11 +231,7 @@ export default function SearchPage() {
             {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
                 <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
             ) : (
-                <SavedSearchQueries
-                    // selectedSearch={selectedSearch}
-                    setSelectedSearch={setSelectedSearch}
-                    setCurrentQuery={setCurrentQuery}
-                />
+                <SavedSearchQueries setSelectedSearch={setSelectedSearch} setCurrentQuery={setCurrentQuery} />
             )}
         </AcmPage>
     )
