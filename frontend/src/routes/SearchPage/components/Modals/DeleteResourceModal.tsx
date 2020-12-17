@@ -108,14 +108,13 @@ export const DeleteResourceModal = (props: any) => {
                             },
                         })
                     }
-                    console.log(searchClient.cache)
-                    const relatedCountResult: any = searchClient.readQuery({
+                    const relatedCountResult = searchClient.readQuery({
                         query: SearchResultRelatedCountDocument,
                         variables: {
                             input: [convertStringToQuery(currentQuery)],
                         },
                     })
-                    console.log(relatedCountResult)
+                    console.log('relatedCountResult: ', relatedCountResult)
                     if (relatedCountResult && relatedCountResult.searchResult) {
                         searchClient.writeQuery({
                             query: SearchResultRelatedCountDocument,
@@ -147,6 +146,7 @@ export const DeleteResourceModal = (props: any) => {
                             input: [convertStringToQuery(currentQuery)],
                         },
                     })
+                    console.log('currentSearchResults: ', currentSearchResults)
                     if (currentSearchResults && currentSearchResults.searchResult) {
                         // Remove deleted resource from search query results - this removes the resource from UI
                         searchClient.writeQuery({
