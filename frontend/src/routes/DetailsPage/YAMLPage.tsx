@@ -19,11 +19,11 @@ monaco.editor.defineTheme('console', {
         { token: 'number', foreground: 'ace12e' },
         { token: 'type', foreground: '73bcf7' },
         { token: 'string', foreground: 'f0ab00' },
-        { token: 'keyword', foreground: 'cbc0ff' }
+        { token: 'keyword', foreground: 'cbc0ff' },
     ],
     colors: {
         'editorGutter.background': '#292e34', // no pf token defined
-    }
+    },
 })
 monaco.editor.setTheme('console')
 
@@ -50,26 +50,26 @@ const useStyles = makeStyles({
         display: 'flex',
         color: 'var(--pf-global--palette--white)',
         alignItems: 'center',
-        margin: '0 10px 0 auto'
+        margin: '0 10px 0 auto',
     },
     editButtonLabel: {
-        paddingRight: '.5rem'
+        paddingRight: '.5rem',
     },
     saveButton: {
-        marginLeft: '.5rem'
-    }
+        marginLeft: '.5rem',
+    },
 })
 
 export default function YAMLPage(props: {
-    resource: Pick<Query, 'getResource'> | undefined,
-    loading: boolean,
-    error: ApolloError | undefined,
-    selfLink: string,
-    name: string,
-    namespace: string,
-    cluster: string,
-    kind: string,
-    api: string,
+    resource: Pick<Query, 'getResource'> | undefined
+    loading: boolean
+    error: ApolloError | undefined
+    selfLink: string
+    name: string
+    namespace: string
+    cluster: string
+    kind: string
+    api: string
 }) {
     const { resource, loading, error, selfLink, name, namespace, cluster, kind, api } = props
     const [editMode, setEditMode] = useState<boolean>(false)
@@ -82,12 +82,12 @@ export default function YAMLPage(props: {
         }
     }, [resource?.getResource])
 
-    const [ updateResource, { error: saveSearchError } ] = useUpdateResourceLazyQuery({
+    const [updateResource, { error: saveSearchError }] = useUpdateResourceLazyQuery({
         client: consoleClient,
-        onCompleted: ((res) => {
+        onCompleted: (res) => {
             setEditMode(false)
             setEditedResourceYaml(jsYaml.safeDump(res.updateResource, { indent: 2 }))
-        })
+        },
     })
 
     const { data: userAccessData, loading: userAccessLoading, error: userAccessError } = useUserAccessQuery({
@@ -113,7 +113,8 @@ export default function YAMLPage(props: {
                     variant={'danger'}
                     isInline={true}
                     title={`Error querying for resource: ${name}`}
-                    subtitle={error.message} />
+                    subtitle={error.message}
+                />
             </PageSection>
         )
     }
@@ -132,17 +133,19 @@ export default function YAMLPage(props: {
     }
     return (
         <PageSection>
-            {saveSearchError &&
+            {saveSearchError && (
                 <AcmAlert
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
                     title={`Error occurred while updating resource: ${name}`}
-                    subtitle={saveSearchError.message} />}
+                    subtitle={saveSearchError.message}
+                />
+            )}
             <div className={classes.headerContainer}>
                 <p className={classes.textTitle}>{'Cluster:'}</p>
                 <p className={classes.textContent}>{cluster}</p>
-                <div className={classes.spacer}/>
+                <div className={classes.spacer} />
                 <p className={classes.textTitle}>{'Namespace:'}</p>
                 <p className={classes.textContent}>{namespace}</p>
                 <div className={classes.editButtonContainer}>
@@ -156,11 +159,12 @@ export default function YAMLPage(props: {
                                 setEditedResourceYaml(editedResourceYaml)
                             }
                             setEditMode(!editMode)
-                        }} 
-                        tooltip={tooltipMessage} >
+                        }}
+                        tooltip={tooltipMessage}
+                    >
                         {editMode ? 'Cancel' : 'Edit'}
                     </AcmButton>
-                    {editMode &&
+                    {editMode && (
                         <AcmButton
                             className={classes.saveButton}
                             variant={'primary'}
@@ -173,20 +177,24 @@ export default function YAMLPage(props: {
                                         kind,
                                         name,
                                         cluster,
-                                    }
+                                    },
                                 })
-                            }} >
+                            }}
+                        >
                             {'Save'}
-                        </AcmButton>}
+                        </AcmButton>
+                    )}
                 </div>
             </div>
             <MonacoEditor
                 theme={'console'}
                 width={'100%'}
                 height={'90%'}
-                value={editedResourceYaml !== ''
-                    ? editedResourceYaml
-                    : jsYaml.safeDump(resource?.getResource, { indent: 2 })}
+                value={
+                    editedResourceYaml !== ''
+                        ? editedResourceYaml
+                        : jsYaml.safeDump(resource?.getResource, { indent: 2 })
+                }
                 onChange={(value) => {
                     setEditedResourceYaml(value)
                 }}
@@ -205,9 +213,10 @@ export default function YAMLPage(props: {
                     fontFamily: 'monospace',
                     scrollbar: {
                         verticalScrollbarSize: 17,
-                        horizontalScrollbarSize: 17
-                    }
-                }} />
+                        horizontalScrollbarSize: 17,
+                    },
+                }}
+            />
         </PageSection>
     )
 }

@@ -1,29 +1,29 @@
 import { getAge, createDetailsLink, createDashboardLink, createExternalLink, formatLabels } from './searchDefinitions'
 
 test('Correctly returns formatSearchbarSuggestions without T in timestamp', () => {
-    Date.now = jest.fn(() => 1607028460000);
+    Date.now = jest.fn(() => 1607028460000)
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        created: '2020-11-30T14:34:20Z'
+        created: '2020-11-30T14:34:20Z',
     }
     const result = getAge(item, 'created')
     expect(result).toMatchSnapshot()
 })
 
 test('Correctly returns formatSearchbarSuggestions with T in timestamp', () => {
-    Date.now = jest.fn(() => 1607028460000);
+    Date.now = jest.fn(() => 1607028460000)
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        created: '2020-11-3014:34:20Z'
+        created: '2020-11-3014:34:20Z',
     }
     const result = getAge(item, 'created')
     expect(result).toMatchSnapshot()
 })
 
 test('Correctly returns formatSearchbarSuggestions no timestamp', () => {
-    Date.now = jest.fn(() => 1607028460000);
+    Date.now = jest.fn(() => 1607028460000)
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
@@ -36,7 +36,7 @@ test('Correctly returns createDetailsLink - Cluster', () => {
     const item = {
         name: 'testClusterName',
         namespace: 'testClusterNamespace',
-        kind: 'cluster'
+        kind: 'cluster',
     }
     const result = createDetailsLink(item)
     expect(result).toMatchSnapshot()
@@ -59,7 +59,7 @@ test('Correctly returns createDetailsLink - NON-Application', () => {
         namespace: 'testApplicationNamespace',
         kind: 'application',
         cluster: 'testCluster',
-        selfLink: '/self/link'
+        selfLink: '/self/link',
     }
     const result = createDetailsLink(item)
     expect(result).toMatchSnapshot()
@@ -71,7 +71,7 @@ test('Correctly returns createDetailsLink - HUB-Policy', () => {
         namespace: 'testPolicyNamespace',
         kind: 'policy',
         _hubClusterResource: true,
-        apigroup: 'policy.open-cluster-management.io'
+        apigroup: 'policy.open-cluster-management.io',
     }
     const result = createDetailsLink(item)
     expect(result).toMatchSnapshot()
@@ -83,7 +83,7 @@ test('Correctly returns createDetailsLink - Managed-Policy', () => {
         namespace: 'testPolicyNamespace',
         kind: 'policy',
         cluster: 'testCluster',
-        selfLink: '/self/link'
+        selfLink: '/self/link',
     }
     const result = createDetailsLink(item)
     expect(result).toMatchSnapshot()
@@ -95,7 +95,7 @@ test('Correctly returns createDetailsLink - Default', () => {
         namespace: 'testPodNamespace',
         kind: 'pod',
         cluster: 'testCluster',
-        selfLink: '/self/link'
+        selfLink: '/self/link',
     }
     const result = createDetailsLink(item)
     expect(result).toMatchSnapshot()
@@ -105,7 +105,7 @@ test('Correctly returns createDashboardLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        dashboard: 'http://dashboard'
+        dashboard: 'http://dashboard',
     }
     const result = createDashboardLink(item)
     expect(result).toMatchSnapshot()
@@ -115,7 +115,7 @@ test('Correctly returns empty createDashboardLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        dashboard: ''
+        dashboard: '',
     }
     const result = createDashboardLink(item)
     expect(result).toMatchSnapshot()
@@ -125,7 +125,7 @@ test('Correctly returns createExternalLink from consoleURL', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        consoleURL: 'http://consoleurl'
+        consoleURL: 'http://consoleurl',
     }
     const result = createExternalLink(item)
     expect(result).toMatchSnapshot()
@@ -135,7 +135,7 @@ test('Correctly returns createExternalLink from clusterip', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        clusterip: 'http://clusterip'
+        clusterip: 'http://clusterip',
     }
     const result = createExternalLink(item)
     expect(result).toMatchSnapshot()
@@ -144,7 +144,7 @@ test('Correctly returns createExternalLink from clusterip', () => {
 test('Correctly returns empty createExternalLink', () => {
     const item = {
         name: 'testName',
-        namespace: 'testNamespace'
+        namespace: 'testNamespace',
     }
     const result = createExternalLink(item)
     expect(result).toMatchSnapshot()
@@ -154,7 +154,7 @@ test('Correctly returns label components', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        label: 'testlabel=label1, testlabel=label2'
+        label: 'testlabel=label1, testlabel=label2',
     }
     const result = formatLabels(item)
     expect(result).toMatchSnapshot()

@@ -1,6 +1,12 @@
 import React from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
-import { AcmButton, AcmPage, AcmPageHeader, AcmSecondaryNav, AcmSecondaryNavItem } from '@open-cluster-management/ui-components'
+import {
+    AcmButton,
+    AcmPage,
+    AcmPageHeader,
+    AcmSecondaryNav,
+    AcmSecondaryNavItem,
+} from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
 import YAMLPage from './YAMLPage'
@@ -45,29 +51,38 @@ export default function DetailsPage() {
             cluster,
             selfLink,
         },
-    });
+    })
     const location = useLocation()
     const history = useHistory()
 
     return (
         <AcmPage>
             <div className={classes.customBreadcrumb}>
-                <AcmButton variant={'link'} onClick={() => history.goBack()}>Search</AcmButton>
+                <AcmButton variant={'link'} onClick={() => history.goBack()}>
+                    Search
+                </AcmButton>
             </div>
             <AcmPageHeader
                 title={name}
                 navigation={
                     <AcmSecondaryNav>
-                        <AcmSecondaryNavItem
-                            isActive={location.pathname === `/resources/${cluster}${selfLink}`} >
-                            <Link replace to={`/resources/${cluster}${selfLink}`}>YAML</Link>
+                        <AcmSecondaryNavItem isActive={location.pathname === `/resources/${cluster}${selfLink}`}>
+                            <Link replace to={`/resources/${cluster}${selfLink}`}>
+                                YAML
+                            </Link>
                         </AcmSecondaryNavItem>
-                        {kind === 'pods' && <AcmSecondaryNavItem
-                            isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`} >
-                            <Link replace to={`/resources/${cluster}${selfLink}/logs`}>Logs</Link>
-                        </AcmSecondaryNavItem>}
+                        {kind === 'pods' && (
+                            <AcmSecondaryNavItem
+                                isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`}
+                            >
+                                <Link replace to={`/resources/${cluster}${selfLink}/logs`}>
+                                    Logs
+                                </Link>
+                            </AcmSecondaryNavItem>
+                        )}
                     </AcmSecondaryNav>
-                } />
+                }
+            />
             <Switch>
                 <Route exact path={`/resources/${cluster}${selfLink}`}>
                     <YAMLPage
@@ -79,15 +94,23 @@ export default function DetailsPage() {
                         namespace={namespace}
                         cluster={cluster}
                         kind={kind}
-                        api={api} />
+                        api={api}
+                    />
                 </Route>
-                {kind === 'pods' && <Route path={`/resources/${cluster}${selfLink}/logs`}>
-                    <LogsPage
-                        containers={getResourceResponse.data?.getResource?.spec.containers.map((container: any) => container.name) || []}
-                        cluster={cluster}
-                        namespace={namespace}
-                        name={name} />
-                </Route>}
+                {kind === 'pods' && (
+                    <Route path={`/resources/${cluster}${selfLink}/logs`}>
+                        <LogsPage
+                            containers={
+                                getResourceResponse.data?.getResource?.spec.containers.map(
+                                    (container: any) => container.name
+                                ) || []
+                            }
+                            cluster={cluster}
+                            namespace={namespace}
+                            name={name}
+                        />
+                    </Route>
+                )}
             </Switch>
         </AcmPage>
     )

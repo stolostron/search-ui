@@ -11,9 +11,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -30,9 +30,9 @@ const searchDefinitions: any = {
             {
                 header: 'Dashboard',
                 sort: 'dashboard',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDashboardLink(item)
-                }),
+                },
             },
             {
                 header: 'Labels',
@@ -40,7 +40,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     applicationrelationship: {
@@ -48,9 +48,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -85,7 +85,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     cluster: {
@@ -93,9 +93,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Available',
@@ -145,7 +145,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     channel: {
@@ -153,9 +153,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -190,7 +190,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     configmap: {
@@ -198,9 +198,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -225,7 +225,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     cronjob: {
@@ -233,9 +233,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -282,7 +282,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     daemonset: {
@@ -290,9 +290,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -342,7 +342,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     deployable: {
@@ -350,9 +350,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -382,7 +382,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     deployment: {
@@ -390,9 +390,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -437,7 +437,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     genericresource: {
@@ -445,9 +445,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -472,17 +472,18 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
-    helmrelease: { // This is the Application Helm CR.
+    helmrelease: {
+        // This is the Application Helm CR.
         columns: [
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -527,7 +528,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     job: {
@@ -535,9 +536,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -577,7 +578,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     namespace: {
@@ -585,9 +586,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Cluster',
@@ -612,7 +613,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     node: {
@@ -620,9 +621,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Cluster',
@@ -662,7 +663,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     persistentvolume: {
@@ -670,9 +671,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Cluster',
@@ -727,7 +728,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     persistentvolumeclaim: {
@@ -735,9 +736,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -782,7 +783,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     placementbinding: {
@@ -790,9 +791,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -822,7 +823,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     placementpolicy: {
@@ -830,9 +831,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -862,7 +863,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     placementrule: {
@@ -870,9 +871,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -902,7 +903,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     pod: {
@@ -910,9 +911,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -957,7 +958,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     policy: {
@@ -965,9 +966,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1010,7 +1011,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     release: {
@@ -1018,9 +1019,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1061,9 +1062,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1098,7 +1099,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     secret: {
@@ -1106,9 +1107,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1138,7 +1139,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     service: {
@@ -1146,9 +1147,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1188,7 +1189,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     statefulset: {
@@ -1196,9 +1197,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1233,7 +1234,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
     subscription: {
@@ -1241,9 +1242,9 @@ const searchDefinitions: any = {
             {
                 header: 'Name',
                 sort: 'name',
-                cell: ((item: any) => {
+                cell: (item: any) => {
                     return createDetailsLink(item)
-                }),
+                },
             },
             {
                 header: 'Namespace',
@@ -1288,7 +1289,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return formatLabels(item)
                 },
-            }
+            },
         ],
     },
 }
@@ -1296,50 +1297,62 @@ const searchDefinitions: any = {
 export function getAge(item: any, key: string) {
     const createdTime = _.get(item, key)
     if (createdTime && createdTime.includes('T')) {
-      return moment(createdTime, 'YYYY-MM-DDTHH:mm:ssZ').fromNow()
+        return moment(createdTime, 'YYYY-MM-DDTHH:mm:ssZ').fromNow()
     } else if (createdTime) {
-      return moment(createdTime, 'YYYY-MM-DD HH:mm:ss').fromNow()
+        return moment(createdTime, 'YYYY-MM-DD HH:mm:ss').fromNow()
     }
     return '-'
 }
 
 export function createDetailsLink(item: any) {
-    switch (item.kind){
-    case 'cluster':
-        return <a href={`/cluster-management/cluster-management/clusters/${item.namespace}/${item.name}`}>{item.name}</a>
-    case 'application':
-        if (item.apigroup === 'app.k8s.io') {
-            // only redirect to apps page if it is an ACM application
-            return <a href={`/multicloud/applications/${item.namespace}/${item.name}`}>{item.name}</a>
-        }
-        return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
-    case 'policy':
-        // Redirects to the policy page if the policy is a hub cluster resource.
-        // If the policy is not, it will redirect and just show the yaml.
-        if (item._hubClusterResource && item.apigroup === 'policy.open-cluster-management.io') {
-            return <a href={`/multicloud/policies/all/${item.name}`}>{item.name}</a>
-        }
-        return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
-    default:
-        return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
+    switch (item.kind) {
+        case 'cluster':
+            return (
+                <a href={`/cluster-management/cluster-management/clusters/${item.namespace}/${item.name}`}>
+                    {item.name}
+                </a>
+            )
+        case 'application':
+            if (item.apigroup === 'app.k8s.io') {
+                // only redirect to apps page if it is an ACM application
+                return <a href={`/multicloud/applications/${item.namespace}/${item.name}`}>{item.name}</a>
+            }
+            return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
+        case 'policy':
+            // Redirects to the policy page if the policy is a hub cluster resource.
+            // If the policy is not, it will redirect and just show the yaml.
+            if (item._hubClusterResource && item.apigroup === 'policy.open-cluster-management.io') {
+                return <a href={`/multicloud/policies/all/${item.name}`}>{item.name}</a>
+            }
+            return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
+        default:
+            return <Link to={{ pathname: `/resources/${item.cluster}${item.selfLink}` }}>{item.name}</Link>
     }
 }
 
 export function createDashboardLink(item: any) {
     if (item.dashboard !== null && item.dashboard !== '') {
-        return <a target="_blank" rel="noopener noreferrer" href={item.dashboard}>{'Launch health view'}</a>
+        return (
+            <a target="_blank" rel="noopener noreferrer" href={item.dashboard}>
+                {'Launch health view'}
+            </a>
+        )
     }
     return '-'
 }
 
 export function createExternalLink(item: any) {
     if (item.consoleURL) {
-      return <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>{'Launch'}</a>
+        return (
+            <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>
+                {'Launch'}
+            </a>
+        )
     } else if (item.clusterip) {
-      return item.clusterip
+        return item.clusterip
     }
     return '-'
-  }
+}
 
 export function formatLabels(item: any) {
     if (item.label) {

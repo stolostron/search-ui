@@ -1,12 +1,20 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import _ from 'lodash'
 import { Fragment, useState } from 'react'
-import { AcmExpandableSection, AcmTable, AcmPageCard, AcmTile, AcmExpandableWrapper, AcmLoadingPage } from '@open-cluster-management/ui-components'
+import {
+    AcmExpandableSection,
+    AcmTable,
+    AcmPageCard,
+    AcmTile,
+    AcmExpandableWrapper,
+    AcmLoadingPage,
+} from '@open-cluster-management/ui-components'
 import { searchClient } from '../../../search-sdk/search-client'
 import {
     useSearchResultItemsQuery,
     useSearchResultRelatedCountQuery,
-    useSearchResultRelatedItemsQuery } from '../../../search-sdk/search-sdk'
+    useSearchResultRelatedItemsQuery,
+} from '../../../search-sdk/search-sdk'
 import { convertStringToQuery } from '../search-helper'
 import { DeleteResourceModal, IDeleteModalProps, ClosedDeleteModalProps } from '../components/Modals/DeleteResourceModal'
 import { PageSection } from '@patternfly/react-core'
@@ -17,8 +25,8 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setD
         skip: selectedKinds.length === 0,
         client: searchClient,
         variables: {
-            input: [{ ...convertStringToQuery(currentQuery), relatedKinds: selectedKinds}]
-        }
+            input: [{ ...convertStringToQuery(currentQuery), relatedKinds: selectedKinds }],
+        },
     })
 
     if (loading === false && !error && !data) {
@@ -80,12 +88,16 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[], setD
     )
 }
 
-function RenderRelatedTiles(currentQuery: string, selectedKinds: string[], setSelected: React.Dispatch<React.SetStateAction<string[]>>) {
+function RenderRelatedTiles(
+    currentQuery: string,
+    selectedKinds: string[],
+    setSelected: React.Dispatch<React.SetStateAction<string[]>>
+) {
     const { data, error, loading } = useSearchResultRelatedCountQuery({
         client: searchClient,
         variables: {
-            input: [convertStringToQuery(currentQuery)]
-        }
+            input: [convertStringToQuery(currentQuery)],
+        },
     })
     if (loading) {
         return (
@@ -114,12 +126,14 @@ function RenderRelatedTiles(currentQuery: string, selectedKinds: string[], setSe
                             isSelected={selectedKinds.indexOf(count!.kind) > -1}
                             title={''}
                             onClick={() => {
-                                const updatedKinds = selectedKinds.indexOf(count!.kind) > -1
-                                    ? selectedKinds.filter(kind => kind !== count!.kind)
-                                    : [count!.kind, ...selectedKinds]
+                                const updatedKinds =
+                                    selectedKinds.indexOf(count!.kind) > -1
+                                        ? selectedKinds.filter((kind) => kind !== count!.kind)
+                                        : [count!.kind, ...selectedKinds]
                                 setSelected(updatedKinds)
                             }}
-                            relatedResourceData={{ count: count!.count || 0, kind: count!.kind }} />
+                            relatedResourceData={{ count: count!.count || 0, kind: count!.kind }}
+                        />
                     )
                 })}
             </AcmExpandableWrapper>
@@ -127,13 +141,12 @@ function RenderRelatedTiles(currentQuery: string, selectedKinds: string[], setSe
     )
 }
 
-
 function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>) {
     const { data, error, loading } = useSearchResultItemsQuery({
         client: searchClient,
         variables: {
-            input: [convertStringToQuery(currentQuery)]
-        }
+            input: [convertStringToQuery(currentQuery)],
+        },
     })
 
     if (loading) {
@@ -148,7 +161,7 @@ function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispa
         return <PageSection>{'Error querying search results'}</PageSection>
     }
     const searchResultItems = data.searchResult[0]?.items || []
-    const uniqueKinds: string[] =  _.uniq(searchResultItems.map((item: { kind: string }) => item.kind))
+    const uniqueKinds: string[] = _.uniq(searchResultItems.map((item: { kind: string }) => item.kind))
 
     return (
         uniqueKinds.map((kind: string ) => {
@@ -189,7 +202,7 @@ function RenderSearchTables(currentQuery: string, setDeleteResource: React.Dispa
     )
 }
 
-export default function SearchResults(props: { currentQuery: string, preSelectedRelatedResources: string[] }) {
+export default function SearchResults(props: { currentQuery: string; preSelectedRelatedResources: string[] }) {
     const { currentQuery, preSelectedRelatedResources } = props
     const [selected, setSelected] = useState<string[]>(preSelectedRelatedResources)
     const [deleteResource, setDeleteResource] = useState<IDeleteModalProps>(ClosedDeleteModalProps)
