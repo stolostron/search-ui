@@ -275,7 +275,7 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(require('fastify-compress'))
+    // await fastify.register(require('fastify-compress'))
 
     fastify.setNotFoundHandler((request, response) => {
         if (!path.extname(request.url)) {
