@@ -68,6 +68,7 @@ function HandleErrors(schemaError: ApolloError | undefined, completeError: Apoll
 function RenderSearchBar(props: {
     searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
+    setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
 }) {
     const { searchQuery, setCurrentQuery } = props
     const [saveSearch, setSaveSearch] = useState<string>()
@@ -118,6 +119,9 @@ function RenderSearchBar(props: {
                         currentQueryCallback={(newQuery) => {
                             setCurrentQuery(newQuery)
                             updateBrowserUrl(newQuery)
+                            if (newQuery !== searchQuery) {
+                                props.setSelectedSearch('Saved searches')
+                            }
                         }}
                         toggleInfoModal={toggle}
                     />
@@ -134,10 +138,13 @@ function RenderSearchBar(props: {
     )
 }
 
-function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.SetStateAction<string>> }) {
+function RenderDropDownAndNewTab(props: {
+    selectedSearch: string
+    setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
+    setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
+}) {
     const classes = useStyles()
 
-    const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const { data } = useSavedSearchesQuery({
         client: searchClient,
     })
@@ -148,16 +155,16 @@ function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.
         if (id === 'savedSearchesID') {
             props.setCurrentQuery('')
             updateBrowserUrl('')
-            setSelectedSearch('Saved searches')
+            props.setSelectedSearch('Saved searches')
         } else {
             const selectedQuery = queries!.filter((query) => query!.id === id)
             props.setCurrentQuery(selectedQuery[0]!.searchText || '')
             updateBrowserUrl(selectedQuery[0]!.searchText || '')
-            setSelectedSearch(selectedQuery[0]!.name || '')
+            props.setSelectedSearch(selectedQuery[0]!.name || '')
         }
     }
 
-    const SavedSearchDropdown = () => {
+    const SavedSearchDropdown = (props: { selectedSearch: string }) => {
         const dropdownItems: any[] = queries.map((query) => {
             return { id: query!.id, text: query!.name }
         })
@@ -172,7 +179,7 @@ function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.
                     onSelect={(id) => {
                         SelectQuery(id)
                     }}
-                    text={selectedSearch}
+                    text={props.selectedSearch}
                     dropdownItems={dropdownItems}
                     isKebab={false}
                 />
@@ -183,7 +190,7 @@ function RenderDropDownAndNewTab(props: { setCurrentQuery: React.Dispatch<React.
     return (
         <div className={classes.actionGroup}>
             <AcmActionGroup>
-                <SavedSearchDropdown />
+                <SavedSearchDropdown selectedSearch={props.selectedSearch} />
                 <AcmLaunchLink links={[{ id: 'search', text: 'Open new search tab', href: '/search' }]} />
             </AcmActionGroup>
         </div>
@@ -199,6 +206,7 @@ export default function SearchPage() {
         preSelectedRelatedResources = [], // used to show any related resource on search page navigation
     } = transformBrowserUrlToSearchString(window.location.search || '')
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
+    const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
@@ -206,12 +214,24 @@ export default function SearchPage() {
     return (
         <AcmPage>
             <AcmPageHeader title="Search" />
-            <RenderDropDownAndNewTab setCurrentQuery={setCurrentQuery} />
-            <RenderSearchBar searchQuery={searchQuery} setCurrentQuery={setCurrentQuery} />
+            <RenderDropDownAndNewTab
+                selectedSearch={selectedSearch}
+                setSelectedSearch={setSelectedSearch}
+                setCurrentQuery={setCurrentQuery}
+            />
+            <RenderSearchBar
+                setSelectedSearch={setSelectedSearch}
+                searchQuery={searchQuery}
+                setCurrentQuery={setCurrentQuery}
+            />
             {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
                 <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
             ) : (
-                <SavedSearchQueries setCurrentQuery={setCurrentQuery} />
+                <SavedSearchQueries
+                    // selectedSearch={selectedSearch}
+                    setSelectedSearch={setSelectedSearch}
+                    setCurrentQuery={setCurrentQuery}
+                />
             )}
         </AcmPage>
     )
