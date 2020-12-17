@@ -89,7 +89,7 @@ export async function startServer(): Promise<FastifyInstance> {
     // Proxy to CONSOLE-API
     await fastify.register(fastifyHttpProxy, {
         upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
-        prefix: '/hcmuiapi/graphql',
+        prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
     })

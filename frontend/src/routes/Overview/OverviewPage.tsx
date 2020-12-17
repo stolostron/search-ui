@@ -48,7 +48,7 @@ function getClusterSummary(clusters: any) {
         } else {
             prev.providers.push({ provider: mapProviderFromLabel(cloud),
                 clusterCount: 1,
-                onClick: ()=>{console.log(`Execute action for cluster provider: ${cloud}`)}})
+                onClick: ()=>{console.log(`Execute action for provider: ${cloud}`)}}) // TODO: Implement this action.
         }
 
         // Data for Summary section.
@@ -84,14 +84,17 @@ export default function OverviewPage() {
 
     if (error || searchError){
         return (
-        <PageSection>
-            <AcmAlert
-                noClose={true}
-                variant={'danger'}
-                isInline={true}
-                title="An unexpected error occurred. Try again."
-                subtitle="" />
-        </PageSection>
+            <AcmPage>  
+                <AcmPageHeader title="Overview" />
+                <PageSection>
+                    <AcmAlert
+                        noClose
+                        isInline
+                        variant={'danger'}
+                        title="An unexpected error occurred. Try again."
+                        subtitle="The backend service is unavailable." />
+                </PageSection>
+            </AcmPage>
         )
     }
 
@@ -124,28 +127,23 @@ export default function OverviewPage() {
 
     return (
         <AcmPage>  
-            <AcmPageHeader title="Overivew" />
-
-            {/* TODO: Use material-ui styles instead of inline. */}
-            {loading? 
-            <div key="1" style={{ marginLeft: ".5rem" }}>
-                <AcmLoadingPage />
-            </div>
+            <AcmPageHeader title="Overview" />
+            
+            {loading || searchLoading? 
+            <AcmLoadingPage />
             :
-            <div style={{ margin: "2rem 1rem 1rem 2rem" }}>
+            <PageSection>
                 <AcmOverviewProviders providers={providers} />
-            </div>
-            }
-                      
-            <div style={{ margin: "1rem 1rem 1rem 2rem" }}>
+            </PageSection>}
+
+            <PageSection>        
                 {loading || searchLoading ?
                 <AcmSummaryList key="loading" loading title="Summary" list={summary}/>
                 :
                 <AcmSummaryList title="Summary" list={summary}/>}
-            </div>
+            </PageSection>
         
-
-            <div style={{ margin: "1rem 2rem 1rem 2rem" }}>
+            <PageSection>
                 {loading || searchLoading ?
                 <AcmChartGroup>
                     <AcmDonutChart loading key="chart-loading-1" title="Cluster compliance" description="Overview of policy compliance status" data={[]} />
@@ -158,7 +156,7 @@ export default function OverviewPage() {
                     <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
                     <AcmDonutChart title="Cluster status" description="Overview of cluster status" data={clusterData} />
                 </AcmChartGroup>}
-            </div>
+            </PageSection>
         </AcmPage>
     )
 }
