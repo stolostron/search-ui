@@ -2,6 +2,7 @@ import '@patternfly/react-core/dist/styles/base.css'
 import _ from 'lodash'
 import { Fragment, useState } from 'react'
 import {
+    AcmAlert,
     AcmExpandableSection,
     AcmTable,
     AcmPageCard,
@@ -48,26 +49,31 @@ function RenderRelatedTables(
             </PageSection>
         )
     } else if (error || !data || !data.searchResult) {
-        // TODO better error handling
-        console.error(error)
-        return <PageSection>{'Error querying related resources'}</PageSection>
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={'Error querying related resources'}
+                    subtitle={error ? error.message : ''}
+                />
+            </PageSection>
+        )
     }
-
     const relatedResultItems = data.searchResult[0]?.related || []
     return selectedKinds.map((kind) => {
-        const items = relatedResultItems[0]?.items.filter(
-            (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
-        )
-        if (items && items.length > 0) {
+        const items = relatedResultItems.filter((item) => item?.kind === kind)
+        if (items && items[0]?.items && items.length > 0) {
             return (
                 <AcmPageCard key={`related-table-${kind}`}>
                     <AcmExpandableSection
-                        label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
+                        label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items[0]?.items.length})`}
                         expanded={true}
                     >
                         <AcmTable
                             plural=""
-                            items={items}
+                            items={items[0]?.items}
                             columns={_.get(
                                 searchDefinitions,
                                 `[${kind}].columns`,
@@ -127,9 +133,17 @@ function RenderRelatedTiles(
             </PageSection>
         )
     } else if (error || !data || !data.searchResult) {
-        // TODO better error handling
-        console.error(error)
-        return <PageSection>{'Error querying related results'}</PageSection>
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={'Error querying related search results'}
+                    subtitle={error ? error.message : ''}
+                />
+            </PageSection>
+        )
     }
     const relatedCounts = data.searchResult[0]!.related || []
     return (
@@ -159,7 +173,8 @@ function RenderRelatedTiles(
 
 function RenderSearchTables(
     currentQuery: string,
-    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>,
+    selectedRelatedKinds: string[]
 ) {
     const { data, error, loading } = useSearchResultItemsQuery({
         client: searchClient,
@@ -175,9 +190,17 @@ function RenderSearchTables(
             </PageSection>
         )
     } else if (error || !data || !data.searchResult) {
-        // TODO better error handling
-        console.error(error)
-        return <PageSection>{'Error querying search results'}</PageSection>
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={'Error querying search results'}
+                    subtitle={error ? error.message : ''}
+                />
+            </PageSection>
+        )
     }
     const searchResultItems = data.searchResult[0]?.items || []
     const uniqueKinds: string[] = _.uniq(searchResultItems.map((item: { kind: string }) => item.kind))
@@ -190,7 +213,7 @@ function RenderSearchTables(
             <AcmPageCard key={`results-table-${kind}`}>
                 <AcmExpandableSection
                     label={`${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
-                    expanded={true}
+                    expanded={selectedRelatedKinds.length === 0}
                 >
                     <AcmTable
                         plural=""
@@ -245,7 +268,7 @@ export default function SearchResults(props: { currentQuery: string; preSelected
             />
             {RenderRelatedTiles(currentQuery, selected, setSelected)}
             {RenderRelatedTables(currentQuery, selected, setDeleteResource)}
-            {RenderSearchTables(currentQuery, setDeleteResource)}
+            {RenderSearchTables(currentQuery, setDeleteResource, selected)}
         </Fragment>
     )
 }
