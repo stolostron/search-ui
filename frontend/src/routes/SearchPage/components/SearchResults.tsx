@@ -16,10 +16,19 @@ import {
     useSearchResultRelatedItemsQuery,
 } from '../../../search-sdk/search-sdk'
 import { convertStringToQuery } from '../search-helper'
+import {
+    DeleteResourceModal,
+    IDeleteModalProps,
+    ClosedDeleteModalProps,
+} from '../components/Modals/DeleteResourceModal'
 import { PageSection } from '@patternfly/react-core'
 import searchDefinitions from '../searchDefinitions'
 
-function RenderRelatedTables(currentQuery: string, selectedKinds: string[]) {
+function RenderRelatedTables(
+    currentQuery: string,
+    selectedKinds: string[],
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+) {
     const { data, loading, error } = useSearchResultRelatedItemsQuery({
         skip: selectedKinds.length === 0,
         client: searchClient,
@@ -49,38 +58,49 @@ function RenderRelatedTables(currentQuery: string, selectedKinds: string[]) {
         const items = relatedResultItems[0]?.items.filter(
             (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
         )
-        return (
-            <AcmPageCard key={`related-table-${kind}`}>
-                <AcmExpandableSection
-                    label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
-                    expanded={true}
-                >
-                    <AcmTable
-                        plural=""
-                        items={items}
-                        columns={_.get(
-                            searchDefinitions,
-                            `[${kind}].columns`,
-                            searchDefinitions['genericresource'].columns
-                        )}
-                        keyFn={(item: any) => item._uid.toString()}
-                        tableActions={[]}
-                        rowActions={
-                            [
-                                // {
-                                //     id: 'delete',
-                                //     title: 'Delete item',
-                                //     click: (item: IExampleData) => {
-                                //         setItems(items ? items.filter((i) => i.uid !== item.uid) : [])
-                                //     },
-                                // },
-                            ]
-                        }
-                        bulkActions={[]}
-                    />
-                </AcmExpandableSection>
-            </AcmPageCard>
-        )
+        if (items && items.length > 0) {
+            return (
+                <AcmPageCard key={`related-table-${kind}`}>
+                    <AcmExpandableSection
+                        label={`Related ${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
+                        expanded={true}
+                    >
+                        <AcmTable
+                            plural=""
+                            items={items}
+                            columns={_.get(
+                                searchDefinitions,
+                                `[${kind}].columns`,
+                                searchDefinitions['genericresource'].columns
+                            )}
+                            keyFn={(item: any) => item._uid.toString()}
+                            tableActions={[]}
+                            rowActions={
+                                kind !== 'cluster' && kind !== 'release'
+                                    ? [
+                                          {
+                                              id: 'delete',
+                                              title: `Delete ${kind}`,
+                                              click: (item: any) => {
+                                                  setDeleteResource({
+                                                      open: true,
+                                                      close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                      resource: item,
+                                                      currentQuery,
+                                                      relatedResource: true,
+                                                  })
+                                              },
+                                          },
+                                      ]
+                                    : []
+                            }
+                            bulkActions={[]}
+                        />
+                    </AcmExpandableSection>
+                </AcmPageCard>
+            )
+        }
+        return null
     })
 }
 
@@ -90,7 +110,6 @@ function RenderRelatedTiles(
     setSelected: React.Dispatch<React.SetStateAction<string[]>>
 ) {
     const { data, error, loading } = useSearchResultRelatedCountQuery({
-        // TODO skip: ??
         client: searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)],
@@ -138,9 +157,11 @@ function RenderRelatedTiles(
     )
 }
 
-function RenderSearchResults(currentQuery: string) {
+function RenderSearchTables(
+    currentQuery: string,
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+) {
     const { data, error, loading } = useSearchResultItemsQuery({
-        // TODO skip: ??
         client: searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)],
@@ -182,16 +203,23 @@ function RenderSearchResults(currentQuery: string) {
                         keyFn={(item: any) => item._uid.toString()}
                         tableActions={[]}
                         rowActions={
-                            [
-                                // if NOT cluster and NOT release kind -> delete action
-                                // {
-                                //     id: 'delete',
-                                //     title: 'Delete item',
-                                //     click: (item: IExampleData) => {
-                                //         setItems(items ? items.filter((i) => i.uid !== item.uid) : [])
-                                //     },
-                                // },
-                            ]
+                            kind !== 'cluster' && kind !== 'release'
+                                ? [
+                                      {
+                                          id: 'delete',
+                                          title: `Delete ${kind}`,
+                                          click: (item: any) => {
+                                              setDeleteResource({
+                                                  open: true,
+                                                  close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                  resource: item,
+                                                  currentQuery,
+                                                  relatedResource: false,
+                                              })
+                                          },
+                                      },
+                                  ]
+                                : []
                         }
                         bulkActions={[]}
                     />
@@ -203,13 +231,21 @@ function RenderSearchResults(currentQuery: string) {
 
 export default function SearchResults(props: { currentQuery: string; preSelectedRelatedResources: string[] }) {
     const { currentQuery, preSelectedRelatedResources } = props
-    let [selected, setSelected] = useState<string[]>(preSelectedRelatedResources)
+    const [selected, setSelected] = useState<string[]>(preSelectedRelatedResources)
+    const [deleteResource, setDeleteResource] = useState<IDeleteModalProps>(ClosedDeleteModalProps)
 
     return (
         <Fragment>
+            <DeleteResourceModal
+                open={deleteResource.open}
+                close={deleteResource.close}
+                resource={deleteResource.resource}
+                currentQuery={deleteResource.currentQuery}
+                relatedResource={deleteResource.relatedResource}
+            />
             {RenderRelatedTiles(currentQuery, selected, setSelected)}
-            {RenderRelatedTables(currentQuery, selected)}
-            {RenderSearchResults(currentQuery)}
+            {RenderRelatedTables(currentQuery, selected, setDeleteResource)}
+            {RenderSearchTables(currentQuery, setDeleteResource)}
         </Fragment>
     )
 }
