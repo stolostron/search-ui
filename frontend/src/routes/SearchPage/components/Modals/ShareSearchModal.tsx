@@ -7,7 +7,7 @@ export const ShareSearchModal = (props: any) => {
     function GetUrl() {
         let url = decodeURIComponent(window.location.origin + window.location.pathname)
         let search = props.shareSearch ? props.shareSearch.searchText : ''
-        return (url += `?filters={"textsearch":"${encodeURIComponent(search)}}`)
+        return (url += `?filters={"textsearch":"${encodeURIComponent(search)}}"`)
     }
 
     return (
