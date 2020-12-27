@@ -9,8 +9,10 @@ import {
     AcmOverviewProviders,
     AcmSummaryList,
     Provider,
+    AcmButton,
 } from '@open-cluster-management/ui-components'
-import { PageSection } from '@patternfly/react-core'
+import { ButtonVariant, PageSection } from '@patternfly/react-core'
+import { PlusIcon } from '@patternfly/react-icons'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
@@ -119,6 +121,22 @@ const searchInput = [
     },
 ]
 
+function getPageControls() {
+    return (
+        <AcmButton
+            href="/cluster-management/cluster-management/provider-connections/add-connection"
+            variant={ButtonVariant.link}
+            component="a"
+            rel="noreferrer"
+            id="add-cloud-connection"
+            icon={<PlusIcon />}
+            iconPosition="left"
+        >
+            Add cloud connection
+        </AcmButton>
+    )
+}
+
 export default function OverviewPage() {
     const { data, loading, error } = useGetOverviewQuery({ client: consoleClient })
     const { data: searchData, loading: searchLoading, error: searchError } = useSearchResultCountQuery({
@@ -130,7 +148,7 @@ export default function OverviewPage() {
     if (error || searchError) {
         return (
             <AcmPage>
-                <AcmPageHeader title="Overview" />
+                <AcmPageHeader title="Overview" controls={getPageControls()} />
                 <PageSection>
                     <AcmAlert
                         noClose
@@ -151,7 +169,7 @@ export default function OverviewPage() {
             ? []
             : [
                   {
-                      isPrimary: true,
+                      isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
                       href: 'search?filters={"textsearch":"kind%3Aapplication"}',
@@ -205,7 +223,7 @@ export default function OverviewPage() {
 
     return (
         <AcmPage>
-            <AcmPageHeader title="Overview" />
+            <AcmPageHeader title="Overview" controls={getPageControls()} />
 
             {loading || searchLoading ? (
                 <AcmLoadingPage />
