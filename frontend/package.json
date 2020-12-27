@@ -7,8 +7,8 @@
     "scripts": {
         "start": "REACT_APP_BACKEND=http://localhost:4000 react-scripts start",
         "build": "REACT_APP_BACKEND='' react-scripts build",
-        "check": "prettier --check src/*.{ts,tsx} src/**/*.{ts,tsx} src/**/**/*.{ts,tsx} src/**/**/**/*.{ts,tsx}",
-        "check:fix": "prettier --write src/*.{ts,tsx} src/**/*.{ts,tsx} src/**/**/*.{ts,tsx} src/**/**/**/*.{ts,tsx}",
+        "check": "prettier --check src/*.{ts,tsx} src/**/*.{ts,tsx} src/**/**/*.{ts,tsx} src/**/**/**/*.{ts,tsx} src/**/**/**/**/*.{ts,tsx}",
+        "check:fix": "prettier --write src/*.{ts,tsx} src/**/*.{ts,tsx} src/**/**/*.{ts,tsx} src/**/**/**/*.{ts,tsx} src/**/**/**/**/*.{ts,tsx}",
         "test": "JEST_JUNIT_OUTPUT_DIR=coverage react-scripts test --all --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit --coverageReporters=lcov --coverageReporters=html --coverageReporters=text --coverageReporters=text-summary --collectCoverageFrom=!src/*-sdk/*.ts --collectCoverageFrom=!**/*.d.ts --collectCoverageFrom=!**/*.snap --testResultsProcessor jest-sonar-reporter",
         "test:updateSnapshot": "react-scripts test --all --watchAll=false -u",
         "test:watch": "react-scripts test --watch",
@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.3.6",
-        "@open-cluster-management/ui-components": "^0.1.123",
+        "@open-cluster-management/ui-components": "^0.1.128",
         "@patternfly/react-core": "^4.84.4",
         "@types/node": "^14.14.14",
         "@types/react": "^17.0.0",

@@ -11,7 +11,13 @@ import { DeleteSearchModal } from './Modals/DeleteSearchModal'
 import { ShareSearchModal } from './Modals/ShareSearchModal'
 import { PageSection } from '@patternfly/react-core'
 
-function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: any, setCurrentQuery: any): any {
+function SearchResultCount(
+    input: any,
+    queries: any,
+    suggestedQueryTemplates: any,
+    setCurrentQuery: React.Dispatch<React.SetStateAction<string>>,
+    setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
+): any {
     const { data, error, loading } = useSearchResultCountQuery({
         variables: { input: input },
         client: searchClient,
@@ -42,7 +48,11 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
         })
         return (
             <PageSection>
-                <SaveAndEditSearchModal editSearch={editSearch} onClose={() => setEditSearch(undefined)} />
+                <SaveAndEditSearchModal
+                    setSelectedSearch={setSelectedSearch}
+                    editSearch={editSearch}
+                    onClose={() => setEditSearch(undefined)}
+                />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />
 
@@ -70,6 +80,7 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
                                     onCardClick={() => {
                                         setCurrentQuery(query.searchText)
                                         updateBrowserUrl(query.searchText)
+                                        setSelectedSearch(query.name)
                                     }}
                                     count={query.count}
                                     countTitle="Results"
@@ -110,7 +121,10 @@ function SearchResultCount(input: any, queries: any, suggestedQueryTemplates: an
     }
 }
 
-export default function SavedSearchQueries(props: { setCurrentQuery: React.Dispatch<React.SetStateAction<string>> }) {
+export default function SavedSearchQueries(props: {
+    setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
+    setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
+}) {
     const { data } = useSavedSearchesQuery({
         client: searchClient,
     })
@@ -122,5 +136,5 @@ export default function SavedSearchQueries(props: { setCurrentQuery: React.Dispa
         ...queries.map((query) => convertStringToQuery(query!.searchText as string)),
         ...suggestedQueryTemplates.map((query: { searchText: string }) => convertStringToQuery(query.searchText)),
     ]
-    return SearchResultCount(input, queries, suggestedQueryTemplates, props.setCurrentQuery)
+    return SearchResultCount(input, queries, suggestedQueryTemplates, props.setCurrentQuery, props.setSelectedSearch)
 }
