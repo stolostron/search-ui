@@ -36,6 +36,3 @@ echo SEARCH_API_URL=$SEARCH_API_URL >> ./backend/.env
 oc create route passthrough console-api --service=console-api --insecure-policy=Redirect -n open-cluster-management
 CONSOLE_API_URL=https://$(oc get route console-api -n open-cluster-management | grep console-api | awk '{print $2}')
 echo CONSOLE_API_URL=$CONSOLE_API_URL >> ./backend/.env
-
-ENABLE_REDIRECT=false
-echo ENABLE_REDIRECT=$ENABLE_REDIRECT >> ./frontend/.env
