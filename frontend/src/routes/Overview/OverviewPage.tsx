@@ -124,7 +124,7 @@ const searchInput = [
 function getPageControls() {
     return (
         <AcmButton
-            href="/cluster-management/cluster-management/provider-connections/add-connection"
+            href="/console/add-connection"
             variant={ButtonVariant.link}
             component="a"
             rel="noreferrer"
