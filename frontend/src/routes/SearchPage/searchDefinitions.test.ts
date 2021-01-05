@@ -154,7 +154,7 @@ test('Correctly returns label components', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        label: 'testlabel=label1, testlabel=label2',
+        label: 'testlabel=label1; testlabel=label2',
     }
     const result = formatLabels(item)
     expect(result).toMatchSnapshot()
