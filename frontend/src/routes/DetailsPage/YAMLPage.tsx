@@ -78,7 +78,7 @@ export default function YAMLPage(props: {
     const classes = useStyles()
     useEffect(() => {
         if (resource?.getResource) {
-            setEditedResourceYaml(jsYaml.safeDump(resource?.getResource, { indent: 2 }))
+            setEditedResourceYaml(jsYaml.dump(resource?.getResource, { indent: 2 }))
         }
     }, [resource?.getResource])
 
@@ -86,7 +86,7 @@ export default function YAMLPage(props: {
         client: consoleClient,
         onCompleted: (res) => {
             setEditMode(false)
-            setEditedResourceYaml(jsYaml.safeDump(res.updateResource, { indent: 2 }))
+            setEditedResourceYaml(jsYaml.dump(res.updateResource, { indent: 2 }))
         },
     })
 
@@ -171,7 +171,7 @@ export default function YAMLPage(props: {
                             onClick={() => {
                                 updateResource({
                                     variables: {
-                                        body: jsYaml.safeLoadAll(editedResourceYaml)[0],
+                                        body: jsYaml.loadAll(editedResourceYaml)[0],
                                         selfLink,
                                         namespace,
                                         kind,
@@ -191,9 +191,7 @@ export default function YAMLPage(props: {
                 width={'100%'}
                 height={'90%'}
                 value={
-                    editedResourceYaml !== ''
-                        ? editedResourceYaml
-                        : jsYaml.safeDump(resource?.getResource, { indent: 2 })
+                    editedResourceYaml !== '' ? editedResourceYaml : jsYaml.dump(resource?.getResource, { indent: 2 })
                 }
                 onChange={(value) => {
                     setEditedResourceYaml(value)
