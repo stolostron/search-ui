@@ -28,6 +28,8 @@ import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 import { ApolloError } from '@apollo/client'
 
+const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
+
 const useStyles = makeStyles({
     actionGroup: {
         backgroundColor: 'var(--pf-global--BackgroundColor--100)',
@@ -75,7 +77,7 @@ function RenderSearchBar(props: {
     const [open, toggleOpen] = useState<boolean>(false)
     const toggle = () => toggleOpen(!open)
     const searchSchemaResults = useSearchSchemaQuery({
-        skip: searchQuery.endsWith(':'),
+        skip: searchQuery.endsWith(':') || operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: searchClient,
     })
 
@@ -85,7 +87,7 @@ function RenderSearchBar(props: {
         return filter.property !== searchCompleteValue
     })
     const searchCompleteResults = useSearchCompleteQuery({
-        skip: !searchQuery.endsWith(':'),
+        skip: !searchQuery.endsWith(':') && !operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: searchClient,
         variables: {
             property: searchCompleteValue,
@@ -108,7 +110,9 @@ function RenderSearchBar(props: {
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
                         queryString={searchQuery}
                         suggestions={
-                            searchQuery === '' || !searchQuery.endsWith(':')
+                            searchQuery === '' ||
+                            (!searchQuery.endsWith(':') &&
+                                !operators.some((operator: string) => searchQuery.endsWith(operator)))
                                 ? formatSearchbarSuggestions(
                                       _.get(searchSchemaResults, 'data.searchSchema.allProperties', []),
                                       'filter',
