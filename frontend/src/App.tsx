@@ -3,6 +3,7 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import { lazy } from 'react'
 import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom'
+import './lib/i18n'
 
 const SearchPage = lazy(() => import('./routes/SearchPage/SearchPage'))
 const DetailsPage = lazy(() => import('./routes/DetailsPage/DetailsPage'))

@@ -12,6 +12,7 @@ import {
 import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
@@ -224,9 +225,10 @@ export default function SearchPage() {
         }
     }, [searchQuery])
     const query = convertStringToQuery(searchQuery)
+    const { t } = useTranslation(['search'])
     return (
         <AcmPage>
-            <AcmPageHeader title="Search" />
+            <AcmPageHeader title={t('search')} />
             <RenderDropDownAndNewTab
                 selectedSearch={selectedSearch}
                 setSelectedSearch={setSelectedSearch}
