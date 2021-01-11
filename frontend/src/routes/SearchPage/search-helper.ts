@@ -1,9 +1,15 @@
+import { DropdownSuggestionsProps } from '@open-cluster-management/ui-components'
+
+const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
+const dateValues = ['hour', 'day', 'week', 'month', 'year']
+
 export function formatSearchbarSuggestions(
     data: string[],
     suggestionKind: 'label' | 'filter' | 'value',
     searchQuery: string
 ) {
     let valuesToRemoveFromSuggestions: string[] = []
+    let suggestions: DropdownSuggestionsProps[] = []
     const labelTag = {
         id: 'id-suggestions-label',
         key: 'key-suggestions-label',
@@ -22,8 +28,53 @@ export function formatSearchbarSuggestions(
                 valuesToRemoveFromSuggestions = filter.values.filter((value) => data.indexOf(value) > 0)
             }
         })
+        if (data[0] === 'isNumber') {
+            if (operators.some((operator: string) => searchQuery.endsWith(operator))) {
+                // operator is already chosen
+                const numberRange =
+                    data.length > 2
+                        ? `Min: ${parseInt(data[1], 10)} - Max: ${parseInt(data[2], 10)}`
+                        : `Min: ${parseInt(data[1], 10)} - Max: ${parseInt(data[1], 10)}`
+
+                return [
+                    labelTag,
+                    {
+                        id: 'id-values-range',
+                        key: 'key-values-range',
+                        name: numberRange,
+                        kind: suggestionKind,
+                        disabled: true,
+                    },
+                ]
+            }
+            return operators.map((op) => {
+                return {
+                    id: `id-${op}`,
+                    key: `key-${op}`,
+                    name: op,
+                    kind: suggestionKind,
+                }
+            })
+        } else if (data[0] === 'isDate') {
+            suggestions = dateValues.map((date) => {
+                return {
+                    id: `id-date-${date}`,
+                    key: `key-date-${date}`,
+                    name: date,
+                    kind: suggestionKind,
+                }
+            })
+            suggestions.unshift({
+                id: 'id-filter-label',
+                name: `${searchCompleteFilter} within the last:`,
+                kind: 'label',
+                disabled: true,
+            })
+            return suggestions
+        }
     }
-    const suggestions = data
+
+    suggestions = data
         .filter((suggestion) => {
             return valuesToRemoveFromSuggestions.indexOf(suggestion) === -1
         })
@@ -61,6 +112,8 @@ export const getSearchCompleteString = (searchQuery: string) => {
     const queryTags = searchQuery.split(' ')
     if (queryTags[queryTags.length - 1].endsWith(':')) {
         return queryTags[queryTags.length - 1].replace(':', '')
+    } else if (operators.some((op) => queryTags[queryTags.length - 1].endsWith(op))) {
+        return queryTags[queryTags.length - 1].substring(0, queryTags[queryTags.length - 1].length - 2)
     }
     return ''
 }

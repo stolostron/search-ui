@@ -178,7 +178,7 @@ function RenderDropDownAndNewTab(props: {
             return { id: query!.id, text: query!.name }
         })
 
-        dropdownItems.unshift({ id: 'savedSearchesID', text: 'Saved searches', searchText: '' })
+        dropdownItems.unshift({ id: 'savedSearchesID', text: 'Saved searches' })
 
         return (
             <div className={classes.dropdown}>
@@ -219,6 +219,11 @@ export default function SearchPage() {
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
+    useEffect(() => {
+        if (searchQuery === '') {
+            setSelectedSearch('Saved searches')
+        }
+    }, [searchQuery])
     const query = convertStringToQuery(searchQuery)
     const { t } = useTranslation(['search'])
     return (
