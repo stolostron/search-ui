@@ -50,7 +50,7 @@ Array [
 ]
 `;
 
-exports[`Correctly returns formatSearchbarSuggestions 2`] = `
+exports[`Correctly returns formatSearchbarSuggestions of name values 1`] = `
 Array [
   Object {
     "disabled": true,
@@ -80,4 +80,162 @@ Array [
 ]
 `;
 
+exports[`Correctly returns formatSearchbarSuggestions of namespace values 1`] = `
+Array [
+  Object {
+    "disabled": true,
+    "id": "id-suggestions-label",
+    "key": "key-suggestions-label",
+    "kind": "value",
+    "name": "namespace values",
+  },
+  Object {
+    "id": "id-namespace1",
+    "key": "key-namespace1",
+    "kind": "value",
+    "name": "namespace1",
+  },
+  Object {
+    "id": "id-namespace2",
+    "key": "key-namespace2",
+    "kind": "value",
+    "name": "namespace2",
+  },
+  Object {
+    "id": "id-namespace3",
+    "key": "key-namespace3",
+    "kind": "value",
+    "name": "namespace3",
+  },
+]
+`;
+
+exports[`Correctly returns formatSearchbarSuggestions of operators 1`] = `
+Array [
+  Object {
+    "id": "id-=",
+    "key": "key-=",
+    "kind": "value",
+    "name": "=",
+  },
+  Object {
+    "id": "id-<",
+    "key": "key-<",
+    "kind": "value",
+    "name": "<",
+  },
+  Object {
+    "id": "id->",
+    "key": "key->",
+    "kind": "value",
+    "name": ">",
+  },
+  Object {
+    "id": "id-<=",
+    "key": "key-<=",
+    "kind": "value",
+    "name": "<=",
+  },
+  Object {
+    "id": "id->=",
+    "key": "key->=",
+    "kind": "value",
+    "name": ">=",
+  },
+  Object {
+    "id": "id-!=",
+    "key": "key-!=",
+    "kind": "value",
+    "name": "!=",
+  },
+  Object {
+    "id": "id-!",
+    "key": "key-!",
+    "kind": "value",
+    "name": "!",
+  },
+]
+`;
+
+exports[`Correctly returns formatSearchbarSuggestions with date 1`] = `
+Array [
+  Object {
+    "disabled": true,
+    "id": "id-filter-label",
+    "kind": "label",
+    "name": "created within the last:",
+  },
+  Object {
+    "id": "id-date-hour",
+    "key": "key-date-hour",
+    "kind": "value",
+    "name": "hour",
+  },
+  Object {
+    "id": "id-date-day",
+    "key": "key-date-day",
+    "kind": "value",
+    "name": "day",
+  },
+  Object {
+    "id": "id-date-week",
+    "key": "key-date-week",
+    "kind": "value",
+    "name": "week",
+  },
+  Object {
+    "id": "id-date-month",
+    "key": "key-date-month",
+    "kind": "value",
+    "name": "month",
+  },
+  Object {
+    "id": "id-date-year",
+    "key": "key-date-year",
+    "kind": "value",
+    "name": "year",
+  },
+]
+`;
+
+exports[`Correctly returns formatSearchbarSuggestions with operator already chosen (single number option) 1`] = `
+Array [
+  Object {
+    "disabled": true,
+    "id": "id-suggestions-label",
+    "key": "key-suggestions-label",
+    "kind": "value",
+    "name": "cpu= values",
+  },
+  Object {
+    "disabled": true,
+    "id": "id-values-range",
+    "key": "key-values-range",
+    "kind": "value",
+    "name": "Min: 1 - Max: 1",
+  },
+]
+`;
+
+exports[`Correctly returns formatSearchbarSuggestions with operator already chosen 1`] = `
+Array [
+  Object {
+    "disabled": true,
+    "id": "id-suggestions-label",
+    "key": "key-suggestions-label",
+    "kind": "value",
+    "name": "cpu= values",
+  },
+  Object {
+    "disabled": true,
+    "id": "id-values-range",
+    "key": "key-values-range",
+    "kind": "value",
+    "name": "Min: 1 - Max: 10",
+  },
+]
+`;
+
 exports[`Correctly returns getSearchCompleteString 1`] = `"kind"`;
+
+exports[`Correctly returns getSearchCompleteString with operator 1`] = `"cpu"`;

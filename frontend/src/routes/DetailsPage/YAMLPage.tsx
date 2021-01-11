@@ -2,15 +2,16 @@ import { useState, useEffect } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmButton, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { ApolloError } from '@apollo/client'
-import MonacoEditor, { monaco } from 'react-monaco-editor'
 import { makeStyles } from '@material-ui/styles'
 import jsYaml from 'js-yaml'
 import { Query, useUserAccessQuery, useUpdateResourceLazyQuery } from '../../console-sdk/console-sdk'
 import { consoleClient } from '../../console-sdk/console-client'
+import './YAMLEditor.css'
 
+import MonacoEditor, { monaco } from 'react-monaco-editor'
 import 'monaco-editor/esm/vs/editor/editor.all.js'
 import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js'
-
+import { global_BackgroundColor_dark_100 as editorBackground } from '@patternfly/react-tokens'
 monaco.editor.defineTheme('console', {
     base: 'vs-dark',
     inherit: true,
@@ -22,7 +23,10 @@ monaco.editor.defineTheme('console', {
         { token: 'keyword', foreground: 'cbc0ff' },
     ],
     colors: {
+        'editor.background': editorBackground.value,
         'editorGutter.background': '#292e34', // no pf token defined
+        'editorLineNumber.activeForeground': '#fff',
+        'editorLineNumber.foreground': '#f0f0f0',
     },
 })
 monaco.editor.setTheme('console')
@@ -78,7 +82,7 @@ export default function YAMLPage(props: {
     const classes = useStyles()
     useEffect(() => {
         if (resource?.getResource) {
-            setEditedResourceYaml(jsYaml.safeDump(resource?.getResource, { indent: 2 }))
+            setEditedResourceYaml(jsYaml.dump(resource?.getResource, { indent: 2 }))
         }
     }, [resource?.getResource])
 
@@ -86,7 +90,7 @@ export default function YAMLPage(props: {
         client: consoleClient,
         onCompleted: (res) => {
             setEditMode(false)
-            setEditedResourceYaml(jsYaml.safeDump(res.updateResource, { indent: 2 }))
+            setEditedResourceYaml(jsYaml.dump(res.updateResource, { indent: 2 }))
         },
     })
 
@@ -171,7 +175,7 @@ export default function YAMLPage(props: {
                             onClick={() => {
                                 updateResource({
                                     variables: {
-                                        body: jsYaml.safeLoadAll(editedResourceYaml)[0],
+                                        body: jsYaml.loadAll(editedResourceYaml)[0],
                                         selfLink,
                                         namespace,
                                         kind,
@@ -191,9 +195,7 @@ export default function YAMLPage(props: {
                 width={'100%'}
                 height={'90%'}
                 value={
-                    editedResourceYaml !== ''
-                        ? editedResourceYaml
-                        : jsYaml.safeDump(resource?.getResource, { indent: 2 })
+                    editedResourceYaml !== '' ? editedResourceYaml : jsYaml.dump(resource?.getResource, { indent: 2 })
                 }
                 onChange={(value) => {
                     setEditedResourceYaml(value)
@@ -202,7 +204,7 @@ export default function YAMLPage(props: {
                 options={{
                     colorDecorators: true,
                     readOnly: !editMode,
-                    fontSize: 14,
+                    fontSize: 12,
                     wordWrap: 'wordWrapColumn',
                     wordWrapColumn: 132,
                     wordWrapMinified: false,
@@ -210,7 +212,7 @@ export default function YAMLPage(props: {
                     smoothScrolling: true,
                     glyphMargin: true,
                     tabSize: 2,
-                    fontFamily: 'monospace',
+                    renderIndentGuides: false,
                     scrollbar: {
                         verticalScrollbarSize: 17,
                         horizontalScrollbarSize: 17,

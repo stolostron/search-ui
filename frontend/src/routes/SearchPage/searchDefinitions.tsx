@@ -1356,7 +1356,7 @@ export function createExternalLink(item: any) {
 
 export function formatLabels(item: any) {
     if (item.label) {
-        return <AcmLabels labels={item.label.split(', ')} />
+        return <AcmLabels labels={item.label.split('; ')} />
     }
     return '-'
 }

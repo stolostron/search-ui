@@ -12,6 +12,7 @@ import {
 import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
@@ -27,6 +28,8 @@ import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchMod
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 import { ApolloError } from '@apollo/client'
+
+const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 
 const useStyles = makeStyles({
     actionGroup: {
@@ -75,7 +78,7 @@ function RenderSearchBar(props: {
     const [open, toggleOpen] = useState<boolean>(false)
     const toggle = () => toggleOpen(!open)
     const searchSchemaResults = useSearchSchemaQuery({
-        skip: searchQuery.endsWith(':'),
+        skip: searchQuery.endsWith(':') || operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: searchClient,
     })
 
@@ -85,7 +88,7 @@ function RenderSearchBar(props: {
         return filter.property !== searchCompleteValue
     })
     const searchCompleteResults = useSearchCompleteQuery({
-        skip: !searchQuery.endsWith(':'),
+        skip: !searchQuery.endsWith(':') && !operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: searchClient,
         variables: {
             property: searchCompleteValue,
@@ -108,7 +111,9 @@ function RenderSearchBar(props: {
                         loadingSuggestions={searchSchemaResults.loading || searchCompleteResults.loading}
                         queryString={searchQuery}
                         suggestions={
-                            searchQuery === '' || !searchQuery.endsWith(':')
+                            searchQuery === '' ||
+                            (!searchQuery.endsWith(':') &&
+                                !operators.some((operator: string) => searchQuery.endsWith(operator)))
                                 ? formatSearchbarSuggestions(
                                       _.get(searchSchemaResults, 'data.searchSchema.allProperties', []),
                                       'filter',
@@ -173,7 +178,7 @@ function RenderDropDownAndNewTab(props: {
             return { id: query!.id, text: query!.name }
         })
 
-        dropdownItems.unshift({ id: 'savedSearchesID', text: 'Saved searches', searchText: '' })
+        dropdownItems.unshift({ id: 'savedSearchesID', text: 'Saved searches' })
 
         return (
             <div className={classes.dropdown}>
@@ -214,10 +219,16 @@ export default function SearchPage() {
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
+    useEffect(() => {
+        if (searchQuery === '') {
+            setSelectedSearch('Saved searches')
+        }
+    }, [searchQuery])
     const query = convertStringToQuery(searchQuery)
+    const { t } = useTranslation(['search'])
     return (
         <AcmPage>
-            <AcmPageHeader title="Search" />
+            <AcmPageHeader title={t('search')} />
             <RenderDropDownAndNewTab
                 selectedSearch={selectedSearch}
                 setSelectedSearch={setSelectedSearch}
