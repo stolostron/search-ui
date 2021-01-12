@@ -30,8 +30,9 @@ function RenderRelatedTables(
     selectedKinds: string[],
     setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
 ) {
+    const queryFilters = convertStringToQuery(currentQuery)
     const { data, loading, error } = useSearchResultRelatedItemsQuery({
-        skip: selectedKinds.length === 0,
+        skip: selectedKinds.length === 0 || queryFilters.keywords.length > 0,
         client: searchClient,
         variables: {
             input: [{ ...convertStringToQuery(currentQuery), relatedKinds: selectedKinds }],
@@ -115,7 +116,9 @@ function RenderRelatedTiles(
     selectedKinds: string[],
     setSelected: React.Dispatch<React.SetStateAction<string[]>>
 ) {
+    const queryFilters = convertStringToQuery(currentQuery)
     const { data, error, loading } = useSearchResultRelatedCountQuery({
+        skip: queryFilters.keywords.length > 0,
         client: searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)],
@@ -132,7 +135,7 @@ function RenderRelatedTiles(
                 </AcmExpandableWrapper>
             </PageSection>
         )
-    } else if (error || !data || !data.searchResult) {
+    } else if (error) {
         return (
             <PageSection>
                 <AcmAlert
@@ -144,31 +147,33 @@ function RenderRelatedTiles(
                 />
             </PageSection>
         )
+    } else if (data && data.searchResult) {
+        const relatedCounts = data.searchResult[0]!.related || []
+        return (
+            <PageSection>
+                <AcmExpandableWrapper maxHeight={'10rem'} withCount={true} expandable={true}>
+                    {relatedCounts.map((count) => {
+                        return (
+                            <AcmTile
+                                key={`related-tile-${count!.kind}`}
+                                isSelected={selectedKinds.indexOf(count!.kind) > -1}
+                                title={''}
+                                onClick={() => {
+                                    const updatedKinds =
+                                        selectedKinds.indexOf(count!.kind) > -1
+                                            ? selectedKinds.filter((kind) => kind !== count!.kind)
+                                            : [count!.kind, ...selectedKinds]
+                                    setSelected(updatedKinds)
+                                }}
+                                relatedResourceData={{ count: count!.count || 0, kind: count!.kind }}
+                            />
+                        )
+                    })}
+                </AcmExpandableWrapper>
+            </PageSection>
+        )
     }
-    const relatedCounts = data.searchResult[0]!.related || []
-    return (
-        <PageSection>
-            <AcmExpandableWrapper maxHeight={'10rem'} withCount={true} expandable={true}>
-                {relatedCounts.map((count) => {
-                    return (
-                        <AcmTile
-                            key={`related-tile-${count!.kind}`}
-                            isSelected={selectedKinds.indexOf(count!.kind) > -1}
-                            title={''}
-                            onClick={() => {
-                                const updatedKinds =
-                                    selectedKinds.indexOf(count!.kind) > -1
-                                        ? selectedKinds.filter((kind) => kind !== count!.kind)
-                                        : [count!.kind, ...selectedKinds]
-                                setSelected(updatedKinds)
-                            }}
-                            relatedResourceData={{ count: count!.count || 0, kind: count!.kind }}
-                        />
-                    )
-                })}
-            </AcmExpandableWrapper>
-        </PageSection>
-    )
+    return null
 }
 
 function RenderSearchTables(
