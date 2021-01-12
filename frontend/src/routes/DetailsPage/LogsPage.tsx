@@ -8,9 +8,8 @@ export default function LogsPage(props: {
     cluster: string
     namespace: string
     name: string
-    client?: any
+    client?: any // TODO: need correct type for client.
 }) {
-    // TODO: need correct type for client.
     const { containers, cluster, namespace, name } = props
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
