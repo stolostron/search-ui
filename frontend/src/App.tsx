@@ -11,7 +11,6 @@ const OverviewPage = lazy(() => import('./routes/Overview/OverviewPage'))
 
 function App() {
     return (
-        // <ApolloProvider client={consoleClient}>
         <Router>
             <Switch>
                 {/* New UI Paths */}
@@ -33,7 +32,6 @@ function App() {
                 </Route>
             </Switch>
         </Router>
-        // </ApolloProvider>
     )
 }
 
