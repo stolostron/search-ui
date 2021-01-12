@@ -48,5 +48,5 @@ it('should render logs page loading state', async () => {
     // This wait pauses till apollo query is returning data
     await wait(1)
     // Test that the component has rendered correctly with data
-    // expect(screen.getByText('testLogs')).toBeInTheDocument()
+    expect(screen.getByText('testLogs')).toBeInTheDocument()
 })
