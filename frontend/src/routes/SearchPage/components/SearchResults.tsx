@@ -210,6 +210,19 @@ function RenderSearchTables(
     const searchResultItems = data.searchResult[0]?.items || []
     const uniqueKinds: string[] = _.uniq(searchResultItems.map((item: { kind: string }) => item.kind))
 
+    if (searchResultItems.length === 0) {
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'warning'}
+                    isInline={true}
+                    title={'No results found for the current search criteria.'}
+                />
+            </PageSection>
+        )
+    }
+
     return uniqueKinds.map((kind: string) => {
         const items = searchResultItems.filter(
             (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
