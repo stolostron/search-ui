@@ -2,13 +2,14 @@ import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { useGetLogsQuery } from '../../console-sdk/console-sdk'
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 
 export default function LogsPage(props: {
     containers: string[]
     cluster: string
     namespace: string
     name: string
-    client?: any // TODO: need correct type for client.
+    client?: ApolloClient<NormalizedCacheObject>
 }) {
     const { containers, cluster, namespace, name } = props
     const [container, setContainer] = useState<string>(containers[0] || '')
