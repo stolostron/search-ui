@@ -215,7 +215,7 @@ function RenderSearchTables(
             <PageSection>
                 <AcmAlert
                     noClose={true}
-                    variant={'warning'}
+                    variant={'info'}
                     isInline={true}
                     title={'No results found for the current search criteria.'}
                 />
