@@ -124,7 +124,7 @@ const searchInput = [
 function getPageControls() {
     return (
         <AcmButton
-            href="/console/add-connection"
+            href="/multicloud/add-connection"
             variant={ButtonVariant.link}
             component="a"
             rel="noreferrer"
@@ -132,7 +132,7 @@ function getPageControls() {
             icon={<PlusIcon />}
             iconPosition="left"
         >
-            Add cloud connection
+            Add provider connection
         </AcmButton>
     )
 }
