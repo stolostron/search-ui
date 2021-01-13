@@ -140,7 +140,6 @@ const PageActions = () => {
         console.log(error)
     }
     const addons = data?.getResource.items
-    console.log('getResourceQuery data', addons)
 
     function getLaunchLink(addons: any) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
@@ -154,7 +153,6 @@ const PageActions = () => {
                 href: addon.metadata.annotations[pathKey] ?? '',
             }))
     }
-    console.log('getLaunchlink', getLaunchLink(addons))
 
     return (
         <AcmActionGroup>
