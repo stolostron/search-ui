@@ -1,21 +1,14 @@
 import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { useGetLogsQuery } from '../../console-sdk/console-sdk'
 import { consoleClient } from '../../console-sdk/console-client'
 
-export default function LogsPage(props: {
-    containers: string[]
-    cluster: string
-    namespace: string
-    name: string
-    client?: ApolloClient<NormalizedCacheObject> // Only passed during tests via MockedProvider
-}) {
+export default function LogsPage(props: { containers: string[]; cluster: string; namespace: string; name: string }) {
     const { containers, cluster, namespace, name } = props
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
-        client: process.env.NODE_ENV === 'test' ? props.client : consoleClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
         skip: containers.length === 0 || !container,
         variables: {
             containerName: container,
