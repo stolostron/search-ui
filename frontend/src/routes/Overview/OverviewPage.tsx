@@ -10,8 +10,8 @@ import {
     AcmSummaryList,
     Provider,
     AcmButton,
-    // AcmLaunchLink,
     AcmActionGroup,
+    AcmLaunchLink,
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
@@ -128,24 +128,37 @@ const PageActions = () => {
         client: consoleClient,
         variables: {
             selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
-            namespace: null,
+            namespace: 'open-cluster-management',
             name: null,
             cluster: 'local-cluster',
             kind: null,
         },
     })
-
-    console.log('getResourceQuery data', data)
     if (loading) {
         console.log('loading')
     } else if (error) {
         console.log(error)
     }
+    const addons = data?.getResource.items
+    console.log('getResourceQuery data', addons)
+
+    function getLaunchLink(addons: any) {
+        const pathKey = 'console.open-cluster-management.io/launch-link'
+        const textKey = 'console.open-cluster-management.io/launch-link-text'
+
+        return addons
+            ?.filter((addon: any) => addon.metadata.name === 'observability-controller')
+            ?.map((addon: any) => ({
+                id: addon.metadata.annotations[textKey] ?? '',
+                text: addon.metadata.annotations[textKey] ?? '',
+                href: addon.metadata.annotations[pathKey] ?? '',
+            }))
+    }
+    console.log('getLaunchlink', getLaunchLink(addons))
 
     return (
         <AcmActionGroup>
-            {/* <AcmLaunchLink links={addons?.filter((addon) => addon.launchLink)} /> */}
-            <AcmButton />
+            <AcmLaunchLink links={getLaunchLink(addons)} />
             <AcmButton
                 href="/console/add-connection"
                 variant={ButtonVariant.link}
