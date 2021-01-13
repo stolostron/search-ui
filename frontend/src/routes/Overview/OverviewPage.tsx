@@ -21,7 +21,7 @@ import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 
 // TODO: Need to verify correct spelling for all these labels.
-function mapProviderFromLabel(provider: string): Provider {
+export function mapProviderFromLabel(provider: string): Provider {
     switch (provider) {
         case 'Amazon':
             return Provider.aws
@@ -173,10 +173,11 @@ const PageActions = () => {
 }
 
 export default function OverviewPage() {
-    const { data, loading, error } = useGetOverviewQuery({ client: consoleClient })
-
+    const { data, loading, error } = useGetOverviewQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+    })
     const { data: searchData, loading: searchLoading, error: searchError } = useSearchResultCountQuery({
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: { input: searchInput },
     })
     const searchResult = searchData?.searchResult || []

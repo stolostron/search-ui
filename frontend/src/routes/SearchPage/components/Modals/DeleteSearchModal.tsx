@@ -6,7 +6,9 @@ import { SavedSearchesDocument, useDeleteSearchMutation } from '../../../../sear
 import { searchClient } from '../../../../search-sdk/search-client'
 
 export const DeleteSearchModal = (props: any) => {
-    const [deleteSearchMutation, { error }] = useDeleteSearchMutation({ client: searchClient })
+    const [deleteSearchMutation, { error }] = useDeleteSearchMutation({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
+    })
     const [isError, setIsError] = useState<boolean>(false)
 
     useEffect(() => {
@@ -47,7 +49,14 @@ export const DeleteSearchModal = (props: any) => {
                     </AcmButton>,
                 ]}
             >
-                {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
+                {isError && (
+                    <AcmAlert
+                        data-testid={'delete-saved-search-error'}
+                        noClose
+                        variant={'danger'}
+                        title={error!.message}
+                    />
+                )}
                 <p>This action is irreversible. Are you sure that you want to continue?</p>
             </AcmModal>
         </Fragment>
