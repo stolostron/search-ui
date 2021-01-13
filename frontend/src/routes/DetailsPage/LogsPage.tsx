@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
-import { consoleClient } from '../../console-sdk/console-client'
 import { useGetLogsQuery } from '../../console-sdk/console-sdk'
+import { consoleClient } from '../../console-sdk/console-client'
 
 export default function LogsPage(props: { containers: string[]; cluster: string; namespace: string; name: string }) {
     const { containers, cluster, namespace, name } = props
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
-        client: consoleClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
         skip: containers.length === 0 || !container,
         variables: {
             containerName: container,
