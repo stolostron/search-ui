@@ -47,12 +47,6 @@ const useStyles = makeStyles({
 
 // Adds AcmAlert to page if there's errors from the Apollo queries.
 function HandleErrors(schemaError: ApolloError | undefined, completeError: ApolloError | undefined) {
-    if (schemaError) {
-        console.error('Search schema query error.', schemaError)
-    }
-    if (completeError) {
-        console.error('Search complete query error.', completeError)
-    }
     if (schemaError || completeError) {
         return (
             <div style={{ marginBottom: '1rem' }}>
@@ -79,7 +73,7 @@ function RenderSearchBar(props: {
     const toggle = () => toggleOpen(!open)
     const searchSchemaResults = useSearchSchemaQuery({
         skip: searchQuery.endsWith(':') || operators.some((operator: string) => searchQuery.endsWith(operator)),
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     const searchCompleteValue = getSearchCompleteString(searchQuery)
@@ -89,7 +83,7 @@ function RenderSearchBar(props: {
     })
     const searchCompleteResults = useSearchCompleteQuery({
         skip: !searchQuery.endsWith(':') && !operators.some((operator: string) => searchQuery.endsWith(operator)),
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
             property: searchCompleteValue,
             query: searchCompleteQuery,
@@ -155,7 +149,7 @@ function RenderDropDownAndNewTab(props: {
     const classes = useStyles()
 
     const { data } = useSavedSearchesQuery({
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     const queries = data?.items ?? ([] as UserSearch[])

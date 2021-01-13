@@ -4,7 +4,7 @@ import { searchClient } from '../../../search-sdk/search-client'
 import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../../../search-sdk/search-sdk'
 import { convertStringToQuery } from '../search-helper'
 import SuggestQueryTemplates from './SuggestedQueryTemplates'
-import { AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
+import { AcmAlert, AcmExpandableWrapper, AcmCountCard } from '@open-cluster-management/ui-components'
 import { updateBrowserUrl } from '../urlQuery'
 import { SaveAndEditSearchModal } from './Modals/SaveAndEditSearchModal'
 import { DeleteSearchModal } from './Modals/DeleteSearchModal'
@@ -20,7 +20,7 @@ function SearchResultCount(
 ): any {
     const { data, error, loading } = useSearchResultCountQuery({
         variables: { input: input },
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     const [editSearch, setEditSearch] = useState(undefined)
@@ -37,7 +37,19 @@ function SearchResultCount(
                 </AcmExpandableWrapper>
             </PageSection>
         )
-    } else if (error || !data || !data.searchResult) {
+    } else if (error) {
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={'Error querying saved search results'}
+                    subtitle={error ? error.message : ''}
+                />
+            </PageSection>
+        )
+    } else if (!loading && !error && (!data || !data.searchResult)) {
         return null
     } else if (data && data.searchResult) {
         const savedQueriesResult = data.searchResult.slice(0, queries.length).map((query, index) => {
@@ -126,7 +138,7 @@ export default function SavedSearchQueries(props: {
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
 }) {
     const { data } = useSavedSearchesQuery({
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
     const queries = data?.items ?? ([] as UserSearch[])
     // each query should contain ---- description, name, results = [], resultHeader

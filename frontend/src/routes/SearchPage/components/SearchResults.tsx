@@ -33,7 +33,7 @@ function RenderRelatedTables(
     const queryFilters = convertStringToQuery(currentQuery)
     const { data, loading, error } = useSearchResultRelatedItemsQuery({
         skip: selectedKinds.length === 0 || queryFilters.keywords.length > 0,
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
             input: [{ ...convertStringToQuery(currentQuery), relatedKinds: selectedKinds }],
         },
@@ -119,9 +119,9 @@ function RenderRelatedTiles(
     const queryFilters = convertStringToQuery(currentQuery)
     const { data, error, loading } = useSearchResultRelatedCountQuery({
         skip: queryFilters.keywords.length > 0,
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
-            input: [convertStringToQuery(currentQuery)],
+            input: [queryFilters],
         },
     })
     if (loading) {
@@ -182,7 +182,7 @@ function RenderSearchTables(
     selectedRelatedKinds: string[]
 ) {
     const { data, error, loading } = useSearchResultItemsQuery({
-        client: searchClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
             input: [convertStringToQuery(currentQuery)],
         },
