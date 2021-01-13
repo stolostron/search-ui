@@ -19,6 +19,7 @@ import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
+import { ClusterManagementAddOn } from '../../lib/resource-request'
 
 // TODO: Need to verify correct spelling for all these labels.
 function mapProviderFromLabel(provider: string): Provider {
@@ -141,17 +142,20 @@ const PageActions = () => {
     }
     const addons = data?.getResource.items
 
-    function getLaunchLink(addons: any) {
+    function getLaunchLink(addons: ClusterManagementAddOn[]) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
-
-        return addons
-            ?.filter((addon: any) => addon.metadata.name === 'observability-controller')
-            ?.map((addon: any) => ({
-                id: addon.metadata.annotations[textKey] ?? '',
-                text: addon.metadata.annotations[textKey] ?? '',
-                href: addon.metadata.annotations[pathKey] ?? '',
-            }))
+        if (addons && addons.filter((addon) => addon.metadata.name === 'observability-controller')) {
+            return addons
+                ?.filter((addon) => addon.metadata.name === 'observability-controller')
+                ?.map((addon) => ({
+                    id: addon.metadata.annotations![textKey] ?? '',
+                    text: addon.metadata.annotations![textKey] ?? '',
+                    href: addon.metadata.annotations![pathKey] ?? '',
+                }))
+        } else {
+            return undefined
+        }
     }
 
     return (
