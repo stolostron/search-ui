@@ -10,11 +10,13 @@ import {
     AcmSummaryList,
     Provider,
     AcmButton,
+    // AcmLaunchLink,
+    AcmActionGroup,
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
 import { consoleClient } from '../../console-sdk/console-client'
-import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
+import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 
@@ -121,47 +123,52 @@ const searchInput = [
     },
 ]
 
-function getPageControls() {
+const PageActions = () => {
+    const { data, loading, error } = useGetResourceQuery({
+        client: consoleClient,
+        variables: {
+            selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
+            namespace: null,
+            name: null,
+            cluster: 'local-cluster',
+            kind: null,
+        },
+    })
+
+    console.log('getResourceQuery data', data)
+    if (loading) {
+        console.log('loading')
+    } else if (error) {
+        console.log(error)
+    }
+
     return (
-        <AcmButton
-            href="/multicloud/add-connection"
-            variant={ButtonVariant.link}
-            component="a"
-            rel="noreferrer"
-            id="add-cloud-connection"
-            icon={<PlusIcon />}
-            iconPosition="left"
-        >
-            Add provider connection
-        </AcmButton>
+        <AcmActionGroup>
+            {/* <AcmLaunchLink links={addons?.filter((addon) => addon.launchLink)} /> */}
+            <AcmButton />
+            <AcmButton
+                href="/console/add-connection"
+                variant={ButtonVariant.link}
+                component="a"
+                rel="noreferrer"
+                id="add-cloud-connection"
+                icon={<PlusIcon />}
+                iconPosition="left"
+            >
+                Add cloud connection
+            </AcmButton>
+        </AcmActionGroup>
     )
 }
 
 export default function OverviewPage() {
     const { data, loading, error } = useGetOverviewQuery({ client: consoleClient })
+
     const { data: searchData, loading: searchLoading, error: searchError } = useSearchResultCountQuery({
         client: searchClient,
         variables: { input: searchInput },
     })
     const searchResult = searchData?.searchResult || []
-
-    if (error || searchError) {
-        return (
-            <AcmPage>
-                <AcmPageHeader title="Overview" controls={getPageControls()} />
-                <PageSection>
-                    <AcmAlert
-                        noClose
-                        isInline
-                        variant={'danger'}
-                        title="An unexpected error occurred. Try again."
-                        subtitle="The backend service is unavailable."
-                    />
-                </PageSection>
-            </AcmPage>
-        )
-    }
-
     const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
 
     const summary =
@@ -221,9 +228,26 @@ export default function OverviewPage() {
                   { key: 'Offline', value: offline, isDanger: true },
               ]
 
+    if (error || searchError) {
+        return (
+            <AcmPage>
+                <AcmPageHeader title="Overview" actions={<PageActions />} />
+                <PageSection>
+                    <AcmAlert
+                        noClose
+                        isInline
+                        variant={'danger'}
+                        title="An unexpected error occurred. Try again."
+                        subtitle="The backend service is unavailable."
+                    />
+                </PageSection>
+            </AcmPage>
+        )
+    }
+
     return (
         <AcmPage>
-            <AcmPageHeader title="Overview" controls={getPageControls()} />
+            <AcmPageHeader title="Overview" actions={<PageActions />} />
 
             {loading || searchLoading ? (
                 <AcmLoadingPage />
