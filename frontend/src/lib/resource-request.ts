@@ -1,5 +1,5 @@
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { V1Status } from '@kubernetes/client-node'
+import { V1Status, V1ObjectMeta } from '@kubernetes/client-node'
 
 const baseUrl = process.env.REACT_APP_BACKEND ?? ''
 export const apiProxyUrl = `/search/proxy`
@@ -14,6 +14,28 @@ export interface Status extends V1Status {
     apiVersion: StatusApiVersionType
     kind: StatusKindType
     status: 'Success' | 'Failure'
+}
+
+export const ClusterManagementAddOnApiVersion = 'addon.open-cluster-management.io/v1alpha1'
+export type ClusterManagementAddOnApiVersionType = 'addon.open-cluster-management.io/v1alpha1'
+
+export const ClusterManagementAddOnKind = 'ClusterManagementAddOn'
+export type ClusterManagementAddOnKindType = 'ClusterManagementAddOn'
+
+export type ClusterManagementAddOn = {
+    apiVersion: ClusterManagementAddOnApiVersionType
+    kind: ClusterManagementAddOnKindType
+    metadata: V1ObjectMeta
+    spec: {
+        addOnMeta?: {
+            displayName: string
+            description: string
+        }
+        addOnConfiguration?: {
+            crdName: string
+            crName: string
+        }
+    }
 }
 
 export interface IRequestOptions {

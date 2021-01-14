@@ -10,13 +10,16 @@ import {
     AcmSummaryList,
     Provider,
     AcmButton,
+    AcmActionGroup,
+    AcmLaunchLink,
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
 import { consoleClient } from '../../console-sdk/console-client'
-import { useGetOverviewQuery } from '../../console-sdk/console-sdk'
+import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
+import { ClusterManagementAddOn } from '../../lib/resource-request'
 
 // TODO: Need to verify correct spelling for all these labels.
 export function mapProviderFromLabel(provider: string): Provider {
@@ -121,19 +124,55 @@ const searchInput = [
     },
 ]
 
-function getPageControls() {
+const PageActions = () => {
+    const { data, loading, error } = useGetResourceQuery({
+        client: consoleClient,
+        variables: {
+            selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
+            namespace: 'open-cluster-management',
+            name: null,
+            cluster: 'local-cluster',
+            kind: null,
+        },
+    })
+    if (loading) {
+        console.log('loading')
+    } else if (error) {
+        console.log(error)
+    }
+    const addons = data?.getResource.items
+
+    function getLaunchLink(addons: ClusterManagementAddOn[]) {
+        const pathKey = 'console.open-cluster-management.io/launch-link'
+        const textKey = 'console.open-cluster-management.io/launch-link-text'
+        if (addons && addons.filter((addon) => addon.metadata.name === 'observability-controller')) {
+            return addons
+                ?.filter((addon) => addon.metadata.name === 'observability-controller')
+                ?.map((addon) => ({
+                    id: addon.metadata.annotations![textKey] ?? '',
+                    text: addon.metadata.annotations![textKey] ?? '',
+                    href: addon.metadata.annotations![pathKey] ?? '',
+                }))
+        } else {
+            return undefined
+        }
+    }
+
     return (
-        <AcmButton
-            href="/multicloud/add-connection"
-            variant={ButtonVariant.link}
-            component="a"
-            rel="noreferrer"
-            id="add-cloud-connection"
-            icon={<PlusIcon />}
-            iconPosition="left"
-        >
-            Add provider connection
-        </AcmButton>
+        <AcmActionGroup>
+            <AcmLaunchLink links={getLaunchLink(addons)} />
+            <AcmButton
+                href="/console/add-connection"
+                variant={ButtonVariant.link}
+                component="a"
+                rel="noreferrer"
+                id="add-cloud-connection"
+                icon={<PlusIcon />}
+                iconPosition="left"
+            >
+                Add cloud connection
+            </AcmButton>
+        </AcmActionGroup>
     )
 }
 
@@ -146,24 +185,6 @@ export default function OverviewPage() {
         variables: { input: searchInput },
     })
     const searchResult = searchData?.searchResult || []
-
-    if (error || searchError) {
-        return (
-            <AcmPage>
-                <AcmPageHeader title="Overview" controls={getPageControls()} />
-                <PageSection>
-                    <AcmAlert
-                        noClose
-                        isInline
-                        variant={'danger'}
-                        title="An unexpected error occurred. Try again."
-                        subtitle="The backend service is unavailable."
-                    />
-                </PageSection>
-            </AcmPage>
-        )
-    }
-
     const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
 
     const summary =
@@ -223,9 +244,26 @@ export default function OverviewPage() {
                   { key: 'Offline', value: offline, isDanger: true },
               ]
 
+    if (error || searchError) {
+        return (
+            <AcmPage>
+                <AcmPageHeader title="Overview" actions={<PageActions />} />
+                <PageSection>
+                    <AcmAlert
+                        noClose
+                        isInline
+                        variant={'danger'}
+                        title="An unexpected error occurred. Try again."
+                        subtitle="The backend service is unavailable."
+                    />
+                </PageSection>
+            </AcmPage>
+        )
+    }
+
     return (
         <AcmPage>
-            <AcmPageHeader title="Overview" controls={getPageControls()} />
+            <AcmPageHeader title="Overview" actions={<PageActions />} />
 
             {loading || searchLoading ? (
                 <AcmLoadingPage />
