@@ -1307,11 +1307,7 @@ export function getAge(item: any, key: string) {
 export function createDetailsLink(item: any) {
     switch (item.kind) {
         case 'cluster':
-            return (
-                <a href={`/cluster-management/cluster-management/clusters/${item.namespace}/${item.name}`}>
-                    {item.name}
-                </a>
-            )
+            return <a href={`/multicloud/clusters/${item.name}/${item.name}`}>{item.name}</a>
         case 'application':
             if (item.apigroup === 'app.k8s.io') {
                 // only redirect to apps page if it is an ACM application

@@ -1,4 +1,10 @@
-import { getAge, createDetailsLink, createDashboardLink, createExternalLink, formatLabels } from './searchDefinitions'
+import searchDefinitions, {
+    getAge,
+    createDetailsLink,
+    createDashboardLink,
+    createExternalLink,
+    formatLabels,
+} from './searchDefinitions'
 
 test('Correctly returns formatSearchbarSuggestions without T in timestamp', () => {
     Date.now = jest.fn(() => 1607028460000)
@@ -167,4 +173,26 @@ test('Correctly returns empty labels', () => {
     }
     const result = formatLabels(item)
     expect(result).toMatchSnapshot()
+})
+
+test('Correctly returns all resource definitions', () => {
+    const testItem = {
+        name: 'testName',
+        namespace: 'testNamespace',
+        kind: 'pod',
+        cluster: 'testCluster',
+        label: 'testLabel=label; testLabel1=label1',
+        selfLink: '/apigroup/cluster/name',
+        created: '2021-01-01T00:00:00Z',
+    }
+    const defKeys = Object.keys(searchDefinitions)
+    defKeys.forEach((key) => {
+        const definition = searchDefinitions[key].columns.map((col: any) => {
+            if (typeof col.cell === 'function') {
+                col.cell = col.cell(testItem)
+            }
+            return col
+        })
+        expect(definition).toMatchSnapshot(`SearchDefinitions-${key}`)
+    })
 })
