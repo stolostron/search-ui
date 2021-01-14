@@ -125,7 +125,6 @@ describe('DeleteSearchModal', () => {
         )
 
         // find the button and simulate a click
-        // const submitButton = screen.getByTestId('delete-saved-search-submit')
         const submitButton = screen.getByText('Delete')
         expect(submitButton).toBeTruthy()
         userEvent.click(submitButton)
