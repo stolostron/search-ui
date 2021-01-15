@@ -30,7 +30,7 @@
         "fastify-https-redirect": "^1.0.3",
         "fastify-oauth2": "^4.2.1",
         "fastify-reply-from": "^4.0.0",
-        "fastify-static": "^3.3.1",
+        "fastify-static": "^3.4.0",
         "pino": "^6.10.0",
         "yamljs": "^0.3.0"
     },
