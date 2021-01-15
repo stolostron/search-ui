@@ -175,7 +175,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
                 >
                     Add cloud connection
                 </AcmButton>
-                <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[1, 30, 60, 5 * 60, 30 * 60, 0]} />
+                <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]} />
             </AcmActionGroup>
             <AcmRefreshTime timestamp={props.timestamp} reloading={props.reloading} />
         </Fragment>
