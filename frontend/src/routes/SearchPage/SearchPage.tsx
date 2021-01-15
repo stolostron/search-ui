@@ -66,9 +66,10 @@ function RenderSearchBar(props: {
     searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
     setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
+    queryErrors: boolean
     setQueryErrors: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-    const { searchQuery, setCurrentQuery, setQueryErrors } = props
+    const { searchQuery, setCurrentQuery, queryErrors, setQueryErrors } = props
     const [saveSearch, setSaveSearch] = useState<string>()
     const [open, toggleOpen] = useState<boolean>(false)
     const toggle = () => toggleOpen(!open)
@@ -90,8 +91,13 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
-    if (searchSchemaResults.error || searchCompleteResults.error) {
+    if (
+        (!searchSchemaResults.data && searchSchemaResults.error) ||
+        (!searchCompleteResults.data && searchCompleteResults.error)
+    ) {
         setQueryErrors(true)
+    } else if (queryErrors) {
+        setQueryErrors(false)
     }
     return (
         <Fragment>
@@ -236,6 +242,7 @@ export default function SearchPage() {
                 setSelectedSearch={setSelectedSearch}
                 searchQuery={searchQuery}
                 setCurrentQuery={setCurrentQuery}
+                queryErrors={queryErrors}
                 setQueryErrors={setQueryErrors}
             />
             {!queryErrors ? (
