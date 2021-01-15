@@ -11,6 +11,14 @@ import { DeleteSearchModal } from './Modals/DeleteSearchModal'
 import { ShareSearchModal } from './Modals/ShareSearchModal'
 import { PageSection } from '@patternfly/react-core'
 
+export type userSearch = {
+    count: number
+    description: string
+    id: string
+    name: string
+    searchText: string
+}
+
 function SearchResultCount(
     input: any,
     queries: any,
@@ -26,6 +34,15 @@ function SearchResultCount(
     const [editSearch, setEditSearch] = useState(undefined)
     const [shareSearch, setShareSearch] = useState(undefined)
     const [deleteSearch, setDeleteSearch] = useState(undefined)
+
+    const handleKeyPress = (KeyboardEvent: React.KeyboardEvent, query: userSearch) => {
+        if (KeyboardEvent.key === 'Enter' || KeyboardEvent.key === ' ') {
+            setCurrentQuery(query.searchText)
+            updateBrowserUrl(query.searchText)
+            setSelectedSearch(query.name)
+        }
+        return
+    }
 
     if (loading) {
         return (
@@ -96,6 +113,9 @@ function SearchResultCount(
                                     }}
                                     count={query.count}
                                     countTitle="Results"
+                                    onKeyPress={(KeyboardEvent: React.KeyboardEvent) =>
+                                        handleKeyPress(KeyboardEvent, query)
+                                    }
                                 />
                             )
                         })}
@@ -123,6 +143,9 @@ function SearchResultCount(
                                     }}
                                     count={query.count}
                                     countTitle="Results"
+                                    onKeyPress={(KeyboardEvent: React.KeyboardEvent) =>
+                                        handleKeyPress(KeyboardEvent, query)
+                                    }
                                 />
                             )
                         })}
