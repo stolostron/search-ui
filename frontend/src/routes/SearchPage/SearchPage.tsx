@@ -66,8 +66,9 @@ function RenderSearchBar(props: {
     searchQuery: string
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
     setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
+    setQueryErrors: React.Dispatch<React.SetStateAction<boolean>>
 }) {
-    const { searchQuery, setCurrentQuery } = props
+    const { searchQuery, setCurrentQuery, setQueryErrors } = props
     const [saveSearch, setSaveSearch] = useState<string>()
     const [open, toggleOpen] = useState<boolean>(false)
     const toggle = () => toggleOpen(!open)
@@ -89,7 +90,9 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
-
+    if (searchSchemaResults.error || searchCompleteResults.error) {
+        setQueryErrors(true)
+    }
     return (
         <Fragment>
             <PageSection>
@@ -210,6 +213,7 @@ export default function SearchPage() {
     } = transformBrowserUrlToSearchString(window.location.search || '')
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
     const [selectedSearch, setSelectedSearch] = useState('Saved searches')
+    const [queryErrors, setQueryErrors] = useState(false)
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
@@ -232,12 +236,18 @@ export default function SearchPage() {
                 setSelectedSearch={setSelectedSearch}
                 searchQuery={searchQuery}
                 setCurrentQuery={setCurrentQuery}
+                setQueryErrors={setQueryErrors}
             />
-            {searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
-                <SearchResults currentQuery={searchQuery} preSelectedRelatedResources={preSelectedRelatedResources} />
-            ) : (
-                <SavedSearchQueries setSelectedSearch={setSelectedSearch} setCurrentQuery={setCurrentQuery} />
-            )}
+            {!queryErrors ? (
+                searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
+                    <SearchResults
+                        currentQuery={searchQuery}
+                        preSelectedRelatedResources={preSelectedRelatedResources}
+                    />
+                ) : (
+                    <SavedSearchQueries setSelectedSearch={setSelectedSearch} setCurrentQuery={setCurrentQuery} />
+                )
+            ) : null}
         </AcmPage>
     )
 }
