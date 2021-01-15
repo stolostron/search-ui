@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import {
     AcmAlert,
     AcmChartGroup,
@@ -12,6 +12,8 @@ import {
     AcmButton,
     AcmActionGroup,
     AcmLaunchLink,
+    AcmAutoRefreshSelect,
+    AcmRefreshTime,
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
@@ -124,7 +126,7 @@ const searchInput = [
     },
 ]
 
-const PageActions = () => {
+const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
     const { data, loading, error } = useGetResourceQuery({
         client: consoleClient,
         variables: {
@@ -159,27 +161,32 @@ const PageActions = () => {
     }
 
     return (
-        <AcmActionGroup>
-            <AcmLaunchLink links={getLaunchLink(addons)} />
-            <AcmButton
-                href="/console/add-connection"
-                variant={ButtonVariant.link}
-                component="a"
-                rel="noreferrer"
-                id="add-cloud-connection"
-                icon={<PlusIcon />}
-                iconPosition="left"
-            >
-                Add cloud connection
-            </AcmButton>
-        </AcmActionGroup>
+        <Fragment>
+            <AcmActionGroup>
+                <AcmLaunchLink links={getLaunchLink(addons)} />
+                <AcmButton
+                    href="/console/add-connection"
+                    variant={ButtonVariant.link}
+                    component="a"
+                    rel="noreferrer"
+                    id="add-cloud-connection"
+                    icon={<PlusIcon />}
+                    iconPosition="left"
+                >
+                    Add cloud connection
+                </AcmButton>
+                <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]} />
+            </AcmActionGroup>
+            <AcmRefreshTime timestamp={props.timestamp} reloading={props.reloading} />
+        </Fragment>
     )
 }
 
 export default function OverviewPage() {
-    const { data, loading, error } = useGetOverviewQuery({
+    const { data, loading, error, refetch } = useGetOverviewQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
+    const timestamp = data?.overview?.timestamp as string
     const { data: searchData, loading: searchLoading, error: searchError } = useSearchResultCountQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: { input: searchInput },
@@ -247,7 +254,10 @@ export default function OverviewPage() {
     if (error || searchError) {
         return (
             <AcmPage>
-                <AcmPageHeader title="Overview" actions={<PageActions />} />
+                <AcmPageHeader
+                    title="Overview"
+                    actions={<PageActions timestamp={timestamp} reloading={loading} refetch={useGetOverviewQuery} />}
+                />
                 <PageSection>
                     <AcmAlert
                         noClose
@@ -263,7 +273,10 @@ export default function OverviewPage() {
 
     return (
         <AcmPage>
-            <AcmPageHeader title="Overview" actions={<PageActions />} />
+            <AcmPageHeader
+                title="Overview"
+                actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetch} />}
+            />
 
             {loading || searchLoading ? (
                 <AcmLoadingPage />
