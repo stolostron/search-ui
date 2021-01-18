@@ -4,6 +4,7 @@ import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
+import fastifyCsrf from 'fastify-csrf'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
 import fastifyReplyFrom from 'fastify-reply-from'
 import fastifyStatic from 'fastify-static'
@@ -48,6 +49,11 @@ export async function startServer(): Promise<FastifyInstance> {
             credentials: true,
         })
     }
+
+    await fastify.register(fastifyCookie)
+
+    // protect against csrf attacks
+    await fastify.register(fastifyCsrf)
 
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
@@ -128,7 +134,6 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(fastifyCookie)
     fastify.addHook('onRequest', (request, reply, done) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ;(request as any).start = process.hrtime()
