@@ -54,6 +54,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
     // protect against csrf attacks
     await fastify.register(fastifyCsrf)
+    await fastify.addHook('onRequest', fastify.csrfProtection)
 
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
