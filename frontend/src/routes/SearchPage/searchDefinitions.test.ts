@@ -4,6 +4,7 @@ import searchDefinitions, {
     createDashboardLink,
     createExternalLink,
     formatLabels,
+    getUrlSearchParam,
 } from './searchDefinitions'
 
 test('Correctly returns formatSearchbarSuggestions without T in timestamp', () => {
@@ -195,4 +196,38 @@ test('Correctly returns all resource definitions', () => {
         })
         expect(definition).toMatchSnapshot(`SearchDefinitions-${key}`)
     })
+})
+
+test('Correctly returns url search params with all params & apigroup', () => {
+    const item = {
+        cluster: 'testCluster',
+        kind: 'pods',
+        apiGroup: 'apps',
+        apiversion: 'v1',
+        name: 'testName',
+        namespace: 'testNamespace',
+    }
+    const result = getUrlSearchParam(item)
+    expect(result).toMatchSnapshot()
+})
+
+test('Correctly returns url search params with all params without apigroup', () => {
+    const item = {
+        cluster: 'testCluster',
+        kind: 'pods',
+        apigroup: 'apps',
+        apiversion: 'v1',
+        name: 'testName',
+        namespace: 'testNamespace',
+    }
+    const result = getUrlSearchParam(item)
+    expect(result).toMatchSnapshot()
+})
+
+test('Correctly returns url search params with 0 params', () => {
+    const item = {
+        cluster: 'testCluster',
+    }
+    const result = getUrlSearchParam(item)
+    expect(result).toMatchSnapshot()
 })
