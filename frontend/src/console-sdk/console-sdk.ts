@@ -206,6 +206,36 @@ export type CompliancePolicy = K8sObject & {
     message?: Maybe<Scalars['String']>
 }
 
+export type PolicyTemplates = {
+    apiVersion?: Maybe<Scalars['String']>
+    complianceType?: Maybe<Scalars['String']>
+    compliant?: Maybe<Scalars['String']>
+    status?: Maybe<Scalars['String']>
+    lastTransition?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    validity?: Maybe<Scalars['String']>
+    raw?: Maybe<Scalars['JSON']>
+}
+
+export type PolicyRules = {
+    apiGroups?: Maybe<Array<Maybe<Scalars['String']>>>
+    complianceType?: Maybe<Scalars['String']>
+    resources?: Maybe<Array<Maybe<Scalars['String']>>>
+    ruleUID?: Maybe<Scalars['String']>
+    templateType?: Maybe<Scalars['String']>
+    verbs?: Maybe<Array<Maybe<Scalars['String']>>>
+}
+
+export type Violations = {
+    cluster?: Maybe<Scalars['String']>
+    message?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    reason?: Maybe<Scalars['String']>
+    selector?: Maybe<Scalars['JSON']>
+    status?: Maybe<Scalars['String']>
+}
+
 export type Filters = {
     clusterLabels?: Maybe<Array<Maybe<FilterItem>>>
     clusterNames?: Maybe<Array<Maybe<FilterItem>>>
@@ -281,123 +311,6 @@ export type Occurrence = {
     securityClassification?: Maybe<Scalars['JSON']>
 }
 
-export type Namespace = K8sObject & {
-    cluster?: Maybe<Scalars['String']>
-    metadata?: Maybe<Metadata>
-    status?: Maybe<Scalars['String']>
-}
-
-export type NodeResources = {
-    cpu?: Maybe<Scalars['String']>
-    memory?: Maybe<Scalars['String']>
-}
-
-export type Node = {
-    capacity?: Maybe<NodeResources>
-    cluster?: Maybe<Cluster>
-    name?: Maybe<Scalars['String']>
-    labels?: Maybe<Scalars['JSON']>
-    roles?: Maybe<Array<Maybe<Scalars['String']>>>
-    status?: Maybe<Scalars['String']>
-}
-
-export type Pod = K8sObject & {
-    cluster?: Maybe<Cluster>
-    containers?: Maybe<Array<Maybe<Container>>>
-    hostIP?: Maybe<Scalars['String']>
-    images?: Maybe<Array<Maybe<Scalars['String']>>>
-    metadata?: Maybe<Metadata>
-    owners?: Maybe<Array<Maybe<Owner>>>
-    podIP?: Maybe<Scalars['String']>
-    restarts?: Maybe<Scalars['Int']>
-    startedAt?: Maybe<Scalars['String']>
-    status?: Maybe<Scalars['String']>
-}
-
-export type Owner = {
-    controller?: Maybe<Scalars['Boolean']>
-    kind?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-    uid?: Maybe<Scalars['String']>
-}
-
-export type Container = {
-    image?: Maybe<Scalars['String']>
-    imagePullPolicy?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-}
-
-export type Policy = K8sObject & {
-    detail?: Maybe<PolicyDetail>
-    enforcement?: Maybe<Scalars['String']>
-    metadata?: Maybe<Metadata>
-    rules?: Maybe<Array<Maybe<PolicyRules>>>
-    status?: Maybe<Scalars['String']>
-    roleTemplates?: Maybe<Array<Maybe<PolicyTemplates>>>
-    roleBindingTemplates?: Maybe<Array<Maybe<PolicyTemplates>>>
-    objectTemplates?: Maybe<Array<Maybe<PolicyTemplates>>>
-    violations?: Maybe<Array<Maybe<Violations>>>
-    raw?: Maybe<Scalars['JSON']>
-    message?: Maybe<Scalars['String']>
-    cluster?: Maybe<Scalars['String']>
-}
-
-export type PolicyDetail = {
-    exclude_namespace?: Maybe<Array<Maybe<Scalars['String']>>>
-    include_namespace?: Maybe<Array<Maybe<Scalars['String']>>>
-}
-
-export type PolicyTemplates = {
-    apiVersion?: Maybe<Scalars['String']>
-    complianceType?: Maybe<Scalars['String']>
-    compliant?: Maybe<Scalars['String']>
-    status?: Maybe<Scalars['String']>
-    lastTransition?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-    kind?: Maybe<Scalars['String']>
-    validity?: Maybe<Scalars['String']>
-    raw?: Maybe<Scalars['JSON']>
-}
-
-export type PolicyRules = {
-    apiGroups?: Maybe<Array<Maybe<Scalars['String']>>>
-    complianceType?: Maybe<Scalars['String']>
-    resources?: Maybe<Array<Maybe<Scalars['String']>>>
-    ruleUID?: Maybe<Scalars['String']>
-    templateType?: Maybe<Scalars['String']>
-    verbs?: Maybe<Array<Maybe<Scalars['String']>>>
-}
-
-export type Violations = {
-    cluster?: Maybe<Scalars['String']>
-    message?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-    reason?: Maybe<Scalars['String']>
-    selector?: Maybe<Scalars['JSON']>
-    status?: Maybe<Scalars['String']>
-}
-
-export type PVs = K8sObject & {
-    accessModes?: Maybe<Array<Maybe<Scalars['String']>>>
-    capacity?: Maybe<Scalars['String']>
-    claim?: Maybe<Scalars['String']>
-    claimRef?: Maybe<Scalars['JSON']>
-    cluster?: Maybe<Cluster>
-    metadata?: Maybe<Metadata>
-    reclaimPolicy?: Maybe<Scalars['String']>
-    status?: Maybe<Scalars['String']>
-    type?: Maybe<Scalars['String']>
-}
-
-export type PVsClaims = K8sObject & {
-    accessModes?: Maybe<Array<Maybe<Scalars['String']>>>
-    cluster?: Maybe<Cluster>
-    metadata?: Maybe<Metadata>
-    persistentVolume?: Maybe<Scalars['String']>
-    requests?: Maybe<Scalars['String']>
-    status?: Maybe<Scalars['String']>
-}
-
 export type Query = {
     application?: Maybe<Application>
     channels?: Maybe<Array<Maybe<Channel>>>
@@ -410,9 +323,6 @@ export type Query = {
     bareMetalAsset?: Maybe<Array<Maybe<BareMetalAsset>>>
     bareMetalAssets?: Maybe<Array<Maybe<BareMetalAsset>>>
     bareMetalAssetSubresources?: Maybe<BareMetalAssetSubresources>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    nodes?: Maybe<Array<Maybe<Node>>>
-    node?: Maybe<Array<Maybe<Node>>>
     /** @deprecated Compliances are deprecated from OCM. Use policies instead. */
     compliances?: Maybe<Array<Maybe<Compliance>>>
     occurrences?: Maybe<Array<Maybe<Occurrence>>>
@@ -423,7 +333,6 @@ export type Query = {
     overview?: Maybe<Overview>
     placementPolicies?: Maybe<Array<Maybe<PlacementPolicy>>>
     placementrules?: Maybe<Array<Maybe<PlacementRule>>>
-    policies?: Maybe<Array<Maybe<Policy>>>
     secrets?: Maybe<Array<Maybe<Secret>>>
     subscriptions?: Maybe<Array<Maybe<Subscription>>>
     subscriptionsForCluster?: Maybe<Array<Maybe<Subscription>>>
@@ -436,16 +345,6 @@ export type Query = {
     resourceTypes?: Maybe<Array<Maybe<Scalars['String']>>>
     topology?: Maybe<Topology>
     getAutomatedImportStatus?: Maybe<Scalars['JSON']>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    namespaces?: Maybe<Array<Maybe<Namespace>>>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    pod?: Maybe<Array<Maybe<Pod>>>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    pods?: Maybe<Array<Maybe<Pod>>>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    pvs?: Maybe<Array<Maybe<PVs>>>
-    /** @deprecated Use search, search has been moved to search-api. Will remove this query in 4.1 */
-    pvsClaims?: Maybe<Array<Maybe<PVsClaims>>>
 }
 
 export type QueryApplicationArgs = {
@@ -500,11 +399,6 @@ export type QueryBareMetalAssetSubresourcesArgs = {
     namespace?: Maybe<Scalars['String']>
 }
 
-export type QueryNodeArgs = {
-    namespace?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-}
-
 export type QueryCompliancesArgs = {
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
@@ -516,6 +410,7 @@ export type QueryConnectionDetailsArgs = {
 }
 
 export type QueryGetResourceArgs = {
+    apiVersion?: Maybe<Scalars['String']>
     kind?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
@@ -545,12 +440,6 @@ export type QueryPlacementrulesArgs = {
     namespace?: Maybe<Scalars['String']>
 }
 
-export type QueryPoliciesArgs = {
-    name?: Maybe<Scalars['String']>
-    namespace?: Maybe<Scalars['String']>
-    clusterName?: Maybe<Scalars['String']>
-}
-
 export type QuerySecretsArgs = {
     namespace?: Maybe<Scalars['String']>
 }
@@ -575,7 +464,8 @@ export type QueryUpdateResourceArgs = {
 }
 
 export type QueryUserAccessArgs = {
-    resource: Scalars['String']
+    resource?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
     action: Scalars['String']
     namespace?: Maybe<Scalars['String']>
     apiGroup?: Maybe<Scalars['String']>
@@ -602,12 +492,6 @@ export type QueryTopologyArgs = {
 export type QueryGetAutomatedImportStatusArgs = {
     namespace?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
-}
-
-export type QueryPodArgs = {
-    name?: Maybe<Scalars['String']>
-    namespace?: Maybe<Scalars['String']>
-    clusterName?: Maybe<Scalars['String']>
 }
 
 export type Mutation = {
@@ -679,6 +563,8 @@ export type MutationEditCloudConnectionArgs = {
 
 export type MutationUpdateResourceArgs = {
     resourceType: Scalars['String']
+    apiVersion?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
     namespace: Scalars['String']
     name: Scalars['String']
     body?: Maybe<Scalars['JSON']>
@@ -688,6 +574,8 @@ export type MutationUpdateResourceArgs = {
 
 export type MutationUpdateResourceLabelsArgs = {
     resourceType: Scalars['String']
+    apiVersion?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
     namespace: Scalars['String']
     name: Scalars['String']
     body?: Maybe<Scalars['JSON']>
@@ -707,6 +595,7 @@ export type MutationDeleteHelmArgs = {
 
 export type MutationDeleteResourceArgs = {
     selfLink?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
     cluster?: Maybe<Scalars['String']>
@@ -894,11 +783,14 @@ export enum CacheControlScope {
 }
 
 export type GetResourceQueryVariables = Exact<{
+    apiVersion?: Maybe<Scalars['String']>
     kind?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
     cluster?: Maybe<Scalars['String']>
     selfLink?: Maybe<Scalars['String']>
+    updateInterval?: Maybe<Scalars['Int']>
+    deleteAfterUse?: Maybe<Scalars['Boolean']>
 }>
 
 export type GetResourceQuery = Pick<Query, 'getResource'>
@@ -916,6 +808,7 @@ export type UpdateResourceQuery = Pick<Query, 'updateResource'>
 
 export type DeleteResourceMutationVariables = Exact<{
     selfLink?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
     cluster?: Maybe<Scalars['String']>
@@ -979,8 +872,26 @@ export type GetOverviewQuery = {
 }
 
 export const GetResourceDocument = gql`
-    query getResource($kind: String, $name: String, $namespace: String, $cluster: String, $selfLink: String) {
-        getResource(kind: $kind, name: $name, namespace: $namespace, cluster: $cluster, selfLink: $selfLink)
+    query getResource(
+        $apiVersion: String
+        $kind: String
+        $name: String
+        $namespace: String
+        $cluster: String
+        $selfLink: String
+        $updateInterval: Int
+        $deleteAfterUse: Boolean
+    ) {
+        getResource(
+            apiVersion: $apiVersion
+            kind: $kind
+            name: $name
+            namespace: $namespace
+            cluster: $cluster
+            selfLink: $selfLink
+            updateInterval: $updateInterval
+            deleteAfterUse: $deleteAfterUse
+        )
     }
 `
 
@@ -996,11 +907,14 @@ export const GetResourceDocument = gql`
  * @example
  * const { data, loading, error } = useGetResourceQuery({
  *   variables: {
+ *      apiVersion: // value for 'apiVersion'
  *      kind: // value for 'kind'
  *      name: // value for 'name'
  *      namespace: // value for 'namespace'
  *      cluster: // value for 'cluster'
  *      selfLink: // value for 'selfLink'
+ *      updateInterval: // value for 'updateInterval'
+ *      deleteAfterUse: // value for 'deleteAfterUse'
  *   },
  * });
  */
@@ -1074,6 +988,7 @@ export type UpdateResourceQueryResult = Apollo.QueryResult<UpdateResourceQuery, 
 export const DeleteResourceDocument = gql`
     mutation deleteResource(
         $selfLink: String
+        $apiVersion: String
         $name: String
         $namespace: String
         $cluster: String
@@ -1082,6 +997,7 @@ export const DeleteResourceDocument = gql`
     ) {
         deleteResource(
             selfLink: $selfLink
+            apiVersion: $apiVersion
             name: $name
             namespace: $namespace
             cluster: $cluster
@@ -1106,6 +1022,7 @@ export type DeleteResourceMutationFn = Apollo.MutationFunction<DeleteResourceMut
  * const [deleteResourceMutation, { data, loading, error }] = useDeleteResourceMutation({
  *   variables: {
  *      selfLink: // value for 'selfLink'
+ *      apiVersion: // value for 'apiVersion'
  *      name: // value for 'name'
  *      namespace: // value for 'namespace'
  *      cluster: // value for 'cluster'

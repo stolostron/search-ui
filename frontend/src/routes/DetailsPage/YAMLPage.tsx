@@ -68,14 +68,13 @@ export default function YAMLPage(props: {
     resource: Pick<Query, 'getResource'> | undefined
     loading: boolean
     error: ApolloError | undefined
-    selfLink: string
     name: string
     namespace: string
     cluster: string
     kind: string
-    api: string
+    apiversion: string
 }) {
-    const { resource, loading, error, selfLink, name, namespace, cluster, kind, api } = props
+    const { resource, loading, error, name, namespace, cluster, kind, apiversion } = props
     const [editMode, setEditMode] = useState<boolean>(false)
     const [userCanEdit, setUserCanEdit] = useState<boolean | undefined>(undefined)
     const [editedResourceYaml, setEditedResourceYaml] = useState<string>('')
@@ -101,7 +100,7 @@ export default function YAMLPage(props: {
             action: 'update',
             namespace,
             name,
-            apiGroup: api,
+            apiGroup: apiversion,
         },
     })
 
@@ -175,11 +174,10 @@ export default function YAMLPage(props: {
                             onClick={() => {
                                 updateResource({
                                     variables: {
-                                        body: jsYaml.loadAll(editedResourceYaml)[0],
-                                        selfLink,
                                         namespace,
                                         kind,
                                         name,
+                                        body: jsYaml.loadAll(editedResourceYaml)[0],
                                         cluster,
                                     },
                                 })

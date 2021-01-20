@@ -23,33 +23,53 @@ const useStyles = makeStyles({
 })
 
 function getResourceData() {
-    const baseSegments = window.location.pathname.split('/').slice(2)
-    if (baseSegments[baseSegments.length - 1] === 'logs') {
-        baseSegments.pop()
-    }
-    const selfLink = '/' + baseSegments.slice(1).join('/')
-    const cluster = baseSegments[0]
-    const name = baseSegments[baseSegments.length - 1]
-    const kind = baseSegments[baseSegments.length - 2]
-    const isNamespaced = baseSegments[baseSegments.length - 4] === 'namespaces'
-    const namespace = isNamespaced ? baseSegments[baseSegments.length - 3] : ''
-    const api = isNamespaced
-        ? baseSegments.slice(1, baseSegments.indexOf('namespaces')).join('/')
-        : baseSegments.slice(1, baseSegments.indexOf(kind)).join('/')
-    return { cluster, selfLink, namespace, kind, name, api }
+    let cluster = '',
+        kind = '',
+        apiversion = '',
+        namespace = '',
+        name = ''
+    const urlParams = window.location.search.replace('?', '').split('&')
+    urlParams.forEach((param) => {
+        const paramKey = param.split('=')[0]
+        const paramValue = param.split('=')[1]
+        switch (paramKey) {
+            case 'cluster':
+                cluster = paramValue
+                break
+            case 'kind':
+                kind = paramValue
+                break
+            case 'apiversion':
+                apiversion = paramValue
+                break
+            case 'namespace':
+                namespace = paramValue
+                break
+            case 'name':
+                name = paramValue
+                break
+        }
+    })
+    return { cluster, kind, apiversion, namespace, name }
 }
 
 export default function DetailsPage() {
-    const { cluster, selfLink, namespace, kind, name, api } = getResourceData()
+    const { cluster, kind, apiversion, namespace, name } = getResourceData()
+    let resourceUrlParams = '?'
+    resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
+    resourceUrlParams = `${resourceUrlParams}${kind !== '' ? `&kind=${kind}` : ''}`
+    resourceUrlParams = `${resourceUrlParams}${apiversion !== '' ? `&apiversion=${apiversion}` : ''}`
+    resourceUrlParams = `${resourceUrlParams}${namespace !== '' ? `&namespace=${namespace}` : ''}`
+    resourceUrlParams = `${resourceUrlParams}${name !== '' ? `&name=${name}` : ''}`
     const classes = useStyles()
     const getResourceResponse = useGetResourceQuery({
         client: consoleClient,
         variables: {
+            apiVersion: apiversion,
             kind,
             name,
             namespace,
             cluster,
-            selfLink,
         },
     })
     const location = useLocation()
@@ -66,16 +86,14 @@ export default function DetailsPage() {
                 title={name}
                 navigation={
                     <AcmSecondaryNav>
-                        <AcmSecondaryNavItem isActive={location.pathname === `/resources/${cluster}${selfLink}`}>
-                            <Link replace to={`/resources/${cluster}${selfLink}`}>
+                        <AcmSecondaryNavItem isActive={location.pathname === '/resources'}>
+                            <Link replace to={`/resources${resourceUrlParams}`}>
                                 YAML
                             </Link>
                         </AcmSecondaryNavItem>
-                        {kind === 'pods' && (
-                            <AcmSecondaryNavItem
-                                isActive={location.pathname === `/resources/${cluster}${selfLink}/logs`}
-                            >
-                                <Link replace to={`/resources/${cluster}${selfLink}/logs`}>
+                        {kind === 'pod' && (
+                            <AcmSecondaryNavItem isActive={location.pathname === '/resources/logs'}>
+                                <Link replace to={`/resources/logs${resourceUrlParams}`}>
                                     Logs
                                 </Link>
                             </AcmSecondaryNavItem>
@@ -84,21 +102,20 @@ export default function DetailsPage() {
                 }
             />
             <Switch>
-                <Route exact path={`/resources/${cluster}${selfLink}`}>
+                <Route exact path={'/resources'}>
                     <YAMLPage
                         resource={getResourceResponse.data}
                         loading={getResourceResponse.loading}
                         error={getResourceResponse.error}
-                        selfLink={selfLink}
                         name={name}
                         namespace={namespace}
                         cluster={cluster}
                         kind={kind}
-                        api={api}
+                        apiversion={apiversion}
                     />
                 </Route>
-                {kind === 'pods' && (
-                    <Route path={`/resources/${cluster}${selfLink}/logs`}>
+                {kind === 'pod' && (
+                    <Route path={'/resources/logs'}>
                         <LogsPage
                             containers={
                                 getResourceResponse.data?.getResource?.spec.containers.map(
