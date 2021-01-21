@@ -53,10 +53,26 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    // protect all routes against csrf attacks
+    // protect proxy routes against csrf attacks
     fastify.route({
         method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-        url: '*',
+        url: '/search/proxy',
+        onRequest: fastify.csrfProtection,
+        handler: async (req, reply) => {
+            return req.body
+        }
+    })
+    fastify.route({
+        method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+        url: '/searchapi/graphql',
+        onRequest: fastify.csrfProtection,
+        handler: async (req, reply) => {
+            return req.body
+        }
+    })
+    fastify.route({
+        method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+        url: '/search/console-api/graphql',
         onRequest: fastify.csrfProtection,
         handler: async (req, reply) => {
             return req.body
@@ -78,7 +94,6 @@ export async function startServer(): Promise<FastifyInstance> {
     async function proxy(req: FastifyRequest, res: FastifyReply) {
         try {
             const token = req.cookies['acm-access-token-cookie']
-            logger.debug({ msg: 'proxy token', token })
             if (!token) {
                 return res.code(401).send()
             }
