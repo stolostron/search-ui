@@ -33,8 +33,7 @@ export const DeleteResourceModal = (props: any) => {
     const [deleteResourceMutation, deleteResourceResults] = useDeleteResourceMutation({ client: consoleClient })
     let apiGroup = ''
     if (resource) {
-        const kind = resource.selfLink.split('/')
-        apiGroup = kind[1] === 'apis' ? kind[2] : ''
+        apiGroup = resource.apigroup ? `${resource.apigroup}/${resource.apiversion}` : resource.apiversion
     }
     const userAccessResponse = useUserAccessQuery({
         skip: !resource,
@@ -51,7 +50,7 @@ export const DeleteResourceModal = (props: any) => {
     function deleteResourceFn() {
         deleteResourceMutation({
             variables: {
-                selfLink: resource.selfLink,
+                apiVersion: apiGroup,
                 name: resource.name,
                 namespace: resource.namespace,
                 cluster: resource.cluster,

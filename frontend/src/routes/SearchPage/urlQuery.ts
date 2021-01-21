@@ -6,9 +6,10 @@ export function updateBrowserUrl(currentQuery: string) {
         // on clear search query
         window.history.pushState({}, '', window.location.pathname)
     } else {
-        const url = `${window.location.pathname}?filters={"textsearch":${encodeURIComponent(
+        let url: string = `${window.location.pathname}?filters={"textsearch":${encodeURIComponent(
             JSON.stringify(currentQuery)
         )}}`
+        url = url.replace(/\./g, '%2E')
         window.history.pushState({}, '', url)
     }
 }
