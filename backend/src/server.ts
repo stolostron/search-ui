@@ -162,7 +162,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 break
             default:
                 {
-                    let url = new URL(request.raw.url).pathname
+                    const url = new URL(request.raw.url).pathname
                     let msg: { [key: string]: any }
 
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
