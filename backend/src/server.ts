@@ -50,8 +50,8 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    fastify.register(fastifyCookie)
-    fastify.register(fastifyCsrf, {
+    await fastify.register(fastifyCookie)
+    await fastify.register(fastifyCsrf, {
         getToken: (req: FastifyRequest) => {
             return req.cookies['csrf-token']
         },
@@ -91,6 +91,7 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/searchapi/graphql',
         http2: false,
         preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return fastify.csrfProtection(req, res, done)
         },
     })
@@ -102,6 +103,7 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
         preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
             return fastify.csrfProtection(req, res, done)
         },
     })
@@ -151,7 +153,7 @@ export async function startServer(): Promise<FastifyInstance> {
     // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
     fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
-        reply.setCookie('csrf-token', token)
+        await reply.setCookie('csrf-token', token)
     })
 
     fastify.addHook('onResponse', (request, reply, done) => {
