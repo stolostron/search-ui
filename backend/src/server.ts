@@ -90,9 +90,9 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: ()=>void) => {
-            return fastify.csrfProtection(req,res,done)
-        }
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            return fastify.csrfProtection(req, res, done)
+        },
     })
 
     // Proxy to CONSOLE-API
@@ -101,9 +101,9 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: ()=>void) => {
-            return fastify.csrfProtection(req,res,done)
-        }
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            return fastify.csrfProtection(req, res, done)
+        },
     })
 
     // CONSOLE-HEADER
@@ -146,7 +146,7 @@ export async function startServer(): Promise<FastifyInstance> {
         ;(request as any).start = process.hrtime()
         done()
     })
-    
+
     // Generate csrf token for each request.
     // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
     fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
