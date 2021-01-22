@@ -30,9 +30,7 @@ function noop(): void {
 }
 
 function getUrlPath(url: string) {
-    return url.includes('?')
-    ? url.substr(0, url.indexOf('?'))
-    : url
+    return url.includes('?') ? url.substr(0, url.indexOf('?')) : url
 }
 
 export async function startServer(): Promise<FastifyInstance> {
