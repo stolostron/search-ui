@@ -50,33 +50,11 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(fastifyCookie)
-    await fastify.register(fastifyCsrf)
-
-    // protect proxy routes against csrf attacks
-    fastify.route({
-        method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-        url: '/search/proxy',
-        onRequest: fastify.csrfProtection,
-        handler: async (req, reply) => {
-            return req.body
-        }
-    })
-    fastify.route({
-        method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-        url: '/searchapi/graphql',
-        onRequest: fastify.csrfProtection,
-        handler: async (req, reply) => {
-            return req.body
-        }
-    })
-    fastify.route({
-        method: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-        url: '/search/console-api/graphql',
-        onRequest: fastify.csrfProtection,
-        handler: async (req, reply) => {
-            return req.body
-        }
+    fastify.register(fastifyCookie)
+    fastify.register(fastifyCsrf, {
+        getToken: (req: FastifyRequest) => {
+            return req.cookies['csrf-token']
+        },
     })
 
     fastify.get('/ping', async (req, res) => {
@@ -112,6 +90,9 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: ()=>void) => {
+            return fastify.csrfProtection(req,res,done)
+        }
     })
 
     // Proxy to CONSOLE-API
@@ -120,6 +101,9 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: ()=>void) => {
+            return fastify.csrfProtection(req,res,done)
+        }
     })
 
     // CONSOLE-HEADER
@@ -161,6 +145,13 @@ export async function startServer(): Promise<FastifyInstance> {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ;(request as any).start = process.hrtime()
         done()
+    })
+    
+    // Generate csrf token for each request.
+    // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
+    fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
+        const token = await reply.generateCsrf()
+        reply.setCookie('csrf-token', token)
     })
 
     fastify.addHook('onResponse', (request, reply, done) => {
