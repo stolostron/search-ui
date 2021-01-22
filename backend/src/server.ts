@@ -162,7 +162,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 break
             default:
                 {
-                    let url = new URL(request.url).pathname
+                    let url = new URL(request.raw.url).pathname
                     let msg: { [key: string]: any }
 
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -293,7 +293,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.setNotFoundHandler((request, response) => {
-        if (!path.extname(new URL(request.url).pathname)) {
+        if (!path.extname(new URL(request.raw.url).pathname)) {
             void response.code(200).sendFile('index.html', join(__dirname, 'public'))
         } else {
             void response.code(404).send()
