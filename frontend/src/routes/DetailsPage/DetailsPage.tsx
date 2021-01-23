@@ -92,7 +92,7 @@ export default function DetailsPage() {
                                 YAML
                             </Link>
                         </AcmSecondaryNavItem>
-                        {kind === 'pod' && (
+                        {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                             <AcmSecondaryNavItem isActive={location.pathname === '/resources/logs'}>
                                 <Link replace to={`/resources/logs${resourceUrlParams}`}>
                                     Logs
@@ -115,7 +115,7 @@ export default function DetailsPage() {
                         apiversion={apiversion}
                     />
                 </Route>
-                {kind === 'pod' && (
+                {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                     <Route path={'/resources/logs'}>
                         <LogsPage
                             containers={_.get(getResourceResponse, 'data.getResource.spec.containers', []).map(
