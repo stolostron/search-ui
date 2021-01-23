@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
+import _ from 'lodash'
 import {
     AcmButton,
     AcmPage,
@@ -117,11 +118,9 @@ export default function DetailsPage() {
                 {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                     <Route path={'/resources/logs'}>
                         <LogsPage
-                            containers={
-                                getResourceResponse.data?.getResource?.spec.containers.map(
-                                    (container: any) => container.name
-                                ) || []
-                            }
+                            containers={_.get(getResourceResponse, 'data.getResource.spec.containers', []).map(
+                                (container: any) => container.name
+                            )}
                             cluster={cluster}
                             namespace={namespace}
                             name={name}
