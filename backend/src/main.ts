@@ -45,4 +45,4 @@ process.on('uncaughtException', (error) => {
 })
 
 import { startServer } from './server'
-startServer()
+void startServer()

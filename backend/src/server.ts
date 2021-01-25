@@ -83,7 +83,7 @@ export async function startServer(): Promise<FastifyInstance> {
             await res.code(200).send()
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
-            res.code(500).send(err)
+            void res.code(500).send(err)
         }
     }
 
@@ -279,16 +279,16 @@ export async function startServer(): Promise<FastifyInstance> {
                         headers: { Authorization: `Bearer ${token}` },
                     }
                 )
-                reply.code(200).send()
+                void reply.code(200).send()
             }
         })
     }
 
     fastify.setNotFoundHandler((request, response) => {
         if (!extname(getUrlPath(request.url))) {
-            response.code(200).sendFile('index.html', join(__dirname, 'public'))
+            void response.code(200).sendFile('index.html', join(__dirname, 'public'))
         } else {
-            response.code(404).send()
+            void response.code(404).send()
         }
     })
     await fastify.register(fastifyStatic, {
@@ -331,7 +331,7 @@ export async function startServer(): Promise<FastifyInstance> {
     process.on('SIGTERM', () => {
         logger.debug({ msg: 'process SIGTERM' })
         logger.debug({ msg: 'closing server' })
-        fastify.close()
+        void fastify.close()
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
@@ -346,7 +346,7 @@ export async function startServer(): Promise<FastifyInstance> {
         console.log()
         logger.debug({ msg: 'process SIGINT' })
         logger.debug({ msg: 'closing server' })
-        fastify.close()
+        void fastify.close()
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
@@ -359,17 +359,17 @@ export async function startServer(): Promise<FastifyInstance> {
     process.on('uncaughtException', (err) => {
         logger.error({ msg: `process uncaughtException`, error: err.message })
         logger.debug({ msg: 'closing server' })
-        fastify.close()
+        void fastify.close()
     })
 
     process.on('multipleResolves', (type, promise, reason) => {
         logger.error({ msg: 'process multipleResolves', type })
-        fastify.close()
+        void fastify.close()
     })
 
     process.on('unhandledRejection', (reason, promise) => {
         logger.error({ msg: 'process unhandledRejection', reason })
-        fastify.close()
+        void fastify.close()
     })
 
     return fastify
