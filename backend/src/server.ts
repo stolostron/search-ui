@@ -332,7 +332,7 @@ export async function startServer(): Promise<FastifyInstance> {
     process.on('SIGTERM', () => {
         logger.debug({ msg: 'process SIGTERM' })
         logger.debug({ msg: 'closing server' })
-        void fastify.close()
+        fastify.close()
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
@@ -347,7 +347,7 @@ export async function startServer(): Promise<FastifyInstance> {
         console.log()
         logger.debug({ msg: 'process SIGINT' })
         logger.debug({ msg: 'closing server' })
-        void fastify.close()
+        fastify.close()
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
@@ -360,17 +360,17 @@ export async function startServer(): Promise<FastifyInstance> {
     process.on('uncaughtException', (err) => {
         logger.error({ msg: `process uncaughtException`, error: err.message })
         logger.debug({ msg: 'closing server' })
-        void fastify.close()
+        fastify.close()
     })
 
     process.on('multipleResolves', (type, promise, reason) => {
         logger.error({ msg: 'process multipleResolves', type })
-        void fastify.close()
+        fastify.close()
     })
 
     process.on('unhandledRejection', (reason, promise) => {
         logger.error({ msg: 'process unhandledRejection', reason })
-        void fastify.close()
+        fastify.close()
     })
 
     return fastify
