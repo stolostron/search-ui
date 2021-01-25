@@ -150,7 +150,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
     fastify.addHook('onRequest', (request, reply, done) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        (request as any).start = process.hrtime()
+        ;(request as any).start = process.hrtime()
         done()
     })
 
@@ -172,10 +172,9 @@ export async function startServer(): Promise<FastifyInstance> {
 
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
                     const operationName = (request.body as any)?.operationName as string
-                    if (operationName) {                        
+                    if (operationName) {
                         msg = { msg: STATUS_CODES[reply.statusCode] }
                         msg.operation = operationName
-
                     } else {
                         msg = {
                             msg: STATUS_CODES[reply.statusCode],
