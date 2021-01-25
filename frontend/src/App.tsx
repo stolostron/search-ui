@@ -23,13 +23,13 @@ function getUrlParams() {
     const apiversion = isNamespaced
         ? baseSegments.slice(1, baseSegments.indexOf('namespaces')).join('/')
         : baseSegments.slice(1, baseSegments.indexOf(kind)).join('/')
-    let resourceUrlParams = '?'
+    let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${kind !== '' ? `&kind=${kind}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${apiversion !== '' ? `&apiversion=${apiversion}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${namespace !== '' ? `&namespace=${namespace}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${name !== '' ? `&name=${name}` : ''}`
-    return resourceUrlParams
+    return `?${encodeURIComponent(resourceUrlParams)}`
 }
 
 function App() {

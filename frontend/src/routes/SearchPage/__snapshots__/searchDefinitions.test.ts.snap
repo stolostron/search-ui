@@ -7,7 +7,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -58,7 +58,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -114,7 +114,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -170,7 +170,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -241,7 +241,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -287,7 +287,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -353,7 +353,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -424,7 +424,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -475,7 +475,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -541,7 +541,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -587,7 +587,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -653,7 +653,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -714,7 +714,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -760,7 +760,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -821,7 +821,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -897,7 +897,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -963,7 +963,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1014,7 +1014,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1065,7 +1065,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1116,7 +1116,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1182,7 +1182,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1243,7 +1243,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1292,7 +1292,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1348,7 +1348,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1399,7 +1399,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1460,7 +1460,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1516,7 +1516,7 @@ Array [
       to={
         Object {
           "pathname": "/resources",
-          "search": "?cluster=testCluster&kind=pod&namespace=testNamespace&name=testName",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
         }
       }
     >
@@ -1606,7 +1606,7 @@ exports[`Correctly returns createDetailsLink - Default 1`] = `
   to={
     Object {
       "pathname": "/resources",
-      "search": "?cluster=testCluster&kind=pod&namespace=testPodNamespace&name=testPodName",
+      "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestPodNamespace%26name%3DtestPodName",
     }
   }
 >
@@ -1627,7 +1627,7 @@ exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
   to={
     Object {
       "pathname": "/resources",
-      "search": "?cluster=testCluster&kind=policy&namespace=testPolicyNamespace&name=testPolicyName",
+      "search": "?cluster%3DtestCluster%26kind%3Dpolicy%26namespace%3DtestPolicyNamespace%26name%3DtestPolicyName",
     }
   }
 >
@@ -1640,7 +1640,7 @@ exports[`Correctly returns createDetailsLink - NON-Application 1`] = `
   to={
     Object {
       "pathname": "/resources",
-      "search": "?cluster=testCluster&kind=application&namespace=testApplicationNamespace&name=testApplicationName",
+      "search": "?cluster%3DtestCluster%26kind%3Dapplication%26namespace%3DtestApplicationNamespace%26name%3DtestApplicationName",
     }
   }
 >
@@ -1683,8 +1683,8 @@ exports[`Correctly returns label components 1`] = `
 />
 `;
 
-exports[`Correctly returns url search params with 0 params 1`] = `"?cluster=testCluster"`;
+exports[`Correctly returns url search params with 0 params 1`] = `"?cluster%3DtestCluster"`;
 
-exports[`Correctly returns url search params with all params & apigroup 1`] = `"?cluster=testCluster&kind=pods&apiversion=v1&namespace=testNamespace&name=testName"`;
+exports[`Correctly returns url search params with all params & apigroup 1`] = `"?cluster%3DtestCluster%26kind%3Dpods%26apiversion%3Dv1%26namespace%3DtestNamespace%26name%3DtestName"`;
 
-exports[`Correctly returns url search params with all params without apigroup 1`] = `"?cluster=testCluster&kind=pods&apiversion=apps/v1&namespace=testNamespace&name=testName"`;
+exports[`Correctly returns url search params with all params without apigroup 1`] = `"?cluster%3DtestCluster%26kind%3Dpods%26apiversion%3Dapps%2Fv1%26namespace%3DtestNamespace%26name%3DtestName"`;
