@@ -18,7 +18,7 @@ import { logError, logger } from './lib/logger'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
-const acm_access_token_cookie = 'acm-access-token-cookie'
+const ACM_ACCESS_TOKEN_COOKIE = 'acm-access-token-cookie'
 
 declare module 'fastify-reply-from' {
     export interface From {
@@ -76,7 +76,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
     async function proxy(req: FastifyRequest, res: FastifyReply) {
         try {
-            const token = req.cookies[acm_access_token_cookie]
+            const token = req.cookies[ACM_ACCESS_TOKEN_COOKIE]
             if (!token) {
                 await res.code(401).send()
             }
@@ -122,7 +122,7 @@ export async function startServer(): Promise<FastifyInstance> {
         })
 
         fastify.all('/multicloud/header/*', (req, res) => {
-            req.headers.authorization = `Bearer ${req.cookies[acm_access_token_cookie]}`
+            req.headers.authorization = `Bearer ${req.cookies[ACM_ACCESS_TOKEN_COOKIE]}`
             res.from(req.raw.url)
         })
 
@@ -136,7 +136,7 @@ export async function startServer(): Promise<FastifyInstance> {
                     method: 'GET',
                     httpsAgent: new https.Agent({ rejectUnauthorized: false }),
                     headers: {
-                        Authorization: `Bearer ${req.cookies[acm_access_token_cookie]}`,
+                        Authorization: `Bearer ${req.cookies[ACM_ACCESS_TOKEN_COOKIE]}`,
                     },
                     responseType: 'json',
                     validateStatus: () => true,
@@ -261,7 +261,7 @@ export async function startServer(): Promise<FastifyInstance> {
             const token = await openshift.getAccessTokenFromAuthorizationCodeFlow(request)
             logger.debug({ msg: 'search/login/callback token', token: token.access_token })
             return reply
-                .setCookie(acm_access_token_cookie, `${token.access_token}`, {
+                .setCookie(ACM_ACCESS_TOKEN_COOKIE, `${token.access_token}`, {
                     path: '/',
                     httpOnly: true,
                     secure: process.env.NODE_ENV === 'production',
@@ -271,7 +271,7 @@ export async function startServer(): Promise<FastifyInstance> {
         })
 
         fastify.delete('/search/login', async function (request, reply) {
-            const token = request.cookies[acm_access_token_cookie]
+            const token = request.cookies[ACM_ACCESS_TOKEN_COOKIE]
             if (token) {
                 await Axios.delete(
                     `${process.env.API_SERVER_URL}/apis/oauth.openshift.io/v1/oauthaccesstokens/${token}`,
