@@ -29,6 +29,10 @@ function noop(): void {
     /* Do Nothing */
 }
 
+function getUrlPath(url: string) {
+    return url.includes('?') ? url.substr(0, url.indexOf('?')) : url
+}
+
 export async function startServer(): Promise<FastifyInstance> {
     const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(noop)
     const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(noop)
@@ -162,10 +166,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 break
             default:
                 {
-                    let url = request.url
-                    if (url.includes('?')) {
-                        url = url.substr(0, url.indexOf('?'))
-                    }
+                    const url = getUrlPath(request.url)
                     let msg: { [key: string]: any }
 
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -296,7 +297,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.setNotFoundHandler((request, response) => {
-        if (!path.extname(request.url)) {
+        if (!path.extname(getUrlPath(request.url))) {
             void response.code(200).sendFile('index.html', join(__dirname, 'public'))
         } else {
             void response.code(404).send()
