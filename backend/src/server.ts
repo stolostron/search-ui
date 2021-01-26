@@ -77,9 +77,9 @@ export async function startServer(): Promise<FastifyInstance> {
         try {
             const token = req.cookies['acm-access-token-cookie']
             if (!token) {
-                await res.code(401).send()
+                return res.code(401).send()
             }
-            await res.code(200).send()
+            return res.code(200).send()
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
             void res.code(500).send(err)
