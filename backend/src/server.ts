@@ -4,6 +4,7 @@ import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
+import fastifyCsrf from 'fastify-csrf'
 import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
 import fastifyReplyFrom from 'fastify-reply-from'
 import fastifyStatic from 'fastify-static'
@@ -28,6 +29,10 @@ function noop(): void {
     /* Do Nothing */
 }
 
+function getUrlPath(url: string) {
+    return url.includes('?') ? url.substr(0, url.indexOf('?')) : url
+}
+
 export async function startServer(): Promise<FastifyInstance> {
     const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(noop)
     const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(noop)
@@ -49,6 +54,13 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
+    await fastify.register(fastifyCookie)
+    await fastify.register(fastifyCsrf, {
+        getToken: (req: FastifyRequest) => {
+            return req.cookies['csrf-token']
+        },
+    })
+
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
     })
@@ -64,11 +76,10 @@ export async function startServer(): Promise<FastifyInstance> {
     async function proxy(req: FastifyRequest, res: FastifyReply) {
         try {
             const token = req.cookies['acm-access-token-cookie']
-            logger.debug({ msg: 'proxy token', token })
             if (!token) {
-                return res.code(401).send()
+                await res.code(401).send()
             }
-            return res.code(200).send()
+            await res.code(200).send()
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
             void res.code(500).send(err)
@@ -83,6 +94,10 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return fastify.csrfProtection(req, res, done)
+        },
     })
 
     // Proxy to CONSOLE-API
@@ -91,6 +106,10 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+            return fastify.csrfProtection(req, res, done)
+        },
     })
 
     // CONSOLE-HEADER
@@ -128,11 +147,17 @@ export async function startServer(): Promise<FastifyInstance> {
         })
     }
 
-    await fastify.register(fastifyCookie)
     fastify.addHook('onRequest', (request, reply, done) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ;(request as any).start = process.hrtime()
         done()
+    })
+
+    // Generate csrf token for each request.
+    // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
+    fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
+        const token = await reply.generateCsrf()
+        await reply.setCookie('csrf-token', token)
     })
 
     fastify.addHook('onResponse', (request, reply, done) => {
@@ -141,10 +166,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 break
             default:
                 {
-                    let url = request.url
-                    if (url.includes('?')) {
-                        url = url.substr(0, url.indexOf('?'))
-                    }
+                    const url = getUrlPath(request.url)
                     let msg: { [key: string]: any }
 
                     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -275,7 +297,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.setNotFoundHandler((request, response) => {
-        if (!path.extname(request.url)) {
+        if (!path.extname(getUrlPath(request.url))) {
             void response.code(200).sendFile('index.html', join(__dirname, 'public'))
         } else {
             void response.code(404).send()

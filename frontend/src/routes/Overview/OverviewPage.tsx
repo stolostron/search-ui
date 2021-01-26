@@ -165,15 +165,15 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
             <AcmActionGroup>
                 <AcmLaunchLink links={getLaunchLink(addons)} />
                 <AcmButton
-                    href="/console/add-connection"
+                    href="/multicloud/add-connection"
                     variant={ButtonVariant.link}
                     component="a"
                     rel="noreferrer"
-                    id="add-cloud-connection"
+                    id="add-provider-connection"
                     icon={<PlusIcon />}
                     iconPosition="left"
                 >
-                    Add cloud connection
+                    Add provider connection
                 </AcmButton>
                 <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]} />
             </AcmActionGroup>

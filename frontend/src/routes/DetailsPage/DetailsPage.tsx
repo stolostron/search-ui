@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
+import _ from 'lodash'
 import {
     AcmButton,
     AcmPage,
@@ -28,7 +29,7 @@ function getResourceData() {
         apiversion = '',
         namespace = '',
         name = ''
-    const urlParams = window.location.search.replace('?', '').split('&')
+    const urlParams = decodeURIComponent(window.location.search).replace('?', '').split('&')
     urlParams.forEach((param) => {
         const paramKey = param.split('=')[0]
         const paramValue = param.split('=')[1]
@@ -55,7 +56,7 @@ function getResourceData() {
 
 export default function DetailsPage() {
     const { cluster, kind, apiversion, namespace, name } = getResourceData()
-    let resourceUrlParams = '?'
+    let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${kind !== '' ? `&kind=${kind}` : ''}`
     resourceUrlParams = `${resourceUrlParams}${apiversion !== '' ? `&apiversion=${apiversion}` : ''}`
@@ -87,13 +88,13 @@ export default function DetailsPage() {
                 navigation={
                     <AcmSecondaryNav>
                         <AcmSecondaryNavItem isActive={location.pathname === '/resources'}>
-                            <Link replace to={`/resources${resourceUrlParams}`}>
+                            <Link replace to={`/resources?${encodeURIComponent(resourceUrlParams)}`}>
                                 YAML
                             </Link>
                         </AcmSecondaryNavItem>
-                        {kind === 'pod' && (
+                        {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                             <AcmSecondaryNavItem isActive={location.pathname === '/resources/logs'}>
-                                <Link replace to={`/resources/logs${resourceUrlParams}`}>
+                                <Link replace to={`/resources/logs?${encodeURIComponent(resourceUrlParams)}`}>
                                     Logs
                                 </Link>
                             </AcmSecondaryNavItem>
@@ -114,14 +115,12 @@ export default function DetailsPage() {
                         apiversion={apiversion}
                     />
                 </Route>
-                {kind === 'pod' && (
+                {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                     <Route path={'/resources/logs'}>
                         <LogsPage
-                            containers={
-                                getResourceResponse.data?.getResource?.spec.containers.map(
-                                    (container: any) => container.name
-                                ) || []
-                            }
+                            containers={_.get(getResourceResponse, 'data.getResource.spec.containers', []).map(
+                                (container: any) => container.name
+                            )}
                             cluster={cluster}
                             namespace={namespace}
                             name={name}

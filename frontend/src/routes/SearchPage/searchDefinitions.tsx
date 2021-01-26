@@ -1305,7 +1305,7 @@ export function getAge(item: any, key: string) {
 }
 
 export const getUrlSearchParam = (resource: any) => {
-    let searchString = `?cluster=${resource.cluster}`
+    let searchString = `cluster=${resource.cluster}`
     if (resource.kind) {
         searchString = `${searchString}&kind=${resource.kind}`
     }
@@ -1320,7 +1320,7 @@ export const getUrlSearchParam = (resource: any) => {
     if (resource.name) {
         searchString = `${searchString}&name=${resource.name}`
     }
-    return searchString
+    return `?${encodeURIComponent(searchString)}`
 }
 
 export function createDetailsLink(item: any) {
