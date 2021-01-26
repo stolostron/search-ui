@@ -16,6 +16,7 @@ import { join } from 'path'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
+import * as fs from 'fs'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
@@ -59,6 +60,27 @@ export async function startServer(): Promise<FastifyInstance> {
         getToken: (req: FastifyRequest) => {
             return req.cookies['csrf-token']
         },
+    })
+
+
+    fastify.get('/search/index.html', async (req, reply) => {
+        logger.info('serving index.html ...')
+
+        const token = await reply.generateCsrf()
+            try {
+                logger.info(`serving index.html from: ${join(__dirname, '..', '..', 'frontend', 'public', 'index.html')}`)
+                const indexFile = fs.readFileSync(join(__dirname, '..', '..', 'frontend', 'public', 'index.html'), 'utf8')
+                const indexWithCsrf = indexFile.replace('{{XSRF_TOKEN}}', token)
+                logger.info(`index.html:  ${indexWithCsrf}`)
+
+                void reply.code(200).send(indexWithCsrf)
+            } catch (e){
+                logger.error('Error reading index.html', e)
+            } finally {
+                logger.info('at finally')
+            }
+            
+            void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
     })
 
     fastify.get('/ping', async (req, res) => {
