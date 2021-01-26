@@ -80,8 +80,8 @@ export async function startServer(): Promise<FastifyInstance> {
                 return res.code(401).send()
             }
         } catch (err) {
-            logError('proxy error', err, { method: req.method, url: req.url })
-            return res.code(500).send(err)
+            logError('proxy authentication error', err, { method: req.method, url: req.url })
+            return res.code(407).send(err)
         }
         return res.code(200).send()
     }
