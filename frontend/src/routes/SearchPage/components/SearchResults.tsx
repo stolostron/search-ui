@@ -151,7 +151,11 @@ function RenderRelatedTiles(
         const relatedCounts = data.searchResult[0]!.related || []
         return (
             <PageSection>
-                <AcmExpandableWrapper maxHeight={'10rem'} withCount={true} expandable={true}>
+                <AcmExpandableWrapper
+                    maxHeight={'10rem'}
+                    withCount={true}
+                    expandable={relatedCounts.length > 0 ? true : false}
+                >
                     {relatedCounts.map((count) => {
                         return (
                             <AcmTile
