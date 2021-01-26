@@ -56,11 +56,11 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     await fastify.register(fastifyCookie)
-    await fastify.register(fastifyCsrf, {
-        getToken: (req: FastifyRequest) => {
-            return req.cookies['csrf-token']
-        },
-    })
+    await fastify.register(fastifyCsrf)
+    //     getToken: (req: FastifyRequest) => {
+    //         return req.cookies['csrf-token']
+    //     },
+    // })
 
 
     fastify.get('/search/index.html', async (req, reply) => {
