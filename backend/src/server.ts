@@ -79,11 +79,11 @@ export async function startServer(): Promise<FastifyInstance> {
             if (!token) {
                 return res.code(401).send()
             }
-            return res.code(200).send()
         } catch (err) {
             logError('proxy error', err, { method: req.method, url: req.url })
-            void res.code(500).send(err)
+            return res.code(500).send(err)
         }
+        return res.code(200).send()
     }
 
     fastify.get('/search/proxy', proxy)
