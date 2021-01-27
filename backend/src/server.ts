@@ -336,7 +336,7 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/', // optional: default '/'
         immutable: true,
         maxAge: 60 * 60 * 1000,
-        index: false,
+        // index: [''],
     })
 
     fastify.addHook('onClose', (instance, done: () => void) => {
