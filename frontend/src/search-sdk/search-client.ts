@@ -1,8 +1,8 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 const getXsrfToken = () => {
-    const token = (document!.head!.querySelector('meta[property=csrf-token]')! as HTMLMetaElement)?.content || ''
-    // const token = document.getElementById('app-access')?.value || '' // ? document.getElementById('app-access').value : ''
+    const metaTag = document!.head!.querySelector('meta[property=csrf-token]')! as HTMLMetaElement
+    const token = (metaTag || {}).content || ''
     return token.toString()
 }
 
