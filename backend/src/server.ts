@@ -67,7 +67,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
         const token = await reply.generateCsrf()
         try {
-             // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
+            // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
             logger.info(`serving index.html from: ${join(__dirname, 'public', 'index.html')}`)
             const indexFile = fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
             const indexWithCsrf = indexFile.replace('{{ CSRF_TOKEN }}', token)
