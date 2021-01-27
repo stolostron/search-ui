@@ -12,6 +12,8 @@ module.exports = {
   collectCoverageFrom: [
       "<rootDir>/src/**/*.{ts,js}",
       "<rootDir>/src/*.{ts,js}",
+      "!<rootDir>/src/**/*.test.{ts,js}",
+      "!<rootDir>/src/*.test.{ts,js}",
       "!<rootDir>/node_modules/**"
   ],
   setupFiles: [
