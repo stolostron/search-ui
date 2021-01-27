@@ -63,25 +63,28 @@ export async function startServer(): Promise<FastifyInstance> {
     // })
 
 
-    fastify.get('/search/index.html', async (req, reply) => {
+    const serveIndexHtml = async (request :FastifyRequest, reply: FastifyReply) => {
+    // fastify.get('/search/', async (req, reply) => {
         logger.info('serving index.html ...')
 
         const token = await reply.generateCsrf()
-            try {
-                logger.info(`serving index.html from: ${join(__dirname, '..', '..', 'frontend', 'public', 'index.html')}`)
-                const indexFile = fs.readFileSync(join(__dirname, '..', '..', 'frontend', 'public', 'index.html'), 'utf8')
-                const indexWithCsrf = indexFile.replace('{{XSRF_TOKEN}}', token)
-                logger.info(`index.html:  ${indexWithCsrf}`)
+        try {
+            logger.info(`serving index.html from: ${join(__dirname, '..', '..', 'frontend', 'public', 'index.html')}`)
+            const indexFile = fs.readFileSync(join(__dirname, '..', '..', 'frontend', 'public', 'index.html'), 'utf8')
+            const indexWithCsrf = indexFile.replace('{{XSRF_TOKEN}}', token)
+            logger.info(`index.html:  ${indexWithCsrf}`)
 
-                void reply.code(200).send(indexWithCsrf)
-            } catch (e){
-                logger.error('Error reading index.html', e)
-            } finally {
-                logger.info('at finally')
-            }
-            
-            void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
-    })
+            void reply.code(200).send(indexWithCsrf)
+        } catch (e){
+            logger.error('Error reading index.html', e)
+        } finally { }
+        
+        // void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
+    // })
+    }
+
+    fastify.get('/search/index.html', serveIndexHtml)
+    fastify.get('/search/', serveIndexHtml)
 
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
@@ -177,10 +180,10 @@ export async function startServer(): Promise<FastifyInstance> {
 
     // Generate csrf token for each request.
     // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
-    fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
-        const token = await reply.generateCsrf()
-        await reply.setCookie('csrf-token', token)
-    })
+    // fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
+    //     const token = await reply.generateCsrf()
+    //     await reply.setCookie('csrf-token', token)
+    // })
 
     fastify.addHook('onResponse', (request, reply, done) => {
         switch (request.url) {
@@ -319,18 +322,24 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.setNotFoundHandler((request, response) => {
+        logger.info(`At not found handler.  ${request.url}`)
         if (!path.extname(getUrlPath(request.url))) {
-            void response.code(200).sendFile('index.html', join(__dirname, 'public'))
+            // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
+            return serveIndexHtml(request, response)
         } else {
-            void response.code(404).send()
+            // void response.code(404).send()
+            return serveIndexHtml(request, response)
         }
     })
+
     await fastify.register(fastifyStatic, {
         root: join(__dirname, 'public'),
         prefix: '/search/', // optional: default '/'
         immutable: true,
         maxAge: 60 * 60 * 1000,
+        index: false,
     })
+
 
     fastify.addHook('onClose', (instance, done: () => void) => {
         logger.debug('server closed')
