@@ -62,22 +62,32 @@ export async function startServer(): Promise<FastifyInstance> {
     //     },
     // })
 
+    let indexHtml: string
+    function getIndexHtml() {
+        try {
+            indexHtml = indexHtml || fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
+        } catch (e) {
+            logger.error('Error reading index.html', e)
+        }
+        return indexHtml
+    }
+
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         logger.info('serving index.html ...')
 
         const token = await reply.generateCsrf()
-        try {
-            // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
-            logger.info(`serving index.html from: ${join(__dirname, 'public', 'index.html')}`)
-            const indexFile = fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
-            const indexWithCsrf = indexFile.replace('{{ CSRF_TOKEN }}', token)
-            logger.info(`index.html:  ${indexWithCsrf}`)
 
-            void reply.code(200).send(indexWithCsrf)
-        } catch (e) {
-            logger.error('Error reading index.html', e)
-            void reply.code(500).send('Error reading index.html')
-        }
+        // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
+        // logger.info(`serving index.html from: ${join(__dirname, 'public', 'index.html')}`)
+        // const indexFile = fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
+        const indexWithCsrf = getIndexHtml().replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
+        logger.info(`index.html:  ${indexWithCsrf}`)
+
+        void reply.code(200).type('text/html').send(indexWithCsrf)
+        // } catch (e) {
+        //     logger.error('Error reading index.html', e)
+        //     void reply.code(500).send('Error reading index.html')
+        // }
 
         // void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
         // })
