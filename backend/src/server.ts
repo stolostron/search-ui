@@ -62,9 +62,8 @@ export async function startServer(): Promise<FastifyInstance> {
     //     },
     // })
 
-
-    const serveIndexHtml = async (request :FastifyRequest, reply: FastifyReply) => {
-    // fastify.get('/search/', async (req, reply) => {
+    const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
+        // fastify.get('/search/', async (req, reply) => {
         logger.info('serving index.html ...')
 
         const token = await reply.generateCsrf()
@@ -75,12 +74,12 @@ export async function startServer(): Promise<FastifyInstance> {
             logger.info(`index.html:  ${indexWithCsrf}`)
 
             void reply.code(200).send(indexWithCsrf)
-        } catch (e){
+        } catch (e) {
             logger.error('Error reading index.html', e)
-        } finally { }
-        
+        }
+
         // void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
-    // })
+        // })
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
@@ -325,10 +324,10 @@ export async function startServer(): Promise<FastifyInstance> {
         logger.info(`At not found handler.  ${request.url}`)
         if (!path.extname(getUrlPath(request.url))) {
             // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
-            return serveIndexHtml(request, response)
+            void serveIndexHtml(request, response)
         } else {
             // void response.code(404).send()
-            return serveIndexHtml(request, response)
+            void serveIndexHtml(request, response)
         }
     })
 
@@ -339,7 +338,6 @@ export async function startServer(): Promise<FastifyInstance> {
         maxAge: 60 * 60 * 1000,
         index: false,
     })
-
 
     fastify.addHook('onClose', (instance, done: () => void) => {
         logger.debug('server closed')
