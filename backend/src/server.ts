@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
@@ -73,7 +72,7 @@ export async function startServer(): Promise<FastifyInstance> {
         await res.code(200).send()
     })
 
-    async function proxy(req: FastifyRequest, res: FastifyReply) {
+    fastify.get('/search/tokenValidation', async (req: FastifyRequest, res: FastifyReply) => {
         try {
             const token = req.cookies['acm-access-token-cookie']
             if (!token) {
@@ -84,9 +83,7 @@ export async function startServer(): Promise<FastifyInstance> {
             return res.code(407).send(err)
         }
         return res.code(200).send()
-    }
-
-    fastify.get('/search/proxy', proxy)
+    })
 
     // Proxy to SEARCH-API
     await fastify.register(fastifyHttpProxy, {
