@@ -57,13 +57,9 @@ export async function startServer(): Promise<FastifyInstance> {
 
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
-    //     getToken: (req: FastifyRequest) => {
-    //         return req.cookies['csrf-token']
-    //     },
-    // })
 
     let indexHtml: string
-    function getIndexHtml() {
+    function readIndexHtml() {
         try {
             indexHtml = indexHtml || fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
         } catch (e) {
@@ -73,13 +69,9 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
-        logger.info('serving index.html ...')
-
         const token = await reply.generateCsrf()
 
-        const indexWithCsrf = getIndexHtml().replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
-        logger.info(`index.html:  ${indexWithCsrf}`)
-
+        const indexWithCsrf = readIndexHtml().replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
         void reply.code(200).type('text/html').send(indexWithCsrf)
     }
 
@@ -120,10 +112,7 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/searchapi/graphql',
         http2: false,
         preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            if (process.env.NODE_ENV !== 'production') {
-                done()
-            }
-            fastify.csrfProtection(req, res, done)
+            process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
         },
     })
 
@@ -134,8 +123,7 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
         preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return fastify.csrfProtection(req, res, done)
+            process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
         },
     })
 
@@ -180,12 +168,6 @@ export async function startServer(): Promise<FastifyInstance> {
         done()
     })
 
-    // Generate csrf token for each request.
-    // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
-    // fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
-    //     const token = await reply.generateCsrf()
-    //     await reply.setCookie('csrf-token', token)
-    // })
 
     fastify.addHook('onResponse', (request, reply, done) => {
         switch (request.url) {
@@ -324,13 +306,10 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.setNotFoundHandler((request, response) => {
-        logger.info(`At not found handler.  ${request.url}`)
         if (!path.extname(getUrlPath(request.url))) {
-            // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
             void serveIndexHtml(request, response)
         } else {
-            // void response.code(404).send()
-            void serveIndexHtml(request, response)
+            void response.code(404).send()
         }
     })
 
@@ -339,7 +318,6 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/', // optional: default '/'
         immutable: true,
         maxAge: 60 * 60 * 1000,
-        // index: [''],
     })
 
     fastify.addHook('onClose', (instance, done: () => void) => {
