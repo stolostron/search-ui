@@ -1,10 +1,7 @@
-import { ApolloClient, InMemoryCache } from '@apollo/client'
+// Copyright (c) 2021 Red Hat, Inc.
 
-const getXsrfToken = () => {
-    const metaTag = document!.body!.querySelector('meta[name=csrf-token]')! as HTMLMetaElement
-    const token = (metaTag || {}).content || ''
-    return token.toString()
-}
+import { ApolloClient, InMemoryCache } from '@apollo/client'
+import getCsrfToken from '../lib/csrf-helper'
 
 export const searchClient = new ApolloClient({
     connectToDevTools: process.env.NODE_ENV === 'development',
@@ -12,7 +9,7 @@ export const searchClient = new ApolloClient({
     cache: new InMemoryCache(),
     credentials: 'same-origin',
     headers: {
-        'csrf-token': getXsrfToken(),
+        'csrf-token': getCsrfToken(),
     },
     defaultOptions: {
         watchQuery: {

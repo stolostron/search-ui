@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+
 /* istanbul ignore file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
@@ -168,7 +170,6 @@ export async function startServer(): Promise<FastifyInstance> {
         done()
     })
 
-
     fastify.addHook('onResponse', (request, reply, done) => {
         switch (request.url) {
             case '/ping':
@@ -312,7 +313,6 @@ export async function startServer(): Promise<FastifyInstance> {
             void response.code(404).send()
         }
     })
-
     await fastify.register(fastifyStatic, {
         root: join(__dirname, 'public'),
         prefix: '/search/', // optional: default '/'
