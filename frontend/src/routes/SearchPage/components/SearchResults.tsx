@@ -154,7 +154,7 @@ function RenderRelatedTiles(
                 <AcmExpandableWrapper
                     maxHeight={'10rem'}
                     withCount={true}
-                    expandable={relatedCounts.length > 0 ? true : false}
+                    expandable={relatedCounts.length > 2}
                 >
                     {relatedCounts.map((count) => {
                         return (
