@@ -77,20 +77,10 @@ export async function startServer(): Promise<FastifyInstance> {
 
         const token = await reply.generateCsrf()
 
-        // void response.code(200).sendFile('index.html', join(__dirname, 'public'))
-        // logger.info(`serving index.html from: ${join(__dirname, 'public', 'index.html')}`)
-        // const indexFile = fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
         const indexWithCsrf = getIndexHtml().replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
         logger.info(`index.html:  ${indexWithCsrf}`)
 
         void reply.code(200).type('text/html').send(indexWithCsrf)
-        // } catch (e) {
-        //     logger.error('Error reading index.html', e)
-        //     void reply.code(500).send('Error reading index.html')
-        // }
-
-        // void reply.code(200).sendFile('index.html', join(__dirname, 'public'))
-        // })
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
@@ -130,8 +120,10 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/searchapi/graphql',
         http2: false,
         preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return fastify.csrfProtection(req, res, done)
+            if (process.env.NODE_ENV !== 'production') {
+                done()
+            }
+            fastify.csrfProtection(req, res, done)
         },
     })
 
