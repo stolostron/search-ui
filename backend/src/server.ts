@@ -17,7 +17,6 @@ import { join } from 'path'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
-import * as fs from 'fs'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
@@ -27,19 +26,24 @@ declare module 'fastify-reply-from' {
     }
 }
 
-function noop(): void {
-    /* Do Nothing */
+
+function handleFileReadError(e: Error): void {
+    logger.error({ msg: 'Error reading file.', error: e })
 }
 
-function getUrlPath(url: string) {
+function getUrlPath(url: string): string {
     return url.includes('?') ? url.substr(0, url.indexOf('?')) : url
 }
 
 export async function startServer(): Promise<FastifyInstance> {
-    const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(noop)
-    const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(noop)
+    const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(handleFileReadError)
+    const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(handleFileReadError)
+    const indexHtmlPromise = promisify<string, Buffer | undefined>(readFile)(
+        join(__dirname, 'public', 'index.html')
+    ).catch(handleFileReadError)
     const key = await keyPromise
     const cert = await certPromise
+    const indexHtml: string = await indexHtmlPromise.toString()
 
     let fastify: FastifyInstance
     if (key && cert) {
@@ -59,21 +63,24 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    let indexHtml: string
-    function readIndexHtml() {
-        try {
-            indexHtml = indexHtml || fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
-        } catch (e) {
-            logger.error('Error reading index.html', e)
-        }
-        return indexHtml
-    }
+    // let indexHtml: string
+    // function readIndexHtml() {
+    //     try {
+    //         indexHtml = indexHtml || fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
+    //     } catch (e) {
+    //         logger.error('Error reading index.html', e)
+    //     }
+    //     return indexHtml
+    // }
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
 
-        const indexWithCsrf = readIndexHtml().replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
-        void reply.code(200).type('text/html').send(indexWithCsrf)
+        // const indexHtmlWithCsrf = indexHtml.replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
+        void reply
+            .code(200)
+            .type('text/html')
+            .send(indexHtml.replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token))
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
