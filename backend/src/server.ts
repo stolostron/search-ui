@@ -82,6 +82,8 @@ export async function startServer(): Promise<FastifyInstance> {
 
     fastify.get('/search/index.html', serveIndexHtml)
     fastify.get('/search/', serveIndexHtml)
+    fastify.get('/overview', serveIndexHtml)
+    fastify.get('/resources', serveIndexHtml)
 
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
