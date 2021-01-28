@@ -1326,7 +1326,7 @@ export const getUrlSearchParam = (resource: any) => {
 export function createDetailsLink(item: any) {
     switch (item.kind) {
         case 'cluster':
-            return <a href={`/multicloud/clusters/${item.name}/${item.name}`}>{item.name}</a>
+            return <a href={`/multicloud/clusters/${item.name}/overview`}>{item.name}</a>
         case 'application':
             if (item.apigroup === 'app.k8s.io') {
                 // only redirect to apps page if it is an ACM application
