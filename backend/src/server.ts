@@ -26,7 +26,6 @@ declare module 'fastify-reply-from' {
     }
 }
 
-
 function handleFileReadError(e: Error): void {
     logger.error({ msg: 'Error reading file.', error: e })
 }
@@ -43,7 +42,7 @@ export async function startServer(): Promise<FastifyInstance> {
     ).catch(handleFileReadError)
     const key = await keyPromise
     const cert = await certPromise
-    const indexHtml: string = await indexHtmlPromise.toString()
+    const indexHtml: string = ((await indexHtmlPromise) || '').toString('utf-8')
 
     let fastify: FastifyInstance
     if (key && cert) {
@@ -75,8 +74,6 @@ export async function startServer(): Promise<FastifyInstance> {
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
-
-        // const indexHtmlWithCsrf = indexHtml.replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token)
         void reply
             .code(200)
             .type('text/html')
