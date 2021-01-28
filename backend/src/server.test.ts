@@ -22,4 +22,9 @@ describe('Server.ts tests', function () {
         const result = await request.get('/search/tokenValidation')
         expect(result.status).toBe(200)
     })
+
+    it('should return 200 response on /search/index.html request', async function () {
+        const result = await request.get('/search/index.html')
+        expect(result.status).toBe(200)
+    })
 })
