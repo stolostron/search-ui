@@ -1,3 +1,6 @@
+// Copyright (c) 2021 Red Hat, Inc.
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { request, setup } from '../test/setup'
 
 setup()
