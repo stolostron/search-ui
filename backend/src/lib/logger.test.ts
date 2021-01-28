@@ -6,13 +6,13 @@ describe('logger test', () => {
     })
 
     it('should correctly call logError with msg only', () => {
-        logger.error = jest.fn();
+        logger.error = jest.fn()
         logError('testing1', null)
         expect(logger.error).toHaveBeenCalledWith({ msg: 'testing1' })
     })
 
     it('should correctly call logError with Error type', () => {
-        logger.error = jest.fn();
+        logger.error = jest.fn()
         const error = Error('errorMessage')
         logError('testing2', error)
         expect(logger.error).toHaveBeenCalledWith({ msg: 'testing2', err: 'errorMessage', name: 'Error' })
