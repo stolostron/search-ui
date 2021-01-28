@@ -1,6 +1,5 @@
 // Copyright (c) 2021 Red Hat, Inc.
 
-/* istanbul ignore file */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
@@ -92,20 +91,18 @@ export async function startServer(): Promise<FastifyInstance> {
         await res.code(200).send()
     })
 
-    async function proxy(req: FastifyRequest, res: FastifyReply) {
+    fastify.get('/search/tokenValidation', async (req: FastifyRequest, res: FastifyReply) => {
         try {
             const token = req.cookies['acm-access-token-cookie']
             if (!token) {
-                await res.code(401).send()
+                return res.code(401).send()
             }
-            await res.code(200).send()
         } catch (err) {
-            logError('proxy error', err, { method: req.method, url: req.url })
-            void res.code(500).send(err)
+            logError('proxy authentication error', err, { method: req.method, url: req.url })
+            return res.code(407).send(err)
         }
-    }
-
-    fastify.get('/search/proxy', proxy)
+        return res.code(200).send()
+    })
 
     // Proxy to SEARCH-API
     await fastify.register(fastifyHttpProxy, {
