@@ -1398,9 +1398,7 @@ export function createExternalLink(item: any) {
 
 export function formatLabels(item: any) {
     if (item.label) {
-        const labels = item.label.split('; ')
-        const labelsToHide = labels.slice(3).map((l: string) => l.split('=')[0])
-        return <AcmLabels labels={labels} collapse={labelsToHide} />
+        return <AcmLabels labels={item.label.split('; ')} />
     }
     return '-'
 }
