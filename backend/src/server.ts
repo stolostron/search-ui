@@ -27,7 +27,7 @@ declare module 'fastify-reply-from' {
 }
 
 function handleFileReadError(e: Error): void {
-    logger.error({ msg: 'Error reading file.', error: e })
+    logError('Error reading file.', e)
 }
 
 function getUrlPath(url: string): string {
@@ -62,19 +62,9 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    // let indexHtml: string
-    // function readIndexHtml() {
-    //     try {
-    //         indexHtml = indexHtml || fs.readFileSync(join(__dirname, 'public', 'index.html'), 'utf8')
-    //     } catch (e) {
-    //         logger.error('Error reading index.html', e)
-    //     }
-    //     return indexHtml
-    // }
-
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
-        void reply
+        await reply
             .code(200)
             .type('text/html')
             .send(indexHtml.replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token))

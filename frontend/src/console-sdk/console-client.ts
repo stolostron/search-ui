@@ -5,7 +5,7 @@ import getCsrfToken from '../lib/csrf-helper'
 
 export const consoleClient = new ApolloClient({
     connectToDevTools: process.env.NODE_ENV === 'development',
-    uri: `${window.location.origin}/search/console-api/graphql`,
+    uri: `search/console-api/graphql`,
     cache: new InMemoryCache(),
     credentials: 'same-origin',
     headers: {
