@@ -71,7 +71,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
-    fastify.get('/search/', serveIndexHtml)
+    fastify.get('/search', serveIndexHtml)
     fastify.get('/overview', serveIndexHtml)
     fastify.get('/resources', serveIndexHtml)
 
@@ -88,14 +88,9 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     fastify.get('/search/tokenValidation', async (req: FastifyRequest, res: FastifyReply) => {
-        try {
-            const token = req.cookies['acm-access-token-cookie']
-            if (!token) {
-                return res.code(401).send()
-            }
-        } catch (err) {
-            logError('proxy authentication error', err, { method: req.method, url: req.url })
-            return res.code(407).send(err)
+        const token = req.cookies['acm-access-token-cookie']
+        if (!token) {
+            return res.code(401).send()
         }
         return res.code(200).send()
     })
