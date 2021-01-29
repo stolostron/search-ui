@@ -27,7 +27,7 @@ describe('Server.ts tests', function () {
     })
 
     it('should return 401 response on tokenValidation without cookie', async function () {
-        const result = await request.get('/search/tokenValidation', { headers: { Cookie: '' }})
+        const result = await request.get('/search/tokenValidation', { headers: { Cookie: '' } })
         expect(result.status).toBe(401)
     })
 
