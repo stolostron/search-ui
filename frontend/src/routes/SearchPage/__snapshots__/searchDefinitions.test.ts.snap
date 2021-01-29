@@ -38,6 +38,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -94,6 +95,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -150,6 +152,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -221,6 +224,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -267,6 +271,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -333,6 +338,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -404,6 +410,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -455,6 +462,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -521,6 +529,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -567,6 +576,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -633,6 +643,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -694,6 +705,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -740,6 +752,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -801,6 +814,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -877,6 +891,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -943,6 +958,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -994,6 +1010,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1045,6 +1062,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1096,6 +1114,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1162,6 +1181,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1223,6 +1243,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1328,6 +1349,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1379,6 +1401,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1440,6 +1463,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1496,6 +1520,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1562,6 +1587,7 @@ Array [
   },
   Object {
     "cell": <AcmLabels
+      collapse={Array []}
       labels={
         Array [
           "testLabel=label",
@@ -1674,6 +1700,7 @@ exports[`Correctly returns formatSearchbarSuggestions without T in timestamp 1`]
 
 exports[`Correctly returns label components 1`] = `
 <AcmLabels
+  collapse={Array []}
   labels={
     Array [
       "testlabel=label1",
