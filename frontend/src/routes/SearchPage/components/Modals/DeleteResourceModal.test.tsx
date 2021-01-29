@@ -2,15 +2,10 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MockedProvider } from '@apollo/client/testing'
-import { GraphQLError } from 'graphql'
 import { wait } from '../../../../lib/test-helper'
 import { DeleteResourceModal } from './DeleteResourceModal'
 import { DeleteResourceDocument, UserAccessDocument } from '../../../../console-sdk/console-sdk'
-import {
-    SearchResultItemsDocument,
-    SearchResultRelatedCountDocument,
-    SearchResultRelatedItemsDocument,
-} from '../../../../search-sdk/search-sdk'
+import { SearchResultItemsDocument } from '../../../../search-sdk/search-sdk'
 
 describe('DeleteResourceModal', () => {
     it('should call the delete resource mutation with a successful response', async () => {
