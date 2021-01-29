@@ -4,6 +4,4 @@
 .build-harness-bootstrap
 build-harness
 build-harness-extensions
-backend/build/
 frontend/.eslintcache
-frontend/build/

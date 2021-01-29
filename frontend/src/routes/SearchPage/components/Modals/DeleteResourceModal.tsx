@@ -30,16 +30,14 @@ export const ClosedDeleteModalProps: IDeleteModalProps = {
 
 export const DeleteResourceModal = (props: any) => {
     const { open, close, resource, currentQuery, relatedResource } = props
-    const [deleteResourceMutation, deleteResourceResults] = useDeleteResourceMutation({
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
-    })
+    const [deleteResourceMutation, deleteResourceResults] = useDeleteResourceMutation({ client: consoleClient })
     let apiGroup = ''
     if (resource) {
         apiGroup = resource.apigroup ? `${resource.apigroup}/${resource.apiversion}` : resource.apiversion
     }
     const userAccessResponse = useUserAccessQuery({
         skip: !resource,
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+        client: consoleClient,
         variables: {
             resource: resource?.kind,
             action: 'delete',
@@ -173,7 +171,7 @@ export const DeleteResourceModal = (props: any) => {
                                             {
                                                 __typename: 'SearchResult',
                                                 items: res.data.searchResult[0].items.filter((item: any) => {
-                                                    return item._uid !== resource._uid
+                                                    return item._uid !== resource._uid && item.name !== resource.name
                                                 }),
                                             },
                                         ],
@@ -212,12 +210,7 @@ export const DeleteResourceModal = (props: any) => {
                 ]}
             >
                 {userAccessResponse.error ? (
-                    <AcmAlert
-                        data-testid={'user-access-error'}
-                        noClose={true}
-                        variant={'danger'}
-                        title={userAccessResponse.error}
-                    />
+                    <AcmAlert noClose={true} variant={'danger'} title={userAccessResponse.error} />
                 ) : null}
                 {!userAccessResponse.loading && !userAccessResponse?.data?.userAccess.allowed ? (
                     <AcmAlert
@@ -227,12 +220,7 @@ export const DeleteResourceModal = (props: any) => {
                     />
                 ) : null}
                 {deleteResourceResults.error ? (
-                    <AcmAlert
-                        data-testid={'delete-resource-error'}
-                        noClose={true}
-                        variant={'danger'}
-                        title={deleteResourceResults.error.message}
-                    />
+                    <AcmAlert noClose={true} variant={'danger'} title={deleteResourceResults.error.message} />
                 ) : null}
                 <div
                     style={{ paddingTop: '1rem' }}

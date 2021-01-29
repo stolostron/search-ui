@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { HttpError } from '@kubernetes/client-node'
 import * as pino from 'pino'
 
