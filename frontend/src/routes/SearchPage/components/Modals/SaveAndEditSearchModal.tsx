@@ -9,6 +9,7 @@ import {
     AcmTextArea,
     AcmAlert,
 } from '@open-cluster-management/ui-components'
+import { useTranslation } from 'react-i18next'
 import { SavedSearchesDocument, useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
 import { makeStyles } from '@material-ui/styles'
@@ -35,6 +36,7 @@ const useStyles = makeStyles({
 })
 
 export const SaveAndEditSearchModal = (props: any) => {
+    const { t } = useTranslation(['search'])
     const [state, dispatch] = useReducer(reducer, initState)
     const { searchName, searchDesc } = state
     const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
@@ -95,7 +97,7 @@ export const SaveAndEditSearchModal = (props: any) => {
             <AcmModal
                 variant={ModalVariant.small}
                 isOpen={props.editSearch !== undefined || props.saveSearch !== undefined}
-                title={'Save Search'}
+                title={t('search.modal.save.title')}
                 onClose={props.onClose}
                 actions={[
                     <AcmButton
@@ -104,25 +106,21 @@ export const SaveAndEditSearchModal = (props: any) => {
                         variant={ButtonVariant.primary}
                         onClick={SaveSearch}
                     >
-                        Save
+                        {t('search.modal.save.action.save')}
                     </AcmButton>,
                     <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
-                        Cancel
+                        {t('search.modal.save.action.cancel')}
                     </AcmButton>,
                 ]}
             >
-                {
-                    <p className={classes.prompt}>
-                        Name your search and provide a description so that you can access it in the future.
-                    </p>
-                }
+                {<p className={classes.prompt}>{t('search.modal.save.text')}</p>}
                 {props.saveSearch === '' && !props.editSearch && (
                     <AcmAlert
                         noClose
                         variant={'danger'}
                         isInline={true}
-                        title={'Error'}
-                        subtitle={'Enter search text'}
+                        title={t('search.modal.save.input.error.title')}
+                        subtitle={t('search.modal.save.input.error.desc')}
                     />
                 )}
                 {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
@@ -130,7 +128,7 @@ export const SaveAndEditSearchModal = (props: any) => {
                     <AcmTextInput
                         id="add-query-name"
                         name="searchName"
-                        label="Search name (50 character limit)"
+                        label={t('search.modal.save.input.name')}
                         value={searchName}
                         onChange={onChange}
                         maxLength={50}
@@ -138,7 +136,7 @@ export const SaveAndEditSearchModal = (props: any) => {
                     <AcmTextArea
                         id="add-query-desc"
                         name="searchDesc"
-                        label="Description (120 character limit)"
+                        label={t('search.modal.save.input.description')}
                         value={searchDesc}
                         onChange={onChange}
                         required

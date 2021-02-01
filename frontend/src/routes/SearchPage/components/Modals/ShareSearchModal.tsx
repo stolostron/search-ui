@@ -2,8 +2,10 @@ import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
 import { ModalVariant } from '@patternfly/react-core'
 import { AcmCodeSnippet, AcmModal } from '@open-cluster-management/ui-components'
+import { useTranslation } from 'react-i18next'
 
 export const ShareSearchModal = (props: any) => {
+    const { t } = useTranslation(['search'])
     function GetUrl() {
         let url = decodeURIComponent(window.location.origin + window.location.pathname)
         let search = props.shareSearch ? props.shareSearch.searchText : ''
@@ -13,7 +15,7 @@ export const ShareSearchModal = (props: any) => {
     return (
         <Fragment>
             <AcmModal
-                title={'Share search'}
+                title={t('search.modal.share.title')}
                 variant={ModalVariant.small}
                 isOpen={props.shareSearch !== undefined}
                 onClose={props.onClose}
@@ -23,8 +25,8 @@ export const ShareSearchModal = (props: any) => {
                 <AcmCodeSnippet
                     id="snippet"
                     command={GetUrl()}
-                    copyTooltipText="Copy to clipboard"
-                    copySuccessText="Copied!"
+                    copyTooltipText={t('search.modal.share.copy.button')}
+                    copySuccessText={t('search.modal.share.copied')}
                 />
             </AcmModal>
         </Fragment>

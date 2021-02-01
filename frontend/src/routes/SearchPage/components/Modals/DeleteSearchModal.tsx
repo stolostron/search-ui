@@ -2,10 +2,12 @@ import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import { AcmModal, AcmButton, AcmAlert } from '@open-cluster-management/ui-components'
+import { useTranslation } from 'react-i18next'
 import { SavedSearchesDocument, useDeleteSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
 
 export const DeleteSearchModal = (props: any) => {
+    const { t } = useTranslation(['search'])
     const [deleteSearchMutation, { error }] = useDeleteSearchMutation({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
@@ -38,14 +40,14 @@ export const DeleteSearchModal = (props: any) => {
             <AcmModal
                 variant={ModalVariant.medium}
                 isOpen={props.deleteSearch !== undefined}
-                title={'Delete search'}
+                title={t('search.modal.delete.search.title')}
                 onClose={props.onClose}
                 actions={[
                     <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
-                        Cancel
+                        {t('search.modal.delete.search.action.cancel')}
                     </AcmButton>,
                     <AcmButton key="confirm" variant={ButtonVariant.danger} onClick={() => deleteSearch()}>
-                        Delete
+                        {t('search.modal.delete.search.action.delete')}
                     </AcmButton>,
                 ]}
             >
@@ -57,7 +59,7 @@ export const DeleteSearchModal = (props: any) => {
                         title={error!.message}
                     />
                 )}
-                <p>This action is irreversible. Are you sure that you want to continue?</p>
+                <p>{t('search.modal.delete.search.text')}</p>
             </AcmModal>
         </Fragment>
     )

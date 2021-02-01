@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
+import { useTranslation } from 'react-i18next'
 import { searchClient } from '../../../search-sdk/search-client'
 import { useSavedSearchesQuery, useSearchResultCountQuery, UserSearch } from '../../../search-sdk/search-sdk'
 import { convertStringToQuery } from '../search-helper'
@@ -26,6 +27,7 @@ function SearchResultCount(
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>,
     setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
 ): any {
+    const { t } = useTranslation(['search'])
     const { data, error, loading } = useSearchResultCountQuery({
         variables: { input: input },
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
@@ -61,7 +63,7 @@ function SearchResultCount(
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={'Error querying saved search results'}
+                    title={t('search.saved.searches.error')}
                     subtitle={error ? error.message : ''}
                 />
             </PageSection>
@@ -88,7 +90,7 @@ function SearchResultCount(
                 {savedQueriesResult.length > 0 && (
                     <AcmExpandableWrapper
                         maxHeight={'16.5rem'}
-                        headerLabel={'Saved searches'}
+                        headerLabel={t('search.saved.searches.section.title')}
                         withCount={true}
                         expandable={true}
                     >
@@ -101,9 +103,18 @@ function SearchResultCount(
                                         title: query.name,
                                         description: query.description,
                                         actions: [
-                                            { text: 'Edit', handleAction: () => setEditSearch(query) },
-                                            { text: 'Share', handleAction: () => setShareSearch(query) },
-                                            { text: 'Delete', handleAction: () => setDeleteSearch(query) },
+                                            {
+                                                text: t('search.saved.searches.action.edit'),
+                                                handleAction: () => setEditSearch(query),
+                                            },
+                                            {
+                                                text: t('search.saved.searches.action.share'),
+                                                handleAction: () => setShareSearch(query),
+                                            },
+                                            {
+                                                text: t('search.saved.searches.action.delete'),
+                                                handleAction: () => setDeleteSearch(query),
+                                            },
                                         ],
                                     }}
                                     onCardClick={() => {
@@ -112,7 +123,7 @@ function SearchResultCount(
                                         setSelectedSearch(query.name)
                                     }}
                                     count={query.count}
-                                    countTitle="Results"
+                                    countTitle={t('search.saved.searches.card.results')}
                                     onKeyPress={(KeyboardEvent: React.KeyboardEvent) =>
                                         handleKeyPress(KeyboardEvent, query)
                                     }
@@ -123,7 +134,7 @@ function SearchResultCount(
                 )}
                 {suggestedQueriesResult.length > 0 && (
                     <AcmExpandableWrapper
-                        headerLabel={'Suggested search templates'}
+                        headerLabel={t('search.suggested.searches.seaction.title')}
                         withCount={false}
                         expandable={false}
                     >
@@ -135,14 +146,19 @@ function SearchResultCount(
                                         hasIcon: true,
                                         title: query.name,
                                         description: query.description,
-                                        actions: [{ text: 'Share', handleAction: () => setShareSearch(query) }],
+                                        actions: [
+                                            {
+                                                text: t('search.saved.searches.action.share'),
+                                                handleAction: () => setShareSearch(query),
+                                            },
+                                        ],
                                     }}
                                     onCardClick={() => {
                                         setCurrentQuery(query.searchText)
                                         updateBrowserUrl(query.searchText)
                                     }}
                                     count={query.count}
-                                    countTitle="Results"
+                                    countTitle={t('search.saved.searches.card.results')}
                                     onKeyPress={(KeyboardEvent: React.KeyboardEvent) =>
                                         handleKeyPress(KeyboardEvent, query)
                                     }

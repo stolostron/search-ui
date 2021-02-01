@@ -10,6 +10,7 @@ import {
 } from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
+import { useTranslation } from 'react-i18next'
 import YAMLPage from './YAMLPage'
 import LogsPage from './LogsPage'
 import { consoleClient } from '../../console-sdk/console-client'
@@ -55,6 +56,7 @@ function getResourceData() {
 }
 
 export default function DetailsPage() {
+    const { t } = useTranslation(['details'])
     const { cluster, kind, apiversion, namespace, name } = getResourceData()
     let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
@@ -80,7 +82,7 @@ export default function DetailsPage() {
         <AcmPage>
             <div className={classes.customBreadcrumb}>
                 <AcmButton variant={'link'} onClick={() => history.goBack()}>
-                    Search
+                    {t('details.breadcrumb.search')}
                 </AcmButton>
             </div>
             <AcmPageHeader

@@ -3,6 +3,7 @@ import React, { Fragment } from 'react'
 import { AcmButton, AcmLabels, AcmModal } from '@open-cluster-management/ui-components'
 import { makeStyles } from '@material-ui/styles'
 import { ButtonVariant } from '@patternfly/react-core'
+import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({
     root: {
@@ -41,62 +42,55 @@ const useStyles = makeStyles({
     },
 })
 export const SearchInfoModal = (props: any) => {
+    const { t } = useTranslation(['search'])
     const classes = useStyles()
     return (
         <Fragment>
             <AcmModal
                 className={classes.root}
-                title={'Search guide'}
+                title={t('search.modal.info.title')}
                 width={'50%'}
                 onClose={props.onClose}
                 isOpen={props.isOpen}
                 actions={[
                     <AcmButton key="close" variant={ButtonVariant.primary} onClick={props.onClose}>
-                        Close
+                        {t('search.modal.info.action.cancel')}
                     </AcmButton>,
                 ]}
             >
                 <div>
-                    <h2>Use keywords or property filters to search for resources</h2>
+                    <h2>{t('search.modal.info.subtitle')}</h2>
                 </div>
                 <hr />
                 <div>
-                    <p>To search for a keyword, type the word in the search box.</p>
+                    <p>{t('search.modal.info.keyword.section.title')}</p>
                     <div className={classes.exampleRow}>
                         <AcmLabels labels={['Type']} />
                         <p>OpenShift</p>
                     </div>
                     <div className={classes.exampleRow}>
                         <AcmLabels labels={['Show']} />
-                        <p>A list of resources containing the keyword "OpenShift" in any field.</p>
+                        <p>{t('search.modal.info.keyword.section.desc')}</p>
                     </div>
                 </div>
                 <hr />
                 <div>
-                    <p>
-                        To search for resources with a given property value, type or select the property name from the
-                        autocomplete list. Then type or select the value for the selected property filter.
-                    </p>
+                    <p>{t('search.modal.info.property.section.title')}</p>
                     <div className={classes.exampleRow}>
                         <AcmLabels labels={['Type']} />
                         <p>status: failed,pending</p>
                     </div>
                     <div className={classes.exampleRow}>
                         <AcmLabels labels={['Show']} />
-                        <p>Resources with "failed" or "pending" status.</p>
+                        <p>{t('search.modal.info.property.section.desc')}</p>
                     </div>
                 </div>
                 <hr />
                 <div>
-                    <p>Additional information:</p>
+                    <p>{t('search.modal.info.additional.info')}</p>
                     <ul>
-                        <li>
-                            You can include any combination of filters and keywords to make your search more specific.
-                        </li>
-                        <li>
-                            You can apply multiple values to the same property filter. First, type or select the filter
-                            name, then select the value. Both values combine into a single filter.
-                        </li>
+                        <li>{t('search.modal.info.additional.info.1')}</li>
+                        <li>{t('search.modal.info.additional.info.2')}</li>
                     </ul>
                 </div>
             </AcmModal>

@@ -1,10 +1,10 @@
 import searchDefinitions, {
-    getAge,
-    createDetailsLink,
-    createDashboardLink,
-    createExternalLink,
-    formatLabels,
-    getUrlSearchParam,
+    GetAge,
+    CreateDetailsLink,
+    CreateDashboardLink,
+    CreateExternalLink,
+    FormatLabels,
+    GetUrlSearchParam,
 } from './searchDefinitions'
 
 test('Correctly returns formatSearchbarSuggestions without T in timestamp', () => {
@@ -14,7 +14,7 @@ test('Correctly returns formatSearchbarSuggestions without T in timestamp', () =
         namespace: 'testNamespace',
         created: '2020-11-30T14:34:20Z',
     }
-    const result = getAge(item, 'created')
+    const result = GetAge(item, 'created')
     expect(result).toMatchSnapshot()
 })
 
@@ -25,7 +25,7 @@ test('Correctly returns formatSearchbarSuggestions with T in timestamp', () => {
         namespace: 'testNamespace',
         created: '2020-11-3014:34:20Z',
     }
-    const result = getAge(item, 'created')
+    const result = GetAge(item, 'created')
     expect(result).toMatchSnapshot()
 })
 
@@ -35,32 +35,32 @@ test('Correctly returns formatSearchbarSuggestions no timestamp', () => {
         name: 'testName',
         namespace: 'testNamespace',
     }
-    const result = getAge(item, 'created')
+    const result = GetAge(item, 'created')
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - Cluster', () => {
+test('Correctly returns CreateDetailsLink - Cluster', () => {
     const item = {
         name: 'testClusterName',
         namespace: 'testClusterNamespace',
         kind: 'cluster',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - ACM-Application', () => {
+test('Correctly returns CreateDetailsLink - ACM-Application', () => {
     const item = {
         name: 'testApplicationName',
         namespace: 'testApplicationNamespace',
         kind: 'application',
         apigroup: 'app.k8s.io',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - NON-Application', () => {
+test('Correctly returns CreateDetailsLink - NON-Application', () => {
     const item = {
         name: 'testApplicationName',
         namespace: 'testApplicationNamespace',
@@ -68,11 +68,11 @@ test('Correctly returns createDetailsLink - NON-Application', () => {
         cluster: 'testCluster',
         selfLink: '/self/link',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - HUB-Policy', () => {
+test('Correctly returns CreateDetailsLink - HUB-Policy', () => {
     const item = {
         name: 'testPolicyName',
         namespace: 'testPolicyNamespace',
@@ -80,11 +80,11 @@ test('Correctly returns createDetailsLink - HUB-Policy', () => {
         _hubClusterResource: true,
         apigroup: 'policy.open-cluster-management.io',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - Managed-Policy', () => {
+test('Correctly returns CreateDetailsLink - Managed-Policy', () => {
     const item = {
         name: 'testPolicyName',
         namespace: 'testPolicyNamespace',
@@ -92,11 +92,11 @@ test('Correctly returns createDetailsLink - Managed-Policy', () => {
         cluster: 'testCluster',
         selfLink: '/self/link',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDetailsLink - Default', () => {
+test('Correctly returns CreateDetailsLink - Default', () => {
     const item = {
         name: 'testPodName',
         namespace: 'testPodNamespace',
@@ -104,56 +104,56 @@ test('Correctly returns createDetailsLink - Default', () => {
         cluster: 'testCluster',
         selfLink: '/self/link',
     }
-    const result = createDetailsLink(item)
+    const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createDashboardLink', () => {
+test('Correctly returns CreateDashboardLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         dashboard: 'http://dashboard',
     }
-    const result = createDashboardLink(item)
+    const result = CreateDashboardLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns empty createDashboardLink', () => {
+test('Correctly returns empty CreateDashboardLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         dashboard: '',
     }
-    const result = createDashboardLink(item)
+    const result = CreateDashboardLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createExternalLink from consoleURL', () => {
+test('Correctly returns CreateExternalLink from consoleURL', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         consoleURL: 'http://consoleurl',
     }
-    const result = createExternalLink(item)
+    const result = CreateExternalLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns createExternalLink from clusterip', () => {
+test('Correctly returns CreateExternalLink from clusterip', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         clusterip: 'http://clusterip',
     }
-    const result = createExternalLink(item)
+    const result = CreateExternalLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns empty createExternalLink', () => {
+test('Correctly returns empty CreateExternalLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
     }
-    const result = createExternalLink(item)
+    const result = CreateExternalLink(item)
     expect(result).toMatchSnapshot()
 })
 
@@ -163,7 +163,7 @@ test('Correctly returns label components', () => {
         namespace: 'testNamespace',
         label: 'testlabel=label1; testlabel=label2',
     }
-    const result = formatLabels(item)
+    const result = FormatLabels(item)
     expect(result).toMatchSnapshot()
 })
 
@@ -172,7 +172,7 @@ test('Correctly returns empty labels', () => {
         name: 'testName',
         namespace: 'testNamespace',
     }
-    const result = formatLabels(item)
+    const result = FormatLabels(item)
     expect(result).toMatchSnapshot()
 })
 
@@ -207,7 +207,7 @@ test('Correctly returns url search params with all params & apigroup', () => {
         name: 'testName',
         namespace: 'testNamespace',
     }
-    const result = getUrlSearchParam(item)
+    const result = GetUrlSearchParam(item)
     expect(result).toMatchSnapshot()
 })
 
@@ -220,7 +220,7 @@ test('Correctly returns url search params with all params without apigroup', () 
         name: 'testName',
         namespace: 'testNamespace',
     }
-    const result = getUrlSearchParam(item)
+    const result = GetUrlSearchParam(item)
     expect(result).toMatchSnapshot()
 })
 
@@ -228,6 +228,6 @@ test('Correctly returns url search params with 0 params', () => {
     const item = {
         cluster: 'testCluster',
     }
-    const result = getUrlSearchParam(item)
+    const result = GetUrlSearchParam(item)
     expect(result).toMatchSnapshot()
 })

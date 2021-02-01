@@ -1,3 +1,10 @@
 {
-    "overview": "Overview"
+    "overview": "Overview",
+    "overview.data.error.title": "An unexpected error occurred. Try again.",
+    "overview.data.error.message": "The backend service is unavailable.",
+    "overview.summary.title": "Summary",
+    "overview.donut.compliance.description": "Overview of {{compliance}} status",
+    "overview.donut.pod.description": "Overview of {{pod}} count and status",
+    "overview.donut.status.description": "Overview of {{cluster}} status",
+    "overview.add.provider": "Add provider connection"
 }
