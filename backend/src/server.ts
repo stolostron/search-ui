@@ -95,15 +95,17 @@ export async function startServer(): Promise<FastifyInstance> {
         return res.code(200).send()
     })
 
+    function csrfProtection(req: FastifyRequest, res: FastifyReply, done: () => void) {
+        process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
+    }
+
     // Proxy to SEARCH-API
     await fastify.register(fastifyHttpProxy, {
         upstream: process.env.SEARCH_API_URL || 'https://search-search-api:4010',
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
-        },
+        preHandler: csrfProtection,
     })
 
     // Proxy to CONSOLE-API
@@ -112,9 +114,15 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
-        },
+        preHandler: csrfProtection,
+    })
+    // Proxy to CONSOLE-API (from /resources)
+    await fastify.register(fastifyHttpProxy, {
+        upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
+        prefix: '/resources/search/console-api/graphql',
+        rewritePrefix: '/hcmuiapi/graphql',
+        http2: false,
+        preHandler: csrfProtection,
     })
 
     // CONSOLE-HEADER
