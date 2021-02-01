@@ -77,8 +77,7 @@
             "ecmaVersion": 2018,
             "sourceType": "module",
             "project": [
-                "./tsconfig.json",
-                "./test/tsconfig.json"
+                "./tsconfig.eslint.json"
             ]
         },
         "extends": [
