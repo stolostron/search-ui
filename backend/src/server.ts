@@ -116,6 +116,16 @@ export async function startServer(): Promise<FastifyInstance> {
             process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
         },
     })
+    // Proxy to CONSOLE-API (from /resources)
+    await fastify.register(fastifyHttpProxy, {
+        upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
+        prefix: '/resources/search/console-api/graphql',
+        rewritePrefix: '/hcmuiapi/graphql',
+        http2: false,
+        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
+        },
+    })
 
     // CONSOLE-HEADER
     /* istanbul ignore next */
