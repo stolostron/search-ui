@@ -2,7 +2,7 @@ import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { V1Status, V1ObjectMeta } from '@kubernetes/client-node'
 
 const baseUrl = process.env.REACT_APP_BACKEND ?? ''
-export const apiProxyUrl = `/search/proxy`
+export const apiProxyUrl = `/search/tokenValidation`
 
 export const StatusApiVersion = 'v1'
 export type StatusApiVersionType = 'v1'
@@ -76,7 +76,7 @@ export class ResourceError extends Error {
     }
 }
 
-export function validateSession() {
+export function validateSessionToken() {
     // This is an empty get request to be used to validate the session and token and redirect to login if invalid
     const url = baseUrl + apiProxyUrl
     return axiosRequest({

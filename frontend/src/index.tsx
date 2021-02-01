@@ -5,13 +5,13 @@ import ReactDOM from 'react-dom'
 import { config } from 'dotenv'
 import App from './App'
 import './lib/acm-header'
-import { validateSession } from './lib/resource-request'
+import { validateSessionToken } from './lib/resource-request'
 
 // config loads .env file vars
 config()
 
 // Validate session tokens - redirect to login if unauthorized
-validateSession()
+validateSessionToken()
 
 ReactDOM.render(
     <React.StrictMode>
