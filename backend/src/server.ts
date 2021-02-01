@@ -125,7 +125,6 @@ export async function startServer(): Promise<FastifyInstance> {
         preHandler: csrfProtection,
     })
 
-    
     // CONSOLE-HEADER
     /* istanbul ignore next */
     if (process.env.NODE_ENV === 'development') {
