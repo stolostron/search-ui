@@ -162,6 +162,10 @@ export async function startServer(): Promise<FastifyInstance> {
         switch (request.url) {
             case '/ping':
                 break
+            case '/livenessProbe':
+                break
+            case '/readinessProbe':
+                break
             default:
                 {
                     const url = getUrlPath(request.url)
