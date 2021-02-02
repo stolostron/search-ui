@@ -81,7 +81,19 @@ export default function DetailsPage() {
     return (
         <AcmPage>
             <div className={classes.customBreadcrumb}>
-                <AcmButton variant={'link'} onClick={() => history.goBack()}>
+                <AcmButton
+                    variant={'link'}
+                    onClick={() => {
+                        const prevLocState = window.history?.state?.state
+                        if (prevLocState && prevLocState.from === '/search') {
+                            // If we came to resources page from search - return to search with previous search filters
+                            history.goBack()
+                        } else {
+                            // If we were redirected to search from elsewhere (ex: application page) - go to blank search page
+                            window.location.href = '/search'
+                        }
+                    }}
+                >
                     {t('details.breadcrumb.search')}
                 </AcmButton>
             </div>
