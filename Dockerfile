@@ -22,7 +22,7 @@ COPY --from=builder /opt/app-root/src/backend/build ./
 COPY --from=builder /opt/app-root/src/frontend/build ./public
 USER 1001
 
-EXPOSE 3000
+EXPOSE 3000 4000
 CMD ["node", "main.js"]
 
 ARG VCS_REF
