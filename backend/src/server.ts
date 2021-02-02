@@ -331,22 +331,22 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     await new Promise<void>((resolve, reject) => {
-        logger.info({ msg: 'Environment', environment: process.env })
-        logger.info(`Environment: ${JSON.stringify(process.env, undefined, 2)}`)
-        const port = process.env.PORT && Number(process.env.PORT)
-        fastify.listen(port, '::', (err: Error, address: string) => {
-            if (process.env.GENERATE) {
-                void fastify.close()
+        fastify.listen(
+            process.env.PORT ? Number(process.env.PORT) : undefined,
+            '::', // Defaults to IPv6 and falls back to IPv4
+            (err: Error, address: string) => {
+                if (process.env.GENERATE) {
+                    void fastify.close()
+                }
+                if (err) {
+                    logger.error(err)
+                    process.exit(1) // eslint-disable-line no-process-exit
+                } else {
+                    logger.info({ msg: 'server started', address })
+                    resolve()
+                }
             }
-            if (err) {
-                logger.error(err)
-                // eslint-disable-next-line no-process-exit
-                process.exit(1)
-            } else {
-                logger.info({ msg: 'server started', address })
-                resolve()
-            }
-        })
+        )
     })
 
     process.on('SIGTERM', () => {
@@ -356,8 +356,7 @@ export async function startServer(): Promise<FastifyInstance> {
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
-                // eslint-disable-next-line no-process-exit
-                process.exit(1)
+                process.exit(1) // eslint-disable-line no-process-exit
             }, 10 * 1000).unref()
         }
     })
