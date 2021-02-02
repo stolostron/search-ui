@@ -334,7 +334,7 @@ export async function startServer(): Promise<FastifyInstance> {
         logger.info({ msg: 'Environment', environment: process.env })
         logger.info(`Environment: ${JSON.stringify(process.env, undefined, 2)}`)
         const port = process.env.PORT && Number(process.env.PORT)
-        fastify.listen(port, '::1', (err: Error, address: string) => {
+        fastify.listen(port, '::', (err: Error, address: string) => {
             if (process.env.GENERATE) {
                 void fastify.close()
             }
