@@ -331,18 +331,23 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     await new Promise<void>((resolve, reject) => {
-        fastify.listen(process.env.PORT ? Number(process.env.PORT) : undefined, (err: Error, address: string) => {
-            if (process.env.GENERATE) {
-                void fastify.close()
+        fastify.listen(
+            process.env.PORT ? Number(process.env.PORT) : undefined,
+            '0.0.0.0',
+            (err: Error, address: string) => {
+                if (process.env.GENERATE) {
+                    void fastify.close()
+                }
+                if (err) {
+                    logger.error(err)
+                    // eslint-disable-next-line no-process-exit
+                    process.exit(1)
+                } else {
+                    logger.info({ msg: 'server started', address })
+                    resolve()
+                }
             }
-            if (err) {
-                logger.error(err)
-                process.exit(1) // eslint-disable-line no-process-exit
-            } else {
-                logger.info({ msg: 'server started', address })
-                resolve()
-            }
-        })
+        )
     })
 
     process.on('SIGTERM', () => {
