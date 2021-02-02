@@ -331,9 +331,9 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     await new Promise<void>((resolve, reject) => {
+        logger.info({msg: 'Environment', environment: process.env})
         fastify.listen(
             process.env.PORT ? Number(process.env.PORT) : undefined,
-            '0.0.0.0',
             (err: Error, address: string) => {
                 if (process.env.GENERATE) {
                     void fastify.close()
