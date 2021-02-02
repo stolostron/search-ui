@@ -47,6 +47,7 @@ const useStyles = makeStyles({
 
 // Adds AcmAlert to page if there's errors from the Apollo queries.
 function HandleErrors(schemaError: ApolloError | undefined, completeError: ApolloError | undefined) {
+    const { t } = useTranslation(['search'])
     if (schemaError || completeError) {
         return (
             <div style={{ marginBottom: '1rem' }}>
@@ -54,8 +55,8 @@ function HandleErrors(schemaError: ApolloError | undefined, completeError: Apoll
                     noClose
                     variant={'danger'}
                     isInline
-                    title="An unexpected error occurred."
-                    subtitle="The search service is unavailable."
+                    title={t('search.filter.errors.title')}
+                    subtitle={t('search.filter.errors.description')}
                 />
             </div>
         )
@@ -70,6 +71,7 @@ function RenderSearchBar(props: {
     setQueryErrors: React.Dispatch<React.SetStateAction<boolean>>
 }) {
     const { searchQuery, setCurrentQuery, queryErrors, setQueryErrors } = props
+    const { t } = useTranslation(['search'])
     const [saveSearch, setSaveSearch] = useState<string>()
     const [open, toggleOpen] = useState<boolean>(false)
     const toggle = () => toggleOpen(!open)
@@ -142,7 +144,7 @@ function RenderSearchBar(props: {
                         onClick={() => setSaveSearch(searchQuery)}
                         isDisabled={searchQuery === ''}
                     >
-                        {'Save search'}
+                        {t('searchbar.button.save.search')}
                     </AcmButton>
                 </div>
             </PageSection>
@@ -156,7 +158,7 @@ function RenderDropDownAndNewTab(props: {
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
 }) {
     const classes = useStyles()
-
+    const { t } = useTranslation(['search'])
     const { data } = useSavedSearchesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
@@ -203,7 +205,7 @@ function RenderDropDownAndNewTab(props: {
         <div className={classes.actionGroup}>
             <AcmActionGroup>
                 <SavedSearchDropdown selectedSearch={props.selectedSearch} />
-                <AcmLaunchLink links={[{ id: 'search', text: 'Open new search tab', href: '/search' }]} />
+                <AcmLaunchLink links={[{ id: 'search', text: t('search.new.tab'), href: '/search' }]} />
             </AcmActionGroup>
         </div>
     )

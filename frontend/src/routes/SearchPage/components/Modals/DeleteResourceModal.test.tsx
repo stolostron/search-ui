@@ -127,7 +127,7 @@ describe('DeleteResourceModal', () => {
         await wait()
 
         // find the button and simulate a click
-        const submitButton = screen.getByText('Delete')
+        const submitButton = screen.getByText('search.modal.delete.resource.action.delete')
         expect(submitButton).toBeTruthy()
         userEvent.click(submitButton)
 

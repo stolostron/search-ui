@@ -4,6 +4,7 @@ import { AcmAlert, AcmButton, AcmLoadingPage } from '@open-cluster-management/ui
 import { ApolloError } from '@apollo/client'
 import { makeStyles } from '@material-ui/styles'
 import jsYaml from 'js-yaml'
+import { useTranslation } from 'react-i18next'
 import { Query, useUserAccessQuery, useUpdateResourceLazyQuery } from '../../console-sdk/console-sdk'
 import { consoleClient } from '../../console-sdk/console-client'
 import './YAMLEditor.css'
@@ -75,6 +76,7 @@ export default function YAMLPage(props: {
     apiversion: string
 }) {
     const { resource, loading, error, name, namespace, cluster, kind, apiversion } = props
+    const { t } = useTranslation(['details'])
     const [editMode, setEditMode] = useState<boolean>(false)
     const [userCanEdit, setUserCanEdit] = useState<boolean | undefined>(undefined)
     const [editedResourceYaml, setEditedResourceYaml] = useState<string>('')
@@ -85,7 +87,7 @@ export default function YAMLPage(props: {
         }
     }, [resource?.getResource])
 
-    const [updateResource, { error: saveSearchError }] = useUpdateResourceLazyQuery({
+    const [updateResource, { error: updateResourceError }] = useUpdateResourceLazyQuery({
         client: consoleClient,
         onCompleted: (res) => {
             setEditMode(false)
@@ -115,7 +117,7 @@ export default function YAMLPage(props: {
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={`Error querying for resource: ${name}`}
+                    title={`${t('yaml.getresource.error')} ${name}`}
                     subtitle={error.message}
                 />
             </PageSection>
@@ -128,31 +130,35 @@ export default function YAMLPage(props: {
             </PageSection>
         )
     }
-    let tooltipMessage = 'Enable resource editing'
+    let tooltipMessage = t('yaml.tooltip.enable')
     if (!userCanEdit) {
-        tooltipMessage = 'You are not allowed to edit this resource'
+        tooltipMessage = t('yaml.tooltip.unauthorized')
     } else if (editMode) {
-        tooltipMessage = 'Cancel Edits'
+        tooltipMessage = t('yaml.tooltip.cancel')
     }
     return (
         <PageSection>
-            {saveSearchError && (
+            {updateResourceError && (
                 <AcmAlert
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={`Error occurred while updating resource: ${name}`}
-                    subtitle={saveSearchError.message}
+                    title={`${t('yaml.update.resource.error')} ${name}`}
+                    subtitle={updateResourceError.message}
                 />
             )}
             <div className={classes.headerContainer}>
+                {/* No translation - this is a kube resource */}
                 <p className={classes.textTitle}>{'Cluster:'}</p>
                 <p className={classes.textContent}>{cluster}</p>
                 <div className={classes.spacer} />
+                {/* No translation - this is a kube resource */}
                 <p className={classes.textTitle}>{'Namespace:'}</p>
                 <p className={classes.textContent}>{namespace}</p>
                 <div className={classes.editButtonContainer}>
-                    <p className={classes.editButtonLabel}>{editMode ? 'Editing mode' : 'Read only mode'}</p>
+                    <p className={classes.editButtonLabel}>
+                        {editMode ? t('yaml.editor.mode.editing') : t('yaml.editor.mode.readonly')}
+                    </p>
                     <AcmButton
                         variant={'primary'}
                         isDisabled={!userCanEdit}
@@ -165,7 +171,7 @@ export default function YAMLPage(props: {
                         }}
                         tooltip={tooltipMessage}
                     >
-                        {editMode ? 'Cancel' : 'Edit'}
+                        {editMode ? t('yaml.editor.cancel') : t('yaml.editor.edit')}
                     </AcmButton>
                     {editMode && (
                         <AcmButton
@@ -183,7 +189,7 @@ export default function YAMLPage(props: {
                                 })
                             }}
                         >
-                            {'Save'}
+                            {t('yaml.editor.save')}
                         </AcmButton>
                     )}
                 </div>

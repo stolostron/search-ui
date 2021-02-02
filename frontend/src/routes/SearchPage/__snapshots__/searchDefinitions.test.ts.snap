@@ -1,5 +1,90 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Correctly returns CreateDashboardLink 1`] = `
+<a
+  href="http://dashboard"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  search.results.table.launch.health
+</a>
+`;
+
+exports[`Correctly returns CreateDetailsLink - ACM-Application 1`] = `
+<a
+  href="/multicloud/applications/testApplicationNamespace/testApplicationName"
+>
+  testApplicationName
+</a>
+`;
+
+exports[`Correctly returns CreateDetailsLink - Cluster 1`] = `
+<a
+  href="/multicloud/clusters/testClusterName/overview"
+>
+  testClusterName
+</a>
+`;
+
+exports[`Correctly returns CreateDetailsLink - Default 1`] = `
+<Link
+  to={
+    Object {
+      "pathname": "/resources",
+      "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestPodNamespace%26name%3DtestPodName",
+    }
+  }
+>
+  testPodName
+</Link>
+`;
+
+exports[`Correctly returns CreateDetailsLink - HUB-Policy 1`] = `
+<a
+  href="/multicloud/policies/all/testPolicyName"
+>
+  testPolicyName
+</a>
+`;
+
+exports[`Correctly returns CreateDetailsLink - Managed-Policy 1`] = `
+<Link
+  to={
+    Object {
+      "pathname": "/resources",
+      "search": "?cluster%3DtestCluster%26kind%3Dpolicy%26namespace%3DtestPolicyNamespace%26name%3DtestPolicyName",
+    }
+  }
+>
+  testPolicyName
+</Link>
+`;
+
+exports[`Correctly returns CreateDetailsLink - NON-Application 1`] = `
+<Link
+  to={
+    Object {
+      "pathname": "/resources",
+      "search": "?cluster%3DtestCluster%26kind%3Dapplication%26namespace%3DtestApplicationNamespace%26name%3DtestApplicationName",
+    }
+  }
+>
+  testApplicationName
+</Link>
+`;
+
+exports[`Correctly returns CreateExternalLink from clusterip 1`] = `"http://clusterip"`;
+
+exports[`Correctly returns CreateExternalLink from consoleURL 1`] = `
+<a
+  href="http://consoleurl"
+  rel="noopener noreferrer"
+  target="_blank"
+>
+  search.results.table.launch
+</a>
+`;
+
 exports[`Correctly returns all resource definitions: SearchDefinitions-application 1`] = `
 Array [
   Object {
@@ -31,7 +116,7 @@ Array [
       rel="noopener noreferrer"
       target="_blank"
     >
-      Launch health view
+      search.results.table.launch.health
     </a>,
     "header": "Dashboard",
     "sort": "dashboard",
@@ -1601,94 +1686,9 @@ Array [
 ]
 `;
 
-exports[`Correctly returns createDashboardLink 1`] = `
-<a
-  href="http://dashboard"
-  rel="noopener noreferrer"
-  target="_blank"
->
-  Launch health view
-</a>
-`;
+exports[`Correctly returns empty CreateDashboardLink 1`] = `"-"`;
 
-exports[`Correctly returns createDetailsLink - ACM-Application 1`] = `
-<a
-  href="/multicloud/applications/testApplicationNamespace/testApplicationName"
->
-  testApplicationName
-</a>
-`;
-
-exports[`Correctly returns createDetailsLink - Cluster 1`] = `
-<a
-  href="/multicloud/clusters/testClusterName/overview"
->
-  testClusterName
-</a>
-`;
-
-exports[`Correctly returns createDetailsLink - Default 1`] = `
-<Link
-  to={
-    Object {
-      "pathname": "/resources",
-      "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestPodNamespace%26name%3DtestPodName",
-    }
-  }
->
-  testPodName
-</Link>
-`;
-
-exports[`Correctly returns createDetailsLink - HUB-Policy 1`] = `
-<a
-  href="/multicloud/policies/all/testPolicyName"
->
-  testPolicyName
-</a>
-`;
-
-exports[`Correctly returns createDetailsLink - Managed-Policy 1`] = `
-<Link
-  to={
-    Object {
-      "pathname": "/resources",
-      "search": "?cluster%3DtestCluster%26kind%3Dpolicy%26namespace%3DtestPolicyNamespace%26name%3DtestPolicyName",
-    }
-  }
->
-  testPolicyName
-</Link>
-`;
-
-exports[`Correctly returns createDetailsLink - NON-Application 1`] = `
-<Link
-  to={
-    Object {
-      "pathname": "/resources",
-      "search": "?cluster%3DtestCluster%26kind%3Dapplication%26namespace%3DtestApplicationNamespace%26name%3DtestApplicationName",
-    }
-  }
->
-  testApplicationName
-</Link>
-`;
-
-exports[`Correctly returns createExternalLink from clusterip 1`] = `"http://clusterip"`;
-
-exports[`Correctly returns createExternalLink from consoleURL 1`] = `
-<a
-  href="http://consoleurl"
-  rel="noopener noreferrer"
-  target="_blank"
->
-  Launch
-</a>
-`;
-
-exports[`Correctly returns empty createDashboardLink 1`] = `"-"`;
-
-exports[`Correctly returns empty createExternalLink 1`] = `"-"`;
+exports[`Correctly returns empty CreateExternalLink 1`] = `"-"`;
 
 exports[`Correctly returns empty labels 1`] = `"-"`;
 

@@ -17,6 +17,7 @@ import {
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
+import { useTranslation } from 'react-i18next'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
@@ -127,6 +128,7 @@ const searchInput = [
 ]
 
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
+    const { t } = useTranslation(['overview'])
     const { data, loading, error } = useGetResourceQuery({
         client: consoleClient,
         variables: {
@@ -173,7 +175,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
                     icon={<PlusIcon />}
                     iconPosition="left"
                 >
-                    Add provider connection
+                    {t('overview.add.provider')}
                 </AcmButton>
                 <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]} />
             </AcmActionGroup>
@@ -183,6 +185,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 }
 
 export default function OverviewPage() {
+    const { t } = useTranslation(['overview'])
     const { data, loading, error, refetch } = useGetOverviewQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
@@ -294,7 +297,7 @@ export default function OverviewPage() {
         return (
             <AcmPage>
                 <AcmPageHeader
-                    title="Overview"
+                    title={t('overview')}
                     actions={<PageActions timestamp={timestamp} reloading={loading} refetch={useGetOverviewQuery} />}
                 />
                 <PageSection>
@@ -302,8 +305,8 @@ export default function OverviewPage() {
                         noClose
                         isInline
                         variant={'danger'}
-                        title="An unexpected error occurred. Try again."
-                        subtitle="The backend service is unavailable."
+                        title={t('overview.data.error.title')}
+                        subtitle={t('overview.data.error.message')}
                     />
                 </PageSection>
             </AcmPage>
@@ -313,7 +316,7 @@ export default function OverviewPage() {
     return (
         <AcmPage>
             <AcmPageHeader
-                title="Overview"
+                title={t('overview')}
                 actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetch} />}
             />
 
@@ -327,9 +330,9 @@ export default function OverviewPage() {
 
             <PageSection>
                 {loading || searchLoading ? (
-                    <AcmSummaryList key="loading" loading title="Summary" list={summary} />
+                    <AcmSummaryList key="loading" loading title={t('overview.summary.title')} list={summary} />
                 ) : (
-                    <AcmSummaryList title="Summary" list={summary} />
+                    <AcmSummaryList title={t('overview.summary.title')} list={summary} />
                 )}
             </PageSection>
 
@@ -340,21 +343,23 @@ export default function OverviewPage() {
                             loading
                             key="chart-loading-1"
                             title="Cluster compliance"
-                            description="Overview of policy compliance status"
+                            description={t('overview.donut.compliance.description', {
+                                compliance: 'policy compliance',
+                            })}
                             data={[]}
                         />
                         <AcmDonutChart
                             loading
                             key="chart-loading-2"
                             title="Pods"
-                            description="Overview of pod count and status"
+                            description={t('overview.donut.pod.description', { pod: 'pod' })}
                             data={[]}
                         />
                         <AcmDonutChart
                             loading
                             key="chart-loading-3"
                             title="Cluster status"
-                            description="Overview of cluster status"
+                            description={t('overview.donut.status.description', { cluster: 'cluster' })}
                             data={[]}
                         />
                     </AcmChartGroup>
@@ -362,13 +367,19 @@ export default function OverviewPage() {
                     <AcmChartGroup>
                         <AcmDonutChart
                             title="Cluster compliance"
-                            description="Overview of policy compliance status"
+                            description={t('overview.donut.compliance.description', {
+                                compliance: 'policy compliance',
+                            })}
                             data={complianceData}
                         />
-                        <AcmDonutChart title="Pods" description="Overview of pod count and status" data={podData} />
+                        <AcmDonutChart
+                            title="Pods"
+                            description={t('overview.donut.pod.description', { pod: 'pod' })}
+                            data={podData}
+                        />
                         <AcmDonutChart
                             title="Cluster status"
-                            description="Overview of cluster status"
+                            description={t('overview.donut.status.description', { cluster: 'cluster' })}
                             data={clusterData}
                         />
                     </AcmChartGroup>

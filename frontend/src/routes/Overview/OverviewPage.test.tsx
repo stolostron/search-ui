@@ -52,7 +52,7 @@ it('should render overview page in error state', async () => {
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    await waitFor(() => expect(screen.queryByText('An unexpected error occurred. Try again.')).toBeTruthy())
+    await waitFor(() => expect(screen.queryByText('overview.data.error.title')).toBeTruthy())
 })
 
 it('should render overview page with expected data', async () => {

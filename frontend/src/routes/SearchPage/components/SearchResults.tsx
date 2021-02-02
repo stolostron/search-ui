@@ -10,6 +10,7 @@ import {
     AcmExpandableWrapper,
     AcmLoadingPage,
 } from '@open-cluster-management/ui-components'
+import { useTranslation } from 'react-i18next'
 import { searchClient } from '../../../search-sdk/search-client'
 import {
     useSearchResultItemsQuery,
@@ -30,6 +31,7 @@ function RenderRelatedTables(
     selectedKinds: string[],
     setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
 ) {
+    const { t } = useTranslation(['search'])
     const queryFilters = convertStringToQuery(currentQuery)
     const { data, loading, error } = useSearchResultRelatedItemsQuery({
         skip: selectedKinds.length === 0 || queryFilters.keywords.length > 0,
@@ -56,7 +58,7 @@ function RenderRelatedTables(
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={'Error querying related resources'}
+                    title={t('search.results.related.resources.error')}
                     subtitle={error ? error.message : ''}
                 />
             </PageSection>
@@ -87,7 +89,7 @@ function RenderRelatedTables(
                                     ? [
                                           {
                                               id: 'delete',
-                                              title: `Delete ${kind}`,
+                                              title: t('search.results.delete.resource', { resourceKind: kind }),
                                               click: (item: any) => {
                                                   setDeleteResource({
                                                       open: true,
@@ -116,6 +118,7 @@ function RenderRelatedTiles(
     selectedKinds: string[],
     setSelected: React.Dispatch<React.SetStateAction<string[]>>
 ) {
+    const { t } = useTranslation(['search'])
     const queryFilters = convertStringToQuery(currentQuery)
     const { data, error, loading } = useSearchResultRelatedCountQuery({
         skip: queryFilters.keywords.length > 0,
@@ -142,7 +145,7 @@ function RenderRelatedTiles(
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={'Error querying related search results'}
+                    title={t('search.results.related.error')}
                     subtitle={error ? error.message : ''}
                 />
             </PageSection>
@@ -181,6 +184,7 @@ function RenderSearchTables(
     setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>,
     selectedRelatedKinds: string[]
 ) {
+    const { t } = useTranslation(['search'])
     const { data, error, loading } = useSearchResultItemsQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
@@ -201,7 +205,7 @@ function RenderSearchTables(
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={'Error querying search results'}
+                    title={t('search.results.error')}
                     subtitle={error ? error.message : ''}
                 />
             </PageSection>
@@ -213,12 +217,7 @@ function RenderSearchTables(
     if (searchResultItems.length === 0) {
         return (
             <PageSection>
-                <AcmAlert
-                    noClose={true}
-                    variant={'info'}
-                    isInline={true}
-                    title={'No results found for the current search criteria.'}
-                />
+                <AcmAlert noClose={true} variant={'info'} isInline={true} title={t('search.results.no.results')} />
             </PageSection>
         )
     }
@@ -248,7 +247,7 @@ function RenderSearchTables(
                                 ? [
                                       {
                                           id: 'delete',
-                                          title: `Delete ${kind}`,
+                                          title: t('search.results.delete.resource', { resourceKind: kind }),
                                           click: (item: any) => {
                                               setDeleteResource({
                                                   open: true,
