@@ -298,7 +298,7 @@ export default function OverviewPage() {
             <AcmPage>
                 <AcmPageHeader
                     title={t('overview')}
-                    actions={<PageActions timestamp={timestamp} reloading={loading} refetch={useGetOverviewQuery} />}
+                    actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetch} />}
                 />
                 <PageSection>
                     <AcmAlert
