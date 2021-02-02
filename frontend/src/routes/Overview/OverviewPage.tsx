@@ -230,25 +230,64 @@ export default function OverviewPage() {
         loading || searchLoading
             ? []
             : [
-                  { key: 'Running', value: searchResult[2]?.count || 0, isPrimary: true },
-                  { key: 'Pending', value: searchResult[3]?.count || 0 },
-                  { key: 'Failed', value: searchResult[4]?.count || 0, isDanger: true },
+                  {
+                      key: 'Running',
+                      value: searchResult[2]?.count || 0,
+                      isPrimary: true,
+                      link: '/search?filters={"textsearch":"kind%3Apod%20status%3ARunning%2CCompleted"}',
+                  },
+                  {
+                      key: 'Pending',
+                      value: searchResult[3]?.count || 0,
+                      link:
+                          '/search?filters={"textsearch":"kind%3Apod%20status%3AContainerCreating%2CPending%2CTerminating%2CWaiting"}',
+                  },
+                  {
+                      key: 'Failed',
+                      value: searchResult[4]?.count || 0,
+                      isDanger: true,
+                      link:
+                          '/search?filters={"textsearch":"kind%3Apod%20status%3ACrashLoopBackOff%2CFailed%2CImagePullBackOff%2CRunContainerError%2CTerminated%2CUnknown%2COOMKilled"}',
+                  },
               ]
 
     const complianceData =
         loading || searchLoading
             ? []
             : [
-                  { key: 'Compliant', value: searchResult[5]?.count || 0, isPrimary: true },
-                  { key: 'Non-compliant', value: searchResult[6]?.count || 0, isDanger: true },
+                  {
+                      key: 'Compliant',
+                      value: searchResult[5]?.count || 0,
+                      isPrimary: true,
+                      link:
+                          '/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:Compliant"}',
+                  },
+                  {
+                      key: 'Non-compliant',
+                      value: searchResult[6]?.count || 0,
+                      isDanger: true,
+                      link:
+                          '/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:NonCompliant"}',
+                  },
               ]
 
     const clusterData =
         loading || searchLoading
             ? []
             : [
-                  { key: 'Ready', value: ready, isPrimary: true },
-                  { key: 'Offline', value: offline, isDanger: true },
+                  {
+                      key: 'Ready',
+                      value: ready,
+                      isPrimary: true,
+                      link: '/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3ATrue"}',
+                  },
+                  {
+                      key: 'Offline',
+                      value: offline,
+                      isDanger: true,
+                      link:
+                          '/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3A!True"}',
+                  },
               ]
 
     if (error || searchError) {
