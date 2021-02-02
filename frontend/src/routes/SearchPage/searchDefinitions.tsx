@@ -1338,6 +1338,9 @@ export function CreateDetailsLink(item: any) {
                     to={{
                         pathname: '/resources',
                         search: GetUrlSearchParam(item),
+                        state: {
+                            from: '/search',
+                        },
                     }}
                 >
                     {item.name}
@@ -1354,6 +1357,9 @@ export function CreateDetailsLink(item: any) {
                     to={{
                         pathname: '/resources',
                         search: GetUrlSearchParam(item),
+                        state: {
+                            from: '/search',
+                        },
                     }}
                 >
                     {item.name}
@@ -1365,6 +1371,9 @@ export function CreateDetailsLink(item: any) {
                     to={{
                         pathname: '/resources',
                         search: GetUrlSearchParam(item),
+                        state: {
+                            from: '/search',
+                        },
                     }}
                 >
                     {item.name}
