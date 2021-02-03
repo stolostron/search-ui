@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import {
     AcmAlert,
     AcmChartGroup,
@@ -216,13 +216,24 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 export default function OverviewPage() {
     console.log('(re)rendering OverviewPage')
     const { t } = useTranslation(['overview'])
+    const [clusters, setClusters] = useState<any[]>([])
     const [selectedCloud, setSelectedCloud] = useState<string>('')
     const [selectedClusterNames, setSelectedClusterNames] = useState<string[]>([])
+    const [summaryData, setSummaryData] = useState<any>({
+        kubernetesTypes: new Set(),
+        regions: new Set(),
+        ready: 0,
+        offline: 0,
+        providers: [],
+    })
 
     const { data, loading, error, refetch } = useGetOverviewQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
     const timestamp = data?.overview?.timestamp as string
+    if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
+        setClusters(data?.overview?.clusters || [])
+    }
 
     const {
         data: searchData,
@@ -238,20 +249,26 @@ export default function OverviewPage() {
     const refetchData = () => {
         console.log('refetchData()')
         refetch()
-        searchRefetch()
+        searchRefetch({ input: searchQueries(selectedCloud, selectedClusterNames) })
     }
 
-    const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
-        data?.overview?.clusters || [],
-        selectedCloud,
-        setSelectedCloud,
-        refetchData
-    )
+    useEffect(() => {
+        console.log('>> inside UseEffect')
 
-    if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
-        setSelectedClusterNames(Array.from(clusterNames))
-    }
+        const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
+            data?.overview?.clusters || [],
+            selectedCloud,
+            setSelectedCloud,
+            refetchData
+        )
+        setSummaryData({ kubernetesTypes, regions, ready, offline, providers })
 
+        if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
+            setSelectedClusterNames(Array.from(clusterNames))
+        }
+    }, [clusters, selectedCloud])
+
+    const { kubernetesTypes, regions, ready, offline, providers } = summaryData
     const summary =
         loading || searchLoading
             ? []
@@ -268,8 +285,8 @@ export default function OverviewPage() {
                       count: data?.overview?.clusters?.length || 0,
                       href: 'search?filters={"textsearch":"kind%3Acluster"}',
                   },
-                  { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes.size },
-                  { isPrimary: false, description: 'Region', count: regions.size },
+                  { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
+                  { isPrimary: false, description: 'Region', count: regions?.size },
                   {
                       isPrimary: false,
                       description: 'Nodes',
