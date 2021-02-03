@@ -24,7 +24,6 @@ import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
 
-// TODO: Need to verify correct spelling for all these labels.
 export function mapProviderFromLabel(provider: string): Provider {
     switch (provider) {
         case 'Amazon':
