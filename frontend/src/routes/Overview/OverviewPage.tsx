@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useState } from 'react'
 import {
     AcmAlert,
     AcmChartGroup,
@@ -45,7 +45,14 @@ export function mapProviderFromLabel(provider: string): Provider {
     }
 }
 
-function getClusterSummary(clusters: any) {
+function getClusterSummary(
+    clusters: any,
+    selectedCloud: string,
+    setSelectedCloud: Dispatch<SetStateAction<string>>,
+    refetch: () => void
+) {
+    console.log('getClusterSummary()', selectedCloud)
+
     const clusterSummary = clusters.reduce(
         (prev: any, curr: any, index: number) => {
             // Data for Providers section.
@@ -58,73 +65,95 @@ function getClusterSummary(clusters: any) {
                     provider: mapProviderFromLabel(cloud),
                     clusterCount: 1,
                     onClick: () => {
-                        console.log(`Execute action for provider: ${cloud}`)
+                        setSelectedCloud(cloud)
+                        refetch()
                     },
-                }) // TODO: Implement this action.
+                })
             }
 
-            // Data for Summary section.
-            prev.kubernetesTypes.add(curr.metadata.labels.vendor)
-            prev.regions.add(curr.metadata.labels.region)
+            // Collect stats if cluster matches selected cloud filter. Defaults to all.
+            if (selectedCloud === '' || selectedCloud === cloud) {
+                // Data for Summary section.
+                prev.clusterNames.add(curr.metadata.name)
+                prev.kubernetesTypes.add(curr.metadata.labels.vendor)
+                prev.regions.add(curr.metadata.labels.region)
 
-            // Data for Cluster status pie chart.
-            if (curr.status === 'ok') {
-                prev.ready = prev.ready + 1
-            } else {
-                prev.offline = prev.offline + 1
+                // Data for Cluster status pie chart.
+                if (curr.status === 'ok') {
+                    prev.ready = prev.ready + 1
+                } else {
+                    prev.offline = prev.offline + 1
+                }
             }
             return prev
         },
-        { kubernetesTypes: new Set(), regions: new Set(), ready: 0, offline: 0, providerCounts: {}, providers: [] }
+        {
+            kubernetesTypes: new Set(),
+            regions: new Set(),
+            ready: 0,
+            offline: 0,
+            providerCounts: {},
+            providers: [],
+            clusterNames: new Set(),
+        }
     )
 
     return clusterSummary
 }
 
-const searchInput = [
-    { keywords: [], filters: [{ property: 'kind', values: ['node'] }] },
-    { keywords: [], filters: [{ property: 'kind', values: ['pod'] }] },
-    {
-        keywords: [],
-        filters: [
-            { property: 'kind', values: ['pod'] },
-            { property: 'status', values: ['Running', 'Completed'] },
-        ],
-    },
-    {
-        keywords: [],
-        filters: [
-            { property: 'kind', values: ['pod'] },
-            { property: 'status', values: ['Pending', 'ContainerCreating', 'Waiting', 'Terminating'] },
-        ],
-    },
-    {
-        keywords: [],
-        filters: [
-            { property: 'kind', values: ['pod'] },
-            {
-                property: 'status',
-                values: ['Failed', 'CrashLoopBackOff', 'ImagePullBackOff', 'Terminated', 'OOMKilled', 'Unknown'],
-            },
-        ],
-    },
-    {
-        keywords: [],
-        filters: [
-            { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
-            { property: 'kind', values: ['policy'] },
-            { property: 'compliant', values: ['Compliant'] },
-        ],
-    },
-    {
-        keywords: [],
-        filters: [
-            { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
-            { property: 'kind', values: ['policy'] },
-            { property: 'compliant', values: ['NonCompliant'] },
-        ],
-    },
-]
+const searchQueries = (selectedCloud: string, clusterFilter: Array<string>): Array<any> => {
+    const baseSearchQueries = [
+        { keywords: [], filters: [{ property: 'kind', values: ['node'] }] },
+        { keywords: [], filters: [{ property: 'kind', values: ['pod'] }] },
+        {
+            keywords: [],
+            filters: [
+                { property: 'kind', values: ['pod'] },
+                { property: 'status', values: ['Running', 'Completed'] },
+            ],
+        },
+        {
+            keywords: [],
+            filters: [
+                { property: 'kind', values: ['pod'] },
+                { property: 'status', values: ['Pending', 'ContainerCreating', 'Waiting', 'Terminating'] },
+            ],
+        },
+        {
+            keywords: [],
+            filters: [
+                { property: 'kind', values: ['pod'] },
+                {
+                    property: 'status',
+                    values: ['Failed', 'CrashLoopBackOff', 'ImagePullBackOff', 'Terminated', 'OOMKilled', 'Unknown'],
+                },
+            ],
+        },
+        {
+            keywords: [],
+            filters: [
+                { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
+                { property: 'kind', values: ['policy'] },
+                { property: 'compliant', values: ['Compliant'] },
+            ],
+        },
+        {
+            keywords: [],
+            filters: [
+                { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
+                { property: 'kind', values: ['policy'] },
+                { property: 'compliant', values: ['NonCompliant'] },
+            ],
+        },
+    ]
+
+    if (selectedCloud !== '' && clusterFilter?.length > 0) {
+        return baseSearchQueries.map((query) => {
+            query.filters.push({ property: 'cluster', values: clusterFilter })
+        })
+    }
+    return baseSearchQueries
+}
 
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
     const { t } = useTranslation(['overview'])
@@ -185,16 +214,38 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 
 export default function OverviewPage() {
     const { t } = useTranslation(['overview'])
+    const [selectedCloud, setSelectedCloud] = useState<string>('')
+    const [selectedClusterNames, setSelectedClusterNames] = useState<string[]>([])
+
     const { data, loading, error, refetch } = useGetOverviewQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
     const timestamp = data?.overview?.timestamp as string
-    const { data: searchData, loading: searchLoading, error: searchError } = useSearchResultCountQuery({
+
+    const {
+        data: searchData,
+        loading: searchLoading,
+        error: searchError,
+        refetch: searchRefetch,
+    } = useSearchResultCountQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
-        variables: { input: searchInput },
+        variables: { input: searchQueries(selectedCloud, selectedClusterNames) },
     })
     const searchResult = searchData?.searchResult || []
-    const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(data?.overview?.clusters || [])
+
+    const refetchData = () => {
+        console.log('refetchData()')
+        refetch()
+        searchRefetch()
+    }
+
+    console.log('(re)rendering...')
+    const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(
+        data?.overview?.clusters || [],
+        selectedCloud,
+        setSelectedCloud,
+        refetchData
+    )
 
     const summary =
         loading || searchLoading
@@ -297,7 +348,7 @@ export default function OverviewPage() {
             <AcmPage>
                 <AcmPageHeader
                     title={t('overview')}
-                    actions={<PageActions timestamp={timestamp} reloading={loading} refetch={useGetOverviewQuery} />}
+                    actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetchData} />}
                 />
                 <PageSection>
                     <AcmAlert
@@ -316,7 +367,7 @@ export default function OverviewPage() {
         <AcmPage>
             <AcmPageHeader
                 title={t('overview')}
-                actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetch} />}
+                actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetchData} />}
             />
 
             {loading || searchLoading ? (
