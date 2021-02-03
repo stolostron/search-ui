@@ -255,7 +255,7 @@ export default function OverviewPage() {
         console.log('>> inside UseEffect')
 
         const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
-            data?.overview?.clusters || [],
+            clusters || [],
             selectedCloud,
             setSelectedCloud,
             refetchData
