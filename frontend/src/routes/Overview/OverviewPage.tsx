@@ -158,7 +158,7 @@ const searchQueries = (selectedCloud: string, clusterFilter: Array<string>): Arr
 
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
     const { t } = useTranslation(['overview'])
-    const { data, loading, error } = useGetResourceQuery({
+    const { data, error } = useGetResourceQuery({
         client: consoleClient,
         variables: {
             selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
@@ -168,10 +168,9 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
             kind: null,
         },
     })
-    if (loading) {
-        console.log('loading')
-    } else if (error) {
-        console.log(error)
+    if (error) {
+        // TODO: Better error handling
+        console.error(error)
     }
     const addons = data?.getResource.items
 
