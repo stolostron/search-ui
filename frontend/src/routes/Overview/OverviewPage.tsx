@@ -23,6 +23,7 @@ import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/cons
 import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
+import _ from 'lodash'
 
 export function mapProviderFromLabel(provider: string): Provider {
     switch (provider) {
@@ -148,7 +149,7 @@ const searchQueries = (selectedCloud: string, clusterFilter: Array<string>): Arr
     ]
 
     if (selectedCloud !== '' && clusterFilter?.length > 0) {
-        return baseSearchQueries.map((query) => {
+        baseSearchQueries.forEach((query) => {
             query.filters.push({ property: 'cluster', values: clusterFilter })
         })
     }
@@ -213,6 +214,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 }
 
 export default function OverviewPage() {
+    console.log('(re)rendering OverviewPage')
     const { t } = useTranslation(['overview'])
     const [selectedCloud, setSelectedCloud] = useState<string>('')
     const [selectedClusterNames, setSelectedClusterNames] = useState<string[]>([])
@@ -239,13 +241,16 @@ export default function OverviewPage() {
         searchRefetch()
     }
 
-    console.log('(re)rendering...')
-    const { kubernetesTypes, regions, ready, offline, providers } = getClusterSummary(
+    const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
         data?.overview?.clusters || [],
         selectedCloud,
         setSelectedCloud,
         refetchData
     )
+
+    if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
+        setSelectedClusterNames(Array.from(clusterNames))
+    }
 
     const summary =
         loading || searchLoading
