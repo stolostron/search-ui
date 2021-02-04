@@ -1395,11 +1395,12 @@ export function CreateDashboardLink(item: any) {
 }
 
 export function CreateExternalLink(item: any) {
-    const { t } = useTranslation(['search'])
+    // const { t } = useTranslation(['search'])
     if (item.consoleURL) {
         return (
             <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>
-                {t('search.results.table.launch')}
+                {/* {t('search.results.table.launch')} */}
+                {'Launch'}
             </a>
         )
     } else if (item.clusterip) {
