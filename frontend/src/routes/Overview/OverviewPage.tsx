@@ -283,6 +283,8 @@ export default function OverviewPage() {
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
 
+    const urlClusterFilter = selectedCloud === '' ? 'kind%3Acluster' : `kind%3Acluster%20label%3acloud=${selectedCloud}`
+
     const summary =
         loading || searchLoading
             ? []
@@ -291,7 +293,7 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
-                      href: 'search?filters={"textsearch":"kind%3Aapplication"}',
+                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=application`,
                   },
                   {
                       isPrimary: false,
@@ -300,7 +302,7 @@ export default function OverviewPage() {
                           selectedClusterNames.length > 0
                               ? selectedClusterNames.length
                               : data?.overview?.clusters?.length || 0,
-                      href: 'search?filters={"textsearch":"kind%3Acluster"}',
+                      href: `search?filters={"textsearch":"${urlClusterFilter}"}`,
                   },
                   { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
                   { isPrimary: false, description: 'Region', count: regions?.size },
@@ -308,13 +310,13 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Nodes',
                       count: searchResult[0]?.count || 0,
-                      href: '/search?filters={"textsearch":"kind%3Anode"}',
+                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=node`,
                   },
                   {
                       isPrimary: false,
                       description: 'Pods',
                       count: searchResult[1]?.count || 0,
-                      href: '/search?filters={"textsearch":"kind%3Apod"}',
+                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=pod`,
                   },
               ]
 
