@@ -22,9 +22,11 @@ it('should responsed with correct value for mapProviderFromLabel function', () =
 
 it('should render overview page in loading state', async () => {
     render(
-        <MockedProvider mocks={[]}>
-            <OverviewPage />
-        </MockedProvider>
+        <Router history={createBrowserHistory()}>
+            <MockedProvider mocks={[]}>
+                <OverviewPage />
+            </MockedProvider>
+        </Router>
     )
     // Test the loading state while apollo query finishes
     expect(screen.getByText('Loading')).toBeInTheDocument()
@@ -43,9 +45,11 @@ it('should render overview page in error state', async () => {
     ]
 
     render(
-        <MockedProvider mocks={mocks}>
-            <OverviewPage />
-        </MockedProvider>
+        <Router history={createBrowserHistory()}>
+            <MockedProvider mocks={mocks}>
+                <OverviewPage />
+            </MockedProvider>
+        </Router>
     )
     // Test the loading state while apollo query finishes
     expect(screen.getByText('Loading')).toBeInTheDocument()
