@@ -90,7 +90,7 @@ exports[`Correctly returns CreateExternalLink from consoleURL 1`] = `
   rel="noopener noreferrer"
   target="_blank"
 >
-  search.results.table.launch
+  Launch
 </a>
 `;
 
