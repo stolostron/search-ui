@@ -373,14 +373,13 @@ export default function OverviewPage() {
                       key: 'Ready',
                       value: ready,
                       isPrimary: true,
-                      link: '/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3ATrue"}',
+                      link: `/search?filters={"textsearch":"${urlClusterFilter}%20ManagedClusterConditionAvailable%3ATrue"}`,
                   },
                   {
                       key: 'Offline',
                       value: offline,
                       isDanger: true,
-                      link:
-                          '/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3A!True"}',
+                      link: `/search?filters={"textsearch":"${urlClusterFilter}%20ManagedClusterConditionAvailable%3A!True"}`,
                   },
               ]
 
