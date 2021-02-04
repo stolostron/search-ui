@@ -58,6 +58,7 @@ function getClusterSummary(clusters: any, selectedCloud: string, setSelectedClou
                 prev.providers.push({
                     provider: mapProviderFromLabel(cloud),
                     clusterCount: 1,
+                    isSelected: selectedCloud === cloud,
                     onClick: () => {
                         // Clicking on the selected cloud card will remove the selection.
                         selectedCloud === cloud ? setSelectedCloud('') : setSelectedCloud(cloud)
