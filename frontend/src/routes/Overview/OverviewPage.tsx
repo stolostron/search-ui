@@ -406,10 +406,12 @@ export default function OverviewPage() {
         <AcmPage>
             <AcmPageHeader
                 title={t('overview')}
-                actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetchData} />}
+                actions={
+                    <PageActions timestamp={timestamp} reloading={loading || searchLoading} refetch={refetchData} />
+                }
             />
 
-            {loading || searchLoading ? (
+            {!called || loading || searchLoading ? (
                 <AcmLoadingPage />
             ) : (
                 <PageSection>
@@ -418,7 +420,7 @@ export default function OverviewPage() {
             )}
 
             <PageSection>
-                {loading || searchLoading ? (
+                {!called || loading || searchLoading ? (
                     <AcmSummaryList key="loading" loading title={t('overview.summary.title')} list={summary} />
                 ) : (
                     <AcmSummaryList title={t('overview.summary.title')} list={summary} />
@@ -426,7 +428,7 @@ export default function OverviewPage() {
             </PageSection>
 
             <PageSection>
-                {loading || searchLoading ? (
+                {!called || loading || searchLoading ? (
                     <AcmChartGroup>
                         <AcmDonutChart
                             loading

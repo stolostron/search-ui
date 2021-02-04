@@ -29,7 +29,7 @@ it('should render overview page in loading state', async () => {
         </Router>
     )
     // Test the loading state while apollo query finishes
-    // expect(screen.getByText('Loading')).toBeInTheDocument() // TODO: re-enable test
+    expect(screen.getByText('Loading')).toBeInTheDocument()
 })
 
 it('should render overview page in error state', async () => {
@@ -52,7 +52,7 @@ it('should render overview page in error state', async () => {
         </Router>
     )
     // Test the loading state while apollo query finishes
-    // expect(screen.getByText('Loading')).toBeInTheDocument() // TODO: re-enable test
+    expect(screen.getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
@@ -263,7 +263,7 @@ it('should render overview page with expected data', async () => {
         </Router>
     )
     // Test the loading state while apollo query finishes
-    // expect(screen.getByText('Loading')).toBeInTheDocument() // TODO: re-enable test
+    expect(screen.getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
