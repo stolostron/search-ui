@@ -207,7 +207,6 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 }
 
 export default function OverviewPage() {
-    console.log('(re)rendering OverviewPage')
     const { t } = useTranslation(['overview'])
     const [clusters, setClusters] = useState<any[]>([])
     const [selectedCloud, setSelectedCloud] = useState<string>('')
@@ -224,16 +223,15 @@ export default function OverviewPage() {
     const [fireConsoleQuery, { data, loading, error, refetch, called }] = useGetOverviewLazyQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
-
     useEffect(() => {
-        console.log('>> UseEffect - consoleQuery.  called:', called)
+        // console.log('>> UseEffect - consoleQuery.  called:', called)
         if (!called) {
             fireConsoleQuery()
         } else {
-            console.log('>> useEffect - refetch()')
+            // console.log('>> useEffect - refetch()')
             refetch && refetch()
         }
-    }, [selectedCloud])
+    }, [selectedCloud, called, fireConsoleQuery, refetch])
 
     const timestamp = data?.overview?.timestamp as string
     if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
@@ -249,31 +247,31 @@ export default function OverviewPage() {
     })
 
     useEffect(() => {
-        console.log('>> UseEffect - searchQuery.  called:', searchCalled)
-        if (!called) {
+        // console.log('>> UseEffect - searchQuery.  called:', searchCalled)
+        if (!searchCalled) {
             fireSearchQuery({
                 variables: { input: searchQueries(selectedCloud, selectedClusterNames) },
             })
         } else {
-            console.log('>> useEffect searchQuery - refetch()')
+            // console.log('>> useEffect searchQuery - refetch()')
             searchRefetch &&
                 searchRefetch({
                     input: searchQueries(selectedCloud, selectedClusterNames),
                 })
         }
-    }, [selectedCloud])
+    }, [fireSearchQuery, selectedClusterNames, searchCalled, searchRefetch]) // FIXME: selectedCloud
 
     const searchResult = searchData?.searchResult || []
 
     const refetchData = () => {
-        console.log('refetchData()')
+        // console.log('refetchData()')
         refetch && refetch()
         searchRefetch && searchRefetch({ input: searchQueries(selectedCloud, selectedClusterNames) })
     }
 
     // Process data from API.
     useEffect(() => {
-        console.log('>> UseEffect - process data from API.')
+        // console.log('>> UseEffect - process data from API.')
 
         const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
             clusters || [],
@@ -285,7 +283,7 @@ export default function OverviewPage() {
         if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
             setSelectedClusterNames(Array.from(clusterNames))
         }
-    }, [clusters, selectedCloud])
+    }, [clusters, selectedCloud, data, searchData, selectedClusterNames])
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
 
