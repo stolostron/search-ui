@@ -47,8 +47,6 @@ export function mapProviderFromLabel(provider: string): Provider {
 }
 
 function getClusterSummary(clusters: any, selectedCloud: string, setSelectedCloud: Dispatch<SetStateAction<string>>) {
-    console.log('getClusterSummary()', selectedCloud)
-
     const clusterSummary = clusters.reduce(
         (prev: any, curr: any, index: number) => {
             // Data for Providers section.
@@ -61,7 +59,8 @@ function getClusterSummary(clusters: any, selectedCloud: string, setSelectedClou
                     provider: mapProviderFromLabel(cloud),
                     clusterCount: 1,
                     onClick: () => {
-                        setSelectedCloud(cloud)
+                        // Clicking on the selected cloud card will remove the selection.
+                        selectedCloud === cloud ? setSelectedCloud('') : setSelectedCloud(cloud)
                     },
                 })
             }
@@ -96,7 +95,7 @@ function getClusterSummary(clusters: any, selectedCloud: string, setSelectedClou
     return clusterSummary
 }
 
-const searchQueries = (selectedCloud: string, clusterFilter: Array<string>): Array<any> => {
+const searchQueries = (selectedClusters: Array<string>): Array<any> => {
     const baseSearchQueries = [
         { keywords: [], filters: [{ property: 'kind', values: ['node'] }] },
         { keywords: [], filters: [{ property: 'kind', values: ['pod'] }] },
@@ -142,9 +141,9 @@ const searchQueries = (selectedCloud: string, clusterFilter: Array<string>): Arr
         },
     ]
 
-    if (selectedCloud !== '' && clusterFilter?.length > 0) {
+    if (selectedClusters?.length > 0) {
         baseSearchQueries.forEach((query) => {
-            query.filters.push({ property: 'cluster', values: clusterFilter })
+            query.filters.push({ property: 'cluster', values: selectedClusters })
         })
     }
     return baseSearchQueries
@@ -224,14 +223,12 @@ export default function OverviewPage() {
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
     useEffect(() => {
-        // console.log('>> UseEffect - consoleQuery.  called:', called)
         if (!called) {
             fireConsoleQuery()
         } else {
-            // console.log('>> useEffect - refetch()')
             refetch && refetch()
         }
-    }, [selectedCloud, called, fireConsoleQuery, refetch])
+    }, [called, fireConsoleQuery, refetch])
 
     const timestamp = data?.overview?.timestamp as string
     if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
@@ -247,32 +244,22 @@ export default function OverviewPage() {
     })
 
     useEffect(() => {
-        // console.log('>> UseEffect - searchQuery.  called:', searchCalled)
-        if (!searchCalled) {
+        if (!called && !searchCalled) {
+            // The console call needs to finish first.
             fireSearchQuery({
-                variables: { input: searchQueries(selectedCloud, selectedClusterNames) },
+                variables: { input: searchQueries(selectedClusterNames) },
             })
         } else {
-            // console.log('>> useEffect searchQuery - refetch()')
             searchRefetch &&
                 searchRefetch({
-                    input: searchQueries(selectedCloud, selectedClusterNames),
+                    input: searchQueries(selectedClusterNames),
                 })
         }
-    }, [fireSearchQuery, selectedClusterNames, searchCalled, searchRefetch]) // FIXME: selectedCloud
-
+    }, [fireSearchQuery, called, selectedClusterNames, searchCalled, searchRefetch])
     const searchResult = searchData?.searchResult || []
-
-    const refetchData = () => {
-        // console.log('refetchData()')
-        refetch && refetch()
-        searchRefetch && searchRefetch({ input: searchQueries(selectedCloud, selectedClusterNames) })
-    }
 
     // Process data from API.
     useEffect(() => {
-        // console.log('>> UseEffect - process data from API.')
-
         const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
             clusters || [],
             selectedCloud,
@@ -280,10 +267,19 @@ export default function OverviewPage() {
         )
         setSummaryData({ kubernetesTypes, regions, ready, offline, providers })
 
-        if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
+        if (selectedCloud === '') {
+            if (!_.isEqual(selectedClusterNames, [])) {
+                setSelectedClusterNames([])
+            }
+        } else if (!_.isEqual(selectedClusterNames, Array.from(clusterNames))) {
             setSelectedClusterNames(Array.from(clusterNames))
         }
     }, [clusters, selectedCloud, data, searchData, selectedClusterNames])
+
+    const refetchData = () => {
+        refetch && refetch()
+        searchRefetch && searchRefetch({ input: searchQueries(selectedClusterNames) })
+    }
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
 
@@ -300,7 +296,10 @@ export default function OverviewPage() {
                   {
                       isPrimary: false,
                       description: 'Clusters',
-                      count: data?.overview?.clusters?.length || 0,
+                      count:
+                          selectedClusterNames.length > 0
+                              ? selectedClusterNames.length
+                              : data?.overview?.clusters?.length || 0,
                       href: 'search?filters={"textsearch":"kind%3Acluster"}',
                   },
                   { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
