@@ -19,8 +19,8 @@ import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'react-i18next'
 import { consoleClient } from '../../console-sdk/console-client'
-import { useGetOverviewQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
-import { useSearchResultCountQuery } from '../../search-sdk/search-sdk'
+import { useGetOverviewLazyQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
+import { useSearchResultCountLazyQuery } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
 import _ from 'lodash'
@@ -46,12 +46,7 @@ export function mapProviderFromLabel(provider: string): Provider {
     }
 }
 
-function getClusterSummary(
-    clusters: any,
-    selectedCloud: string,
-    setSelectedCloud: Dispatch<SetStateAction<string>>,
-    refetch: () => void
-) {
+function getClusterSummary(clusters: any, selectedCloud: string, setSelectedCloud: Dispatch<SetStateAction<string>>) {
     console.log('getClusterSummary()', selectedCloud)
 
     const clusterSummary = clusters.reduce(
@@ -67,7 +62,6 @@ function getClusterSummary(
                     clusterCount: 1,
                     onClick: () => {
                         setSelectedCloud(cloud)
-                        refetch()
                     },
                 })
             }
@@ -226,39 +220,65 @@ export default function OverviewPage() {
         providers: [],
     })
 
-    const { data, loading, error, refetch } = useGetOverviewQuery({
+    // CONSOLE-API
+    const [fireConsoleQuery, { data, loading, error, refetch, called }] = useGetOverviewLazyQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
     })
+
+    useEffect(() => {
+        console.log('>> UseEffect - consoleQuery.  called:', called)
+        if (!called) {
+            fireConsoleQuery()
+        } else {
+            console.log('>> useEffect - refetch()')
+            refetch && refetch()
+        }
+    }, [selectedCloud])
+
     const timestamp = data?.overview?.timestamp as string
     if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
         setClusters(data?.overview?.clusters || [])
     }
 
-    const {
-        data: searchData,
-        loading: searchLoading,
-        error: searchError,
-        refetch: searchRefetch,
-    } = useSearchResultCountQuery({
+    // SEARCH-API
+    const [
+        fireSearchQuery,
+        { called: searchCalled, data: searchData, loading: searchLoading, error: searchError, refetch: searchRefetch },
+    ] = useSearchResultCountLazyQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
-        variables: { input: searchQueries(selectedCloud, selectedClusterNames) },
     })
+
+    useEffect(() => {
+        console.log('>> UseEffect - searchQuery.  called:', searchCalled)
+        if (!called) {
+            fireSearchQuery({
+                variables: { input: searchQueries(selectedCloud, selectedClusterNames) },
+            })
+        } else {
+            console.log('>> useEffect searchQuery - refetch()')
+            searchRefetch &&
+                searchRefetch({
+                    input: searchQueries(selectedCloud, selectedClusterNames),
+                })
+        }
+    }, [selectedCloud])
+
     const searchResult = searchData?.searchResult || []
 
     const refetchData = () => {
         console.log('refetchData()')
-        refetch()
-        searchRefetch({ input: searchQueries(selectedCloud, selectedClusterNames) })
+        refetch && refetch()
+        searchRefetch && searchRefetch({ input: searchQueries(selectedCloud, selectedClusterNames) })
     }
 
+    // Process data from API.
     useEffect(() => {
-        console.log('>> inside UseEffect')
+        console.log('>> UseEffect - process data from API.')
 
         const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
             clusters || [],
             selectedCloud,
-            setSelectedCloud,
-            refetchData
+            setSelectedCloud
         )
         setSummaryData({ kubernetesTypes, regions, ready, offline, providers })
 
@@ -268,6 +288,7 @@ export default function OverviewPage() {
     }, [clusters, selectedCloud])
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
+
     const summary =
         loading || searchLoading
             ? []
