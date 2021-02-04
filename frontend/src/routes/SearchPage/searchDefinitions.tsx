@@ -3,7 +3,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
-import { useTranslation } from 'react-i18next'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 const searchDefinitions: any = {
@@ -1383,11 +1382,11 @@ export function CreateDetailsLink(item: any) {
 }
 
 export function CreateDashboardLink(item: any) {
-    const { t } = useTranslation(['search'])
     if (item.dashboard !== null && item.dashboard !== '') {
         return (
             <a target="_blank" rel="noopener noreferrer" href={item.dashboard}>
-                {t('search.results.table.launch.health')}
+                {/* TODO Not translating - caused issue: https://github.com/open-cluster-management/backlog/issues/9184 */}
+                {'Launch health view'}
             </a>
         )
     }
@@ -1398,6 +1397,7 @@ export function CreateExternalLink(item: any) {
     if (item.consoleURL) {
         return (
             <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>
+                {/* TODO Not translating - caused issue: https://github.com/open-cluster-management/backlog/issues/9184 */}
                 {'Launch'}
             </a>
         )

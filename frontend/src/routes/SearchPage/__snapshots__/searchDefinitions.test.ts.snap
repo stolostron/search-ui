@@ -6,7 +6,7 @@ exports[`Correctly returns CreateDashboardLink 1`] = `
   rel="noopener noreferrer"
   target="_blank"
 >
-  search.results.table.launch.health
+  Launch health view
 </a>
 `;
 
@@ -128,7 +128,7 @@ Array [
       rel="noopener noreferrer"
       target="_blank"
     >
-      search.results.table.launch.health
+      Launch health view
     </a>,
     "header": "Dashboard",
     "sort": "dashboard",
