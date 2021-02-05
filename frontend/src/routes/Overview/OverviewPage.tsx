@@ -297,6 +297,7 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
+
                       href: buildSummaryLinks(selectedCloud, 'application'),
                   },
                   {
@@ -328,6 +329,7 @@ export default function OverviewPage() {
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
     // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+
     const urlClusterFilter = selectedClusterNames.length > 0 && `%20cluster%3A${selectedClusterNames.join(',')}`
     const podData =
         loading || searchLoading
