@@ -284,8 +284,7 @@ export default function OverviewPage() {
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
 
-    const urlClusterFilter = selectedCloud === '' ? 'kind%3Acluster' : `kind%3Acluster%20label%3acloud=${selectedCloud}`
-
+    const urlCloudFilter = selectedCloud === '' ? 'kind%3Acluster' : `kind%3Acluster%20label%3acloud=${selectedCloud}`
     const summary =
         loading || searchLoading
             ? []
@@ -294,7 +293,7 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
-                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=application`,
+                      href: `/search?filters={"textsearch":"${urlCloudFilter}"}&showrelated=application`,
                   },
                   {
                       isPrimary: false,
@@ -303,7 +302,7 @@ export default function OverviewPage() {
                           selectedClusterNames.length > 0
                               ? selectedClusterNames.length
                               : data?.overview?.clusters?.length || 0,
-                      href: `search?filters={"textsearch":"${urlClusterFilter}"}`,
+                      href: `search?filters={"textsearch":"${urlCloudFilter}"}`,
                   },
                   { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
                   { isPrimary: false, description: 'Region', count: regions?.size },
@@ -311,16 +310,19 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Nodes',
                       count: searchResult[0]?.count || 0,
-                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=node`,
+                      href: `/search?filters={"textsearch":"${urlCloudFilter}"}&showrelated=node`,
                   },
                   {
                       isPrimary: false,
                       description: 'Pods',
                       count: searchResult[1]?.count || 0,
-                      href: `/search?filters={"textsearch":"${urlClusterFilter}"}&showrelated=pod`,
+                      href: `/search?filters={"textsearch":"${urlCloudFilter}"}&showrelated=pod`,
                   },
               ]
 
+    // TODO: Breaks url if length of selectedClustersFilter is too big.
+    // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+    const urlClusterFilter = selectedClusterNames.length > 0 ? `%20cluster%3A${selectedClusterNames.join(',')}` : ''
     const podData =
         loading || searchLoading
             ? []
@@ -329,20 +331,18 @@ export default function OverviewPage() {
                       key: 'Running',
                       value: searchResult[2]?.count || 0,
                       isPrimary: true,
-                      link: '/search?filters={"textsearch":"kind%3Apod%20status%3ARunning%2CCompleted"}',
+                      link: `/search?filters={"textsearch":"kind%3Apod%20status%3ARunning%2CCompleted${urlClusterFilter}"}`,
                   },
                   {
                       key: 'Pending',
                       value: searchResult[3]?.count || 0,
-                      link:
-                          '/search?filters={"textsearch":"kind%3Apod%20status%3AContainerCreating%2CPending%2CTerminating%2CWaiting"}',
+                      link: `/search?filters={"textsearch":"kind%3Apod%20status%3AContainerCreating%2CPending%2CTerminating%2CWaiting${urlClusterFilter}"}`,
                   },
                   {
                       key: 'Failed',
                       value: searchResult[4]?.count || 0,
                       isDanger: true,
-                      link:
-                          '/search?filters={"textsearch":"kind%3Apod%20status%3ACrashLoopBackOff%2CFailed%2CImagePullBackOff%2CRunContainerError%2CTerminated%2CUnknown%2COOMKilled"}',
+                      link: `/search?filters={"textsearch":"kind%3Apod%20status%3ACrashLoopBackOff%2CFailed%2CImagePullBackOff%2CRunContainerError%2CTerminated%2CUnknown%2COOMKilled${urlClusterFilter}"}`,
                   },
               ]
 
@@ -354,15 +354,13 @@ export default function OverviewPage() {
                       key: 'Compliant',
                       value: searchResult[5]?.count || 0,
                       isPrimary: true,
-                      link:
-                          '/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:Compliant"}',
+                      link: `/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:Compliant${urlClusterFilter}"}`,
                   },
                   {
                       key: 'Non-compliant',
                       value: searchResult[6]?.count || 0,
                       isDanger: true,
-                      link:
-                          '/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:NonCompliant"}',
+                      link: `/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:NonCompliant${urlClusterFilter}"}`,
                   },
               ]
 
