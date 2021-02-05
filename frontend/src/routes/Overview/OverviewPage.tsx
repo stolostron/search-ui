@@ -284,7 +284,8 @@ export default function OverviewPage() {
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
 
-    function buildSummaryLinks(selectedCloud: string, kind: string) {
+    const cloudLabelFilter: string = selectedCloud === '' ? '' : `%20label%3acloud=${selectedCloud}`
+    function buildSummaryLinks(kind: string) {
         return selectedCloud === ''
             ? `/search?filters={"textsearch":"kind%3A${kind}"}`
             : `/search?filters={"textsearch":"kind%3Acluster%20label%3acloud=${selectedCloud}"}&showrelated=${kind}`
@@ -297,7 +298,7 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
-                      href: buildSummaryLinks(selectedCloud, 'application'),
+                      href: buildSummaryLinks('application'),
                   },
                   {
                       isPrimary: false,
@@ -306,9 +307,7 @@ export default function OverviewPage() {
                           selectedClusterNames.length > 0
                               ? selectedClusterNames.length
                               : data?.overview?.clusters?.length || 0,
-                      href: `search?filters={"textsearch":"kind%3Acluster${
-                          selectedCloud && `%20label%3acloud=${selectedCloud}`
-                      }"}`,
+                      href: `search?filters={"textsearch":"kind%3Acluster${cloudLabelFilter}"}`,
                   },
                   { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
                   { isPrimary: false, description: 'Region', count: regions?.size },
@@ -316,19 +315,20 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Nodes',
                       count: searchResult[0]?.count || 0,
-                      href: buildSummaryLinks(selectedCloud, 'node'),
+                      href: buildSummaryLinks('node'),
                   },
                   {
                       isPrimary: false,
                       description: 'Pods',
                       count: searchResult[1]?.count || 0,
-                      href: buildSummaryLinks(selectedCloud, 'pod'),
+                      href: buildSummaryLinks('pod'),
                   },
               ]
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
     // Issue: https://github.com/open-cluster-management/backlog/issues/7087
-    const urlClusterFilter = selectedClusterNames.length > 0 && `%20cluster%3A${selectedClusterNames.join(',')}`
+    const urlClusterFilter: string =
+        selectedClusterNames.length > 0 ? `%20cluster%3A${selectedClusterNames.join(',')}` : ''
     const podData =
         loading || searchLoading
             ? []
@@ -378,13 +378,13 @@ export default function OverviewPage() {
                       key: 'Ready',
                       value: ready,
                       isPrimary: true,
-                      link: `/search?filters={"textsearch":"ManagedClusterConditionAvailable%3ATrue${urlClusterFilter}"}`,
+                      link: `/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3ATrue${cloudLabelFilter}"}`,
                   },
                   {
                       key: 'Offline',
                       value: offline,
                       isDanger: true,
-                      link: `/search?filters={"textsearch":"ManagedClusterConditionAvailable%3A!True${urlClusterFilter}"}`,
+                      link: `/search?filters={"textsearch":"kind%3Acluster%20ManagedClusterConditionAvailable%3A!True${cloudLabelFilter}"}`,
                   },
               ]
 
