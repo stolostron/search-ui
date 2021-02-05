@@ -307,7 +307,7 @@ export default function OverviewPage() {
                               ? selectedClusterNames.length
                               : data?.overview?.clusters?.length || 0,
                       href: `search?filters={"textsearch":"kind%3Acluster${
-                          selectedCloud && `kind%3Acluster%20label%3acloud=${selectedCloud}`
+                          selectedCloud && `%20label%3acloud=${selectedCloud}`
                       }"}`,
                   },
                   { isPrimary: false, description: 'Kubernetes type', count: kubernetesTypes?.size },
