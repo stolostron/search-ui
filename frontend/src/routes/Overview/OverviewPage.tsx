@@ -288,7 +288,7 @@ export default function OverviewPage() {
     function buildSummaryLinks(kind: string) {
         return selectedCloud === ''
             ? `/search?filters={"textsearch":"kind%3A${kind}"}`
-            : `/search?filters={"textsearch":"kind%3Acluster%20label%3acloud=${selectedCloud}"}&showrelated=${kind}`
+            : `/search?filters={"textsearch":"kind%3Acluster${cloudLabelFilter}"}&showrelated=${kind}`
     }
     const summary =
         loading || searchLoading
