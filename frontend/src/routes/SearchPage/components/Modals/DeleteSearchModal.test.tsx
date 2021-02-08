@@ -60,7 +60,7 @@ describe('DeleteSearchModal', () => {
         )
 
         // find the button and simulate a click
-        const submitButton = screen.getByText('Delete')
+        const submitButton = screen.getByText('search.modal.delete.search.action.delete')
         expect(submitButton).toBeTruthy()
         userEvent.click(submitButton)
 
@@ -125,7 +125,7 @@ describe('DeleteSearchModal', () => {
         )
 
         // find the button and simulate a click
-        const submitButton = screen.getByText('Delete')
+        const submitButton = screen.getByText('search.modal.delete.search.action.delete')
         expect(submitButton).toBeTruthy()
         userEvent.click(submitButton)
 

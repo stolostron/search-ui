@@ -55,7 +55,7 @@ describe('SearchPage', () => {
         // This wait pauses till apollo query is returning data
         await wait()
         // Test that the component has rendered correctly with data
-        await waitFor(() => expect(screen.queryByText('Open new search tab')).toBeTruthy())
+        await waitFor(() => expect(screen.queryByText('search.new.tab')).toBeTruthy())
         await waitFor(() => expect(screen.queryByText('Saved searches')).toBeTruthy())
     })
 
@@ -101,8 +101,8 @@ describe('SearchPage', () => {
         // This wait pauses till apollo query is returning data
         await wait()
         // Test that the component has rendered correctly with data
-        await waitFor(() => expect(screen.queryByText('An unexpected error occurred.')).toBeTruthy())
-        await waitFor(() => expect(screen.queryByText('The search service is unavailable.')).toBeTruthy())
+        await waitFor(() => expect(screen.queryByText('search.filter.errors.title')).toBeTruthy())
+        await waitFor(() => expect(screen.queryByText('search.filter.errors.description')).toBeTruthy())
     })
 
     it('should render search page correctly and add a search', async () => {
@@ -167,7 +167,7 @@ describe('SearchPage', () => {
         // This wait pauses till apollo query is returning data
         await wait()
         // Test that the component has rendered correctly with data
-        await waitFor(() => expect(screen.queryByText('Open new search tab')).toBeTruthy())
+        await waitFor(() => expect(screen.queryByText('search.new.tab')).toBeTruthy())
         await waitFor(() => expect(screen.queryByText('Saved searches')).toBeTruthy())
 
         const searchbar = screen.getByText('Search items')

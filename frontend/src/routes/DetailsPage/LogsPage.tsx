@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
+import { useTranslation } from 'react-i18next'
 import { useGetLogsQuery } from '../../console-sdk/console-sdk'
 import { consoleClient } from '../../console-sdk/console-client'
 
 export default function LogsPage(props: { containers: string[]; cluster: string; namespace: string; name: string }) {
     const { containers, cluster, namespace, name } = props
+    const { t } = useTranslation(['details'])
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
@@ -24,7 +26,7 @@ export default function LogsPage(props: { containers: string[]; cluster: string;
                     noClose={true}
                     variant={'danger'}
                     isInline={true}
-                    title={`Error querying for resource: ${name}`}
+                    title={`${t('logs.request.error')} ${name}`}
                     subtitle={error.message}
                 />
             </PageSection>

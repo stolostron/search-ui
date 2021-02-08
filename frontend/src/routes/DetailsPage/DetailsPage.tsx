@@ -10,6 +10,7 @@ import {
 } from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
+import { useTranslation } from 'react-i18next'
 import YAMLPage from './YAMLPage'
 import LogsPage from './LogsPage'
 import { consoleClient } from '../../console-sdk/console-client'
@@ -55,6 +56,7 @@ function getResourceData() {
 }
 
 export default function DetailsPage() {
+    const { t } = useTranslation(['details'])
     const { cluster, kind, apiversion, namespace, name } = getResourceData()
     let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
@@ -79,8 +81,20 @@ export default function DetailsPage() {
     return (
         <AcmPage>
             <div className={classes.customBreadcrumb}>
-                <AcmButton variant={'link'} onClick={() => history.goBack()}>
-                    Search
+                <AcmButton
+                    variant={'link'}
+                    onClick={() => {
+                        const prevLocState = window.history?.state?.state
+                        if (prevLocState && prevLocState.from === '/search') {
+                            // If we came to resources page from search - return to search with previous search filters
+                            history.goBack()
+                        } else {
+                            // If we were redirected to search from elsewhere (ex: application page) - go to blank search page
+                            window.location.href = '/search'
+                        }
+                    }}
+                >
+                    {t('details.breadcrumb.search')}
                 </AcmButton>
             </div>
             <AcmPageHeader

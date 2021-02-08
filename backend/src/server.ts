@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Axios, { AxiosResponse } from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
@@ -25,19 +27,23 @@ declare module 'fastify-reply-from' {
     }
 }
 
-function noop(): void {
-    /* Do Nothing */
+function handleFileReadError(e: Error): void {
+    logError('Error reading file.', e)
 }
 
-function getUrlPath(url: string) {
+function getUrlPath(url: string): string {
     return url.includes('?') ? url.substr(0, url.indexOf('?')) : url
 }
 
 export async function startServer(): Promise<FastifyInstance> {
-    const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(noop)
-    const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(noop)
+    const keyPromise = promisify<string, Buffer>(readFile)('./certs/tls.key').catch(handleFileReadError)
+    const certPromise = promisify<string, Buffer | undefined>(readFile)('./certs/tls.crt').catch(handleFileReadError)
+    const indexHtmlPromise = promisify<string, Buffer | undefined>(readFile)(
+        join(__dirname, 'public', 'index.html')
+    ).catch(handleFileReadError)
     const key = await keyPromise
     const cert = await certPromise
+    const indexHtml: string = ((await indexHtmlPromise) || '').toString('utf-8')
 
     let fastify: FastifyInstance
     if (key && cert) {
@@ -55,11 +61,20 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     await fastify.register(fastifyCookie)
-    await fastify.register(fastifyCsrf, {
-        getToken: (req: FastifyRequest) => {
-            return req.cookies['csrf-token']
-        },
-    })
+    await fastify.register(fastifyCsrf)
+
+    const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
+        const token = await reply.generateCsrf()
+        await reply
+            .code(200)
+            .type('text/html')
+            .send(indexHtml.replace(RegExp('{{ CSRF_TOKEN }}', 'g'), token))
+    }
+
+    fastify.get('/search/index.html', serveIndexHtml)
+    fastify.get('/search', serveIndexHtml)
+    fastify.get('/overview', serveIndexHtml)
+    fastify.get('/resources', serveIndexHtml)
 
     fastify.get('/ping', async (req, res) => {
         await res.code(200).send()
@@ -74,17 +89,16 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     fastify.get('/search/tokenValidation', async (req: FastifyRequest, res: FastifyReply) => {
-        try {
-            const token = req.cookies[ACM_ACCESS_TOKEN_COOKIE]
-            if (!token) {
-                return res.code(401).send()
-            }
-        } catch (err) {
-            logError('proxy authentication error', err, { method: req.method, url: req.url })
-            return res.code(407).send(err)
+        const token = req.cookies['acm-access-token-cookie']
+        if (!token) {
+            return res.code(401).send()
         }
         return res.code(200).send()
     })
+
+    function csrfProtection(req: FastifyRequest, res: FastifyReply, done: () => void) {
+        process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
+    }
 
     // Proxy to SEARCH-API
     await fastify.register(fastifyHttpProxy, {
@@ -92,10 +106,7 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return fastify.csrfProtection(req, res, done)
-        },
+        preHandler: csrfProtection,
     })
 
     // Proxy to CONSOLE-API
@@ -104,10 +115,15 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/search/console-api/graphql',
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
-        preHandler: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-            return fastify.csrfProtection(req, res, done)
-        },
+        preHandler: csrfProtection,
+    })
+    // Proxy to CONSOLE-API (from /resources)
+    await fastify.register(fastifyHttpProxy, {
+        upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
+        prefix: '/resources/search/console-api/graphql',
+        rewritePrefix: '/hcmuiapi/graphql',
+        http2: false,
+        preHandler: csrfProtection,
     })
 
     // CONSOLE-HEADER
@@ -151,16 +167,13 @@ export async function startServer(): Promise<FastifyInstance> {
         done()
     })
 
-    // Generate csrf token for each request.
-    // IMPORTANT: This creates 2 cookies _csrf and csrf-token, both are needed for validation.
-    fastify.addHook('onSend', async (req: FastifyRequest, reply: FastifyReply) => {
-        const token = await reply.generateCsrf()
-        await reply.setCookie('csrf-token', token)
-    })
-
     fastify.addHook('onResponse', (request, reply, done) => {
         switch (request.url) {
             case '/ping':
+                break
+            case '/livenessProbe':
+                break
+            case '/readinessProbe':
                 break
             default:
                 {
@@ -308,15 +321,14 @@ export async function startServer(): Promise<FastifyInstance> {
     await new Promise<void>((resolve, reject) => {
         fastify.listen(
             process.env.PORT ? Number(process.env.PORT) : undefined,
-            '0.0.0.0',
+            '::', // Defaults to IPv6 and falls back to IPv4
             (err: Error, address: string) => {
                 if (process.env.GENERATE) {
                     void fastify.close()
                 }
                 if (err) {
                     logger.error(err)
-                    // eslint-disable-next-line no-process-exit
-                    process.exit(1)
+                    process.exit(1) // eslint-disable-line no-process-exit
                 } else {
                     logger.info({ msg: 'server started', address })
                     resolve()
@@ -332,8 +344,7 @@ export async function startServer(): Promise<FastifyInstance> {
         if (process.env.NODE_ENV !== 'test') {
             setTimeout(function () {
                 logger.error({ msg: 'shutdown timeout' })
-                // eslint-disable-next-line no-process-exit
-                process.exit(1)
+                process.exit(1) // eslint-disable-line no-process-exit
             }, 10 * 1000).unref()
         }
     })
