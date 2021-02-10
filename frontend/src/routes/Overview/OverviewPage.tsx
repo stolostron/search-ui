@@ -7,6 +7,7 @@ import {
     AcmPage,
     AcmPageHeader,
     AcmOverviewProviders,
+    AcmScrollable,
     AcmSummaryList,
     Provider,
     AcmButton,
@@ -416,72 +417,73 @@ export default function OverviewPage() {
                     <PageActions timestamp={timestamp} reloading={loading || searchLoading} refetch={refetchData} />
                 }
             />
+            <AcmScrollable>
+                {!called || loading || searchLoading ? (
+                    <AcmLoadingPage />
+                ) : (
+                    <PageSection>
+                        <AcmOverviewProviders providers={providers} />
+                    </PageSection>
+                )}
 
-            {!called || loading || searchLoading ? (
-                <AcmLoadingPage />
-            ) : (
                 <PageSection>
-                    <AcmOverviewProviders providers={providers} />
+                    {!called || loading || searchLoading ? (
+                        <AcmSummaryList key="loading" loading title={t('overview.summary.title')} list={summary} />
+                    ) : (
+                        <AcmSummaryList title={t('overview.summary.title')} list={summary} />
+                    )}
                 </PageSection>
-            )}
 
-            <PageSection>
-                {!called || loading || searchLoading ? (
-                    <AcmSummaryList key="loading" loading title={t('overview.summary.title')} list={summary} />
-                ) : (
-                    <AcmSummaryList title={t('overview.summary.title')} list={summary} />
-                )}
-            </PageSection>
-
-            <PageSection>
-                {!called || loading || searchLoading ? (
-                    <AcmChartGroup>
-                        <AcmDonutChart
-                            loading
-                            key="chart-loading-1"
-                            title="Cluster compliance"
-                            description={t('overview.donut.compliance.description', {
-                                compliance: 'policy compliance',
-                            })}
-                            data={[]}
-                        />
-                        <AcmDonutChart
-                            loading
-                            key="chart-loading-2"
-                            title="Pods"
-                            description={t('overview.donut.pod.description', { pod: 'pod' })}
-                            data={[]}
-                        />
-                        <AcmDonutChart
-                            loading
-                            key="chart-loading-3"
-                            title="Cluster status"
-                            description={t('overview.donut.status.description', { cluster: 'cluster' })}
-                            data={[]}
-                        />
-                    </AcmChartGroup>
-                ) : (
-                    <AcmChartGroup>
-                        <AcmDonutChart
-                            title="Cluster compliance"
-                            description={t('overview.donut.compliance.description', {
-                                compliance: 'policy compliance',
-                            })}
-                            data={complianceData}
-                        />
-                        <AcmDonutChart
-                            title="Pods"
-                            description={t('overview.donut.pod.description', { pod: 'pod' })}
-                            data={podData}
-                        />
-                        <AcmDonutChart
-                            title="Cluster status"
-                            description={t('overview.donut.status.description', { cluster: 'cluster' })}
-                            data={clusterData}
-                        />
-                    </AcmChartGroup>
-                )}
-            </PageSection>
+                <PageSection>
+                    {!called || loading || searchLoading ? (
+                        <AcmChartGroup>
+                            <AcmDonutChart
+                                loading
+                                key="chart-loading-1"
+                                title="Cluster compliance"
+                                description={t('overview.donut.compliance.description', {
+                                    compliance: 'policy compliance',
+                                })}
+                                data={[]}
+                            />
+                            <AcmDonutChart
+                                loading
+                                key="chart-loading-2"
+                                title="Pods"
+                                description={t('overview.donut.pod.description', { pod: 'pod' })}
+                                data={[]}
+                            />
+                            <AcmDonutChart
+                                loading
+                                key="chart-loading-3"
+                                title="Cluster status"
+                                description={t('overview.donut.status.description', { cluster: 'cluster' })}
+                                data={[]}
+                            />
+                        </AcmChartGroup>
+                    ) : (
+                        <AcmChartGroup>
+                            <AcmDonutChart
+                                title="Cluster compliance"
+                                description={t('overview.donut.compliance.description', {
+                                    compliance: 'policy compliance',
+                                })}
+                                data={complianceData}
+                            />
+                            <AcmDonutChart
+                                title="Pods"
+                                description={t('overview.donut.pod.description', { pod: 'pod' })}
+                                data={podData}
+                            />
+                            <AcmDonutChart
+                                title="Cluster status"
+                                description={t('overview.donut.status.description', { cluster: 'cluster' })}
+                                data={clusterData}
+                            />
+                        </AcmChartGroup>
+                    )}
+                </PageSection>
+            </AcmScrollable>
         </AcmPage>
     )
 }
