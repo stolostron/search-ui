@@ -41,7 +41,7 @@ describe('DeleteResourceModal', () => {
                         apiVersion: 'v1',
                         name: 'testPod',
                         namespace: 'testNamespace',
-                        cluster: 'testCluster',
+                        cluster: 'local-cluster',
                         kind: 'pod',
                     },
                 },
@@ -83,7 +83,7 @@ describe('DeleteResourceModal', () => {
                                 items: [
                                     {
                                         apiversion: 'v1',
-                                        cluster: 'testCluster',
+                                        cluster: 'local-cluster',
                                         container: 'installer',
                                         created: '2021-01-04T14:53:52Z',
                                         hostIP: '10.0.128.203',
@@ -114,7 +114,7 @@ describe('DeleteResourceModal', () => {
                         namespace: 'testNamespace',
                         kind: 'pod',
                         apiversion: 'v1',
-                        cluster: 'testCluster',
+                        cluster: 'local-cluster',
                     }}
                     close={() => {}}
                 />
