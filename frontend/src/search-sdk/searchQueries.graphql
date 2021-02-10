@@ -54,3 +54,10 @@ query searchResultRelatedItems($input: [SearchInput]) {
     }
   }
 }
+
+query overviewData($cloud: string, $input: [SearchInput]) {
+  overview: overview(cloud: $cloud)
+  searchResult: search(input: $input){
+    count
+  }
+}
