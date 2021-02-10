@@ -101,7 +101,6 @@ export default function YAMLPage(props: {
             resource: kind,
             action: 'update',
             namespace,
-            name,
             apiGroup: apiversion,
         },
     })
