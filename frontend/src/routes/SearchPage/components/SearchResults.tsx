@@ -222,51 +222,65 @@ function RenderSearchTables(
         )
     }
 
-    return uniqueKinds.map((kind: string) => {
-        const items = searchResultItems.filter(
-            (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
-        )
-        return (
-            <AcmPageCard key={`results-table-${kind}`}>
-                <AcmExpandableSection
-                    label={`${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
-                    expanded={selectedRelatedKinds.length === 0}
-                >
-                    <AcmTable
-                        plural=""
-                        items={items}
-                        columns={_.get(
-                            searchDefinitions,
-                            `[${kind}].columns`,
-                            searchDefinitions['genericresource'].columns
-                        )}
-                        keyFn={(item: any) => item._uid.toString()}
-                        tableActions={[]}
-                        rowActions={
-                            kind !== 'cluster' && kind !== 'release'
-                                ? [
-                                      {
-                                          id: 'delete',
-                                          title: t('search.results.delete.resource', { resourceKind: kind }),
-                                          click: (item: any) => {
-                                              setDeleteResource({
-                                                  open: true,
-                                                  close: () => setDeleteResource(ClosedDeleteModalProps),
-                                                  resource: item,
-                                                  currentQuery,
-                                                  relatedResource: false,
-                                              })
-                                          },
-                                      },
-                                  ]
-                                : []
-                        }
-                        bulkActions={[]}
+    return (
+        <div>
+            {searchResultItems.length >= 10000 ? (
+                <PageSection>
+                    <AcmAlert
+                        noClose={true}
+                        variant={'warning'}
+                        isInline={true}
+                        title={t('search.results.limited.results')}
                     />
-                </AcmExpandableSection>
-            </AcmPageCard>
-        )
-    })
+                </PageSection>
+            ) : null}
+            {uniqueKinds.map((kind: string) => {
+                const items = searchResultItems.filter(
+                    (item: { kind: string; __type: string }) => item.kind === kind || item.__type === kind
+                )
+                return (
+                    <AcmPageCard key={`results-table-${kind}`}>
+                        <AcmExpandableSection
+                            label={`${kind.charAt(0).toUpperCase()}${kind.slice(1)} (${items.length})`}
+                            expanded={selectedRelatedKinds.length === 0}
+                        >
+                            <AcmTable
+                                plural=""
+                                items={items}
+                                columns={_.get(
+                                    searchDefinitions,
+                                    `[${kind}].columns`,
+                                    searchDefinitions['genericresource'].columns
+                                )}
+                                keyFn={(item: any) => item._uid.toString()}
+                                tableActions={[]}
+                                rowActions={
+                                    kind !== 'cluster' && kind !== 'release'
+                                        ? [
+                                              {
+                                                  id: 'delete',
+                                                  title: t('search.results.delete.resource', { resourceKind: kind }),
+                                                  click: (item: any) => {
+                                                      setDeleteResource({
+                                                          open: true,
+                                                          close: () => setDeleteResource(ClosedDeleteModalProps),
+                                                          resource: item,
+                                                          currentQuery,
+                                                          relatedResource: false,
+                                                      })
+                                                  },
+                                              },
+                                          ]
+                                        : []
+                                }
+                                bulkActions={[]}
+                            />
+                        </AcmExpandableSection>
+                    </AcmPageCard>
+                )
+            })}
+        </div>
+    )
 }
 
 export default function SearchResults(props: { currentQuery: string; preSelectedRelatedResources: string[] }) {

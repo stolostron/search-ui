@@ -6,6 +6,7 @@ import {
     AcmLaunchLink,
     AcmPage,
     AcmPageHeader,
+    AcmScrollable,
     AcmSearchbar,
     AcmActionGroup,
 } from '@open-cluster-management/ui-components'
@@ -240,23 +241,25 @@ export default function SearchPage() {
                 setSelectedSearch={setSelectedSearch}
                 setCurrentQuery={setCurrentQuery}
             />
-            <RenderSearchBar
-                setSelectedSearch={setSelectedSearch}
-                searchQuery={searchQuery}
-                setCurrentQuery={setCurrentQuery}
-                queryErrors={queryErrors}
-                setQueryErrors={setQueryErrors}
-            />
-            {!queryErrors ? (
-                searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
-                    <SearchResults
-                        currentQuery={searchQuery}
-                        preSelectedRelatedResources={preSelectedRelatedResources}
-                    />
-                ) : (
-                    <SavedSearchQueries setSelectedSearch={setSelectedSearch} setCurrentQuery={setCurrentQuery} />
-                )
-            ) : null}
+            <AcmScrollable>
+                <RenderSearchBar
+                    setSelectedSearch={setSelectedSearch}
+                    searchQuery={searchQuery}
+                    setCurrentQuery={setCurrentQuery}
+                    queryErrors={queryErrors}
+                    setQueryErrors={setQueryErrors}
+                />
+                {!queryErrors ? (
+                    searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (
+                        <SearchResults
+                            currentQuery={searchQuery}
+                            preSelectedRelatedResources={preSelectedRelatedResources}
+                        />
+                    ) : (
+                        <SavedSearchQueries setSelectedSearch={setSelectedSearch} setCurrentQuery={setCurrentQuery} />
+                    )
+                ) : null}
+            </AcmScrollable>
         </AcmPage>
     )
 }
