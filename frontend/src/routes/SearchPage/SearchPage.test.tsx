@@ -145,6 +145,7 @@ describe('SearchPage', () => {
                         query: {
                             filters: [],
                             keywords: [],
+                            limit: 10000,
                         },
                     },
                 },
