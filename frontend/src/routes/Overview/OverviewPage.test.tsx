@@ -88,7 +88,30 @@ it('should render overview page with expected data', async () => {
                                     __typename: 'Metadata',
                                 },
                                 consoleURL:
-                                    'https://console-openshift-console.apps.zlayne-dev.dev07.red-chesterfield.com',
+                                    'https://console-openshift-console.apps.mock-cluster-name.com',
+                                status: 'ok',
+                                __typename: 'ClusterOverview',
+                            },
+                            {
+                                metadata: {
+                                    name: 'managed-cluster',
+                                    namespace: 'managed-cluster',
+                                    labels: {
+                                        cloud: 'Azure',
+                                        clusterID: '1111-2222-3333-4444',
+                                        'installer.name': 'multiclusterhub',
+                                        'installer.namespace': 'open-cluster-management',
+                                        'local-cluster': 'false',
+                                        name: 'managed-cluster',
+                                        vendor: 'OpenShift',
+                                        region: 'Other',
+                                        environment: 'Other',
+                                    },
+                                    uid: null,
+                                    __typename: 'Metadata',
+                                },
+                                consoleURL:
+                                    'https://console-openshift-console.apps.mock-cluster-name.com',
                                 status: 'ok',
                                 __typename: 'ClusterOverview',
                             },
@@ -115,6 +138,11 @@ it('should render overview page with expected data', async () => {
                                                 clustername: 'local-cluster',
                                                 clusternamespace: 'local-cluster',
                                                 compliant: 'Compliant',
+                                            },
+                                            {
+                                                clustername: 'managed-cluster',
+                                                clusternamespace: 'managed-cluster',
+                                                compliant: 'NonCompliant',
                                             },
                                         ],
                                     },
@@ -229,23 +257,22 @@ it('should render overview page with expected data', async () => {
         },
     ]
 
-    const { getByText, queryByText } = render(
+    const { getAllByText, getByText, queryByText } = render(
         <Router history={createBrowserHistory()}>
             <MockedProvider mocks={mocks}>
                 <OverviewPage />
             </MockedProvider>
-        </Router>,
-        {
-            container: document.body,
-        }
+        </Router>
     )
     // Test the loading state while apollo query finishes
     expect(getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    await waitFor(() => expect(queryByText('Amazon')).toBeTruthy())
+    expect(queryByText('Amazon')).toBeTruthy()
 
-    // Check Cluster compliance chart
-    // await waitFor(() => expect(queryByText('Cluster compliance')).toBeTruthy())
+    // Check Cluster compliance chart rendered
+    expect(getAllByText('Cluster compliance')).toHaveLength(2)
+    expect(getByText('1 Compliant')).toBeTruthy()
+    expect(getByText('1 Non-compliant')).toBeTruthy()
 })
