@@ -115,6 +115,7 @@ describe('DeleteResourceModal', () => {
                         kind: 'pod',
                         apiversion: 'v1',
                         cluster: 'local-cluster',
+                        _hubClusterResource: 'true',
                     }}
                     close={() => {}}
                 />
