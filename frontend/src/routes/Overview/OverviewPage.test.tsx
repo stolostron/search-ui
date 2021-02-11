@@ -105,7 +105,21 @@ it('should render overview page with expected data', async () => {
                                 __typename: 'ApplicationOverview',
                             },
                         ],
-                        compliances: [],
+                        compliances: [
+                            {
+                                raw: {
+                                    status: {
+                                        status: [
+                                            {
+                                                clustername: 'local-cluster',
+                                                clusternamespace: 'local-cluster',
+                                                compliant: "Compliant",
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        ],
                         timestamp: 'Wed Jan 13 2021 13:19:40 GMT+0000 (Coordinated Universal Time)',
                         __typename: 'Overview',
                     },
