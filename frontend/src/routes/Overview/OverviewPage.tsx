@@ -354,7 +354,7 @@ export default function OverviewPage() {
     // Issue: https://github.com/open-cluster-management/backlog/issues/7087
     function buildClustereComplianceLinks(clusterNames: Array<string>): string {
         return `/search?filters={"textsearch":"kind:cluster${
-            clusterNames.length > 0 && `%20name:${clusterNames.join(',')}`
+            clusterNames.length > 0 ? `%20name:${clusterNames.join(',')}` : ''
         }"}&showrelated=policy`
     }
     const complianceData =
