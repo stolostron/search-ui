@@ -181,23 +181,6 @@ it('should render overview page with expected data', async () => {
                                 },
                             ],
                         },
-                        {
-                            keywords: [],
-                            filters: [
-                                {
-                                    property: 'apigroup',
-                                    values: ['policy.open-cluster-management.io'],
-                                },
-                                {
-                                    property: 'kind',
-                                    values: ['policy'],
-                                },
-                                {
-                                    property: 'compliant',
-                                    values: ['Compliant'],
-                                },
-                            ],
-                        },
                     ],
                 },
             },
