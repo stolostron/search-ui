@@ -87,8 +87,29 @@ it('should render overview page with expected data', async () => {
                                     uid: null,
                                     __typename: 'Metadata',
                                 },
-                                consoleURL:
-                                    'https://console-openshift-console.apps.zlayne-dev.dev07.red-chesterfield.com',
+                                consoleURL: 'https://console-openshift-console.apps.mock-cluster-name.com',
+                                status: 'ok',
+                                __typename: 'ClusterOverview',
+                            },
+                            {
+                                metadata: {
+                                    name: 'managed-cluster',
+                                    namespace: 'managed-cluster',
+                                    labels: {
+                                        cloud: 'Azure',
+                                        clusterID: '1111-2222-3333-4444',
+                                        'installer.name': 'multiclusterhub',
+                                        'installer.namespace': 'open-cluster-management',
+                                        'local-cluster': 'false',
+                                        name: 'managed-cluster',
+                                        vendor: 'OpenShift',
+                                        region: 'Other',
+                                        environment: 'Other',
+                                    },
+                                    uid: null,
+                                    __typename: 'Metadata',
+                                },
+                                consoleURL: 'https://console-openshift-console.apps.mock-cluster-name.com',
                                 status: 'ok',
                                 __typename: 'ClusterOverview',
                             },
@@ -105,7 +126,28 @@ it('should render overview page with expected data', async () => {
                                 __typename: 'ApplicationOverview',
                             },
                         ],
-                        compliances: [],
+                        compliances: [
+                            {
+                                metadata: null,
+                                raw: {
+                                    status: {
+                                        status: [
+                                            {
+                                                clustername: 'local-cluster',
+                                                clusternamespace: 'local-cluster',
+                                                compliant: 'Compliant',
+                                            },
+                                            {
+                                                clustername: 'managed-cluster',
+                                                clusternamespace: 'managed-cluster',
+                                                compliant: 'NonCompliant',
+                                            },
+                                        ],
+                                    },
+                                },
+                                __typename: 'ComplianceOverview',
+                            },
+                        ],
                         timestamp: 'Wed Jan 13 2021 13:19:40 GMT+0000 (Coordinated Universal Time)',
                         __typename: 'Overview',
                     },
@@ -181,40 +223,6 @@ it('should render overview page with expected data', async () => {
                                 },
                             ],
                         },
-                        {
-                            keywords: [],
-                            filters: [
-                                {
-                                    property: 'apigroup',
-                                    values: ['policy.open-cluster-management.io'],
-                                },
-                                {
-                                    property: 'kind',
-                                    values: ['policy'],
-                                },
-                                {
-                                    property: 'compliant',
-                                    values: ['Compliant'],
-                                },
-                            ],
-                        },
-                        {
-                            keywords: [],
-                            filters: [
-                                {
-                                    property: 'apigroup',
-                                    values: ['policy.open-cluster-management.io'],
-                                },
-                                {
-                                    property: 'kind',
-                                    values: ['policy'],
-                                },
-                                {
-                                    property: 'compliant',
-                                    values: ['NonCompliant'],
-                                },
-                            ],
-                        },
                     ],
                 },
             },
@@ -241,21 +249,13 @@ it('should render overview page with expected data', async () => {
                             count: 0,
                             __typename: 'SearchResult',
                         },
-                        {
-                            count: 0,
-                            __typename: 'SearchResult',
-                        },
-                        {
-                            count: 0,
-                            __typename: 'SearchResult',
-                        },
                     ],
                 },
             },
         },
     ]
 
-    render(
+    const { getAllByText, getByText, queryByText } = render(
         <Router history={createBrowserHistory()}>
             <MockedProvider mocks={mocks}>
                 <OverviewPage />
@@ -263,9 +263,14 @@ it('should render overview page with expected data', async () => {
         </Router>
     )
     // Test the loading state while apollo query finishes
-    expect(screen.getByText('Loading')).toBeInTheDocument()
+    expect(getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    await waitFor(() => expect(screen.queryByText('Amazon')).toBeTruthy())
+    expect(queryByText('Amazon')).toBeTruthy()
+
+    // Check Cluster compliance chart rendered
+    expect(getAllByText('Cluster compliance')).toHaveLength(2)
+    expect(getByText('1 Compliant')).toBeTruthy()
+    expect(getByText('1 Non-compliant')).toBeTruthy()
 })
