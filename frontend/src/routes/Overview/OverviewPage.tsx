@@ -124,22 +124,6 @@ const searchQueries = (selectedClusters: Array<string>): Array<any> => {
                 },
             ],
         },
-        {
-            keywords: [],
-            filters: [
-                { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
-                { property: 'kind', values: ['policy'] },
-                { property: 'compliant', values: ['Compliant'] },
-            ],
-        },
-        {
-            keywords: [],
-            filters: [
-                { property: 'apigroup', values: ['policy.open-cluster-management.io'] },
-                { property: 'kind', values: ['policy'] },
-                { property: 'compliant', values: ['NonCompliant'] },
-            ],
-        },
     ]
 
     if (selectedClusters?.length > 0) {
@@ -235,6 +219,19 @@ export default function OverviewPage() {
     if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
         setClusters(data?.overview?.clusters || [])
     }
+
+    const nonCompliantClusters = new Set<string>()
+    data?.overview?.compliances?.forEach((c) => {
+        c?.raw?.status?.status?.forEach((i: any) => {
+            if (selectedClusterNames.length === 0 || selectedClusterNames.includes(i.clustername)) {
+                if (i.compliant === 'NonCompliant') {
+                    nonCompliantClusters.add(i.clustername)
+                }
+            }
+        })
+    })
+    const tempClusters = selectedClusterNames.length > 0 ? selectedClusterNames : clusters.map((c) => c.metadata?.name)
+    const compliantClusters = tempClusters.filter((c) => !nonCompliantClusters.has(c))
 
     // SEARCH-API
     const [
@@ -352,21 +349,28 @@ export default function OverviewPage() {
                   },
               ]
 
+    // TODO: Breaks url if length of selectedClustersFilter is too big.
+    // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+    function buildClustereComplianceLinks(clusterNames: Array<string>): string {
+        return `/search?filters={"textsearch":"kind:cluster${
+            clusterNames.length > 0 && `%20name:${clusterNames.join(',')}`
+        }"}&showrelated=policy`
+    }
     const complianceData =
         loading || searchLoading
             ? []
             : [
                   {
                       key: 'Compliant',
-                      value: searchResult[5]?.count || 0,
+                      value: compliantClusters.length,
                       isPrimary: true,
-                      link: `/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:Compliant${urlClusterFilter}"}`,
+                      link: buildClustereComplianceLinks(compliantClusters),
                   },
                   {
                       key: 'Non-compliant',
-                      value: searchResult[6]?.count || 0,
+                      value: nonCompliantClusters.size,
                       isDanger: true,
-                      link: `/search?filters={"textsearch":"kind:policy%20apigroup:policy.open-cluster-management.io%20compliant:NonCompliant${urlClusterFilter}"}`,
+                      link: buildClustereComplianceLinks(Array.from(nonCompliantClusters)),
                   },
               ]
 
