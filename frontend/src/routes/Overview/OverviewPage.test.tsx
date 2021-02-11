@@ -241,14 +241,6 @@ it('should render overview page with expected data', async () => {
                             count: 0,
                             __typename: 'SearchResult',
                         },
-                        {
-                            count: 0,
-                            __typename: 'SearchResult',
-                        },
-                        {
-                            count: 0,
-                            __typename: 'SearchResult',
-                        },
                     ],
                 },
             },
