@@ -45,7 +45,7 @@ export const DeleteResourceModal = (props: any) => {
         variables: {
             resource: resource?.kind,
             action: 'delete',
-            namespace: resource?.cluster === 'local-cluster' ? resource?.namespace : resource?.cluster,
+            namespace: resource?._hubClusterResource === 'true' ? resource?.namespace : resource?.cluster,
             apiGroup,
         },
     })
