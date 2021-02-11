@@ -100,7 +100,7 @@ export default function YAMLPage(props: {
         variables: {
             resource: kind,
             action: 'update',
-            namespace,
+            namespace: cluster === 'local-cluster' ? namespace : cluster,
             apiGroup: apiversion,
         },
     })
