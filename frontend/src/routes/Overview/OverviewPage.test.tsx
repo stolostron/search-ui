@@ -107,18 +107,20 @@ it('should render overview page with expected data', async () => {
                         ],
                         compliances: [
                             {
+                                metadata: null,
                                 raw: {
                                     status: {
                                         status: [
                                             {
                                                 clustername: 'local-cluster',
                                                 clusternamespace: 'local-cluster',
-                                                compliant: "Compliant",
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
+                                                compliant: 'Compliant',
+                                            },
+                                        ],
+                                    },
+                                },
+                                __typename: 'ComplianceOverview',
+                            },
                         ],
                         timestamp: 'Wed Jan 13 2021 13:19:40 GMT+0000 (Coordinated Universal Time)',
                         __typename: 'Overview',
@@ -227,17 +229,23 @@ it('should render overview page with expected data', async () => {
         },
     ]
 
-    render(
+    const { getByText, queryByText } = render(
         <Router history={createBrowserHistory()}>
             <MockedProvider mocks={mocks}>
                 <OverviewPage />
             </MockedProvider>
-        </Router>
+        </Router>,
+        {
+            container: document.body,
+        }
     )
     // Test the loading state while apollo query finishes
-    expect(screen.getByText('Loading')).toBeInTheDocument()
+    expect(getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    await waitFor(() => expect(screen.queryByText('Amazon')).toBeTruthy())
+    await waitFor(() => expect(queryByText('Amazon')).toBeTruthy())
+
+    // Check Cluster compliance chart
+    // await waitFor(() => expect(queryByText('Cluster compliance')).toBeTruthy())
 })

@@ -223,7 +223,7 @@ export default function OverviewPage() {
 
     const nonCompliantClusters = new Set<string>()
     data?.overview?.compliances?.forEach((c) => {
-        c?.raw?.status?.status?.forEach((i: any) => {
+        c?.raw?.status?.status?.forEach((i: { clustername: string; clusternamespace: string; compliant?: string }) => {
             if (selectedClusterNames.length === 0 || selectedClusterNames.includes(i.clustername)) {
                 if (i.compliant === 'NonCompliant') {
                     nonCompliantClusters.add(i.clustername)
@@ -352,7 +352,7 @@ export default function OverviewPage() {
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
     // Issue: https://github.com/open-cluster-management/backlog/issues/7087
-    function buildClustereComplianceLinks(clusterNames: Array<string>): string {
+    function buildClusterComplianceLinks(clusterNames: Array<string> = []): string {
         return `/search?filters={"textsearch":"kind:cluster${
             clusterNames.length > 0 ? `%20name:${clusterNames.join(',')}` : ''
         }"}&showrelated=policy`
@@ -365,13 +365,13 @@ export default function OverviewPage() {
                       key: 'Compliant',
                       value: compliantClusters.length,
                       isPrimary: true,
-                      link: buildClustereComplianceLinks(compliantClusters),
+                      link: buildClusterComplianceLinks(compliantClusters),
                   },
                   {
                       key: 'Non-compliant',
                       value: nonCompliantClusters.size,
                       isDanger: true,
-                      link: buildClustereComplianceLinks(Array.from(nonCompliantClusters)),
+                      link: buildClusterComplianceLinks(Array.from(nonCompliantClusters)),
                   },
               ]
 
