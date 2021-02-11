@@ -87,8 +87,7 @@ it('should render overview page with expected data', async () => {
                                     uid: null,
                                     __typename: 'Metadata',
                                 },
-                                consoleURL:
-                                    'https://console-openshift-console.apps.mock-cluster-name.com',
+                                consoleURL: 'https://console-openshift-console.apps.mock-cluster-name.com',
                                 status: 'ok',
                                 __typename: 'ClusterOverview',
                             },
@@ -110,8 +109,7 @@ it('should render overview page with expected data', async () => {
                                     uid: null,
                                     __typename: 'Metadata',
                                 },
-                                consoleURL:
-                                    'https://console-openshift-console.apps.mock-cluster-name.com',
+                                consoleURL: 'https://console-openshift-console.apps.mock-cluster-name.com',
                                 status: 'ok',
                                 __typename: 'ClusterOverview',
                             },
