@@ -151,7 +151,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         // TODO: Better error handling
         console.error(error)
     }
-    const addons = data?.getResource.items
+    const addons = data?.getResource?.items
 
     function getLaunchLink(addons: ClusterManagementAddOn[]) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
@@ -172,7 +172,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
     return (
         <Fragment>
             <AcmActionGroup>
-                <AcmLaunchLink links={getLaunchLink(addons)} />
+                {!error && <AcmLaunchLink links={getLaunchLink(addons)} />}
                 <AcmButton
                     href="/multicloud/add-connection"
                     variant={ButtonVariant.link}
