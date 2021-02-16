@@ -14,10 +14,10 @@ describe('DeleteResourceModal', () => {
                 request: {
                     query: UserAccessDocument,
                     variables: {
-                        resource: 'pod',
+                        kind: 'pod',
                         action: 'delete',
                         namespace: 'testNamespace',
-                        apiGroup: 'v1',
+                        version: 'v1',
                     },
                 },
                 result: {
@@ -27,9 +27,9 @@ describe('DeleteResourceModal', () => {
                             reason: 'RBAC: allowed by ...',
                             namespace: 'testNamespace',
                             verb: 'delete',
-                            group: 'v1',
-                            version: '*',
-                            resource: 'pod',
+                            group: '*',
+                            version: 'v1',
+                            resource: 'pods',
                         },
                     },
                 },

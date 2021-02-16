@@ -43,10 +43,11 @@ export const DeleteResourceModal = (props: any) => {
         skip: !resource,
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
         variables: {
-            resource: resource?.kind,
+            kind: resource?.kind,
             action: 'delete',
             namespace: resource?._hubClusterResource === 'true' ? resource?.namespace : resource?.cluster,
-            apiGroup,
+            apiGroup: resource?.apigroup ?? undefined,
+            version: resource?.apiversion,
         },
     })
 

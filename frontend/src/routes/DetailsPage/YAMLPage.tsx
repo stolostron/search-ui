@@ -95,13 +95,17 @@ export default function YAMLPage(props: {
         },
     })
 
+    // Need to split the apigroup & apiversion (ex: for deployments = apps/v1)
+    const apiGroup = apiversion.includes('/') ? apiversion.split('/')[0] : undefined
+    const version = apiversion.includes('/') ? apiversion.split('/')[1] : apiversion.split('/')[0]
     const { data: userAccessData, loading: userAccessLoading, error: userAccessError } = useUserAccessQuery({
         client: consoleClient,
         variables: {
-            resource: kind,
+            kind,
             action: 'update',
             namespace: cluster === 'local-cluster' ? namespace : cluster,
-            apiGroup: apiversion,
+            apiGroup,
+            version: version,
         },
     })
 
