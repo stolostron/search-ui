@@ -257,13 +257,14 @@ export default function OverviewPage() {
 
     // Process data from API.
     useEffect(() => {
-        const { kubernetesTypes, regions, ready, offline, providers, clusterNames } = getClusterSummary(
+        const clusterSummary = getClusterSummary(
             clusters || [],
             selectedCloud,
             setSelectedCloud
         )
-        setSummaryData({ kubernetesTypes, regions, ready, offline, providers })
+        setSummaryData(clusterSummary)
 
+        const { clusterNames } = clusterSummary
         if (selectedCloud === '') {
             if (!_.isEqual(selectedClusterNames, [])) {
                 setSelectedClusterNames([])
