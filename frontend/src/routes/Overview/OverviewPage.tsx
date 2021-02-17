@@ -341,7 +341,8 @@ export default function OverviewPage() {
                       key: 'Failed',
                       value: searchResult[4]?.count || 0,
                       isDanger: true,
-                      link: `/search?filters={"textsearch":"kind%3Apod%20status%3ACrashLoopBackOff%2CFailed%2CImagePullBackOff%2CRunContainerError%2CTerminated%2CUnknown%2COOMKilled${urlClusterFilter}"}`,
+                      link: `/search?filters={"textsearch":"kind%3Apod%20status%3ACrashLoopBackOff%2CFailed%2CImagePullBackOff%2CRunContainerError%2C
+Terminated%2CUnknown%2COOMKilled${urlClusterFilter}"}`,
                   },
               ]
 
