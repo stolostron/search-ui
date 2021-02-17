@@ -149,7 +149,6 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         // TODO: Better error handling
         console.error(error)
     }
-    const addons = data?.getResource?.items
 
     function getLaunchLink(addons: ClusterManagementAddOn[]) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
@@ -166,6 +165,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
             return undefined
         }
     }
+    const addons = data?.getResource?.items
 
     return (
         <Fragment>
