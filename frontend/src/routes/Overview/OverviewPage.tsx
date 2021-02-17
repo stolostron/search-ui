@@ -257,11 +257,7 @@ export default function OverviewPage() {
 
     // Process data from API.
     useEffect(() => {
-        const clusterSummary = getClusterSummary(
-            clusters || [],
-            selectedCloud,
-            setSelectedCloud
-        )
+        const clusterSummary = getClusterSummary(clusters || [], selectedCloud, setSelectedCloud)
         setSummaryData(clusterSummary)
 
         const { clusterNames } = clusterSummary
