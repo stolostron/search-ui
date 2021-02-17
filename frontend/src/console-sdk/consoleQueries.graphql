@@ -10,8 +10,8 @@ mutation deleteResource($selfLink: String, $apiVersion: String, $name: String, $
     deleteResource(selfLink: $selfLink, apiVersion: $apiVersion, name: $name, namespace: $namespace, cluster: $cluster, kind: $kind, childResources: $childResources)
 }
 
-query userAccess($resource: String!, $action: String!, $namespace: String, $name: String, $apiGroup: String){
-    userAccess(resource: $resource, action: $action, namespace: $namespace, name: $name, apiGroup: $apiGroup)
+query userAccess($resource: String, $kind: String, $action: String!, $namespace: String, $apiGroup: String, $name: String, $version: String){
+    userAccess(resource: $resource, kind: $kind, action: $action, namespace: $namespace, apiGroup: $apiGroup, name: $name, version: $version)
 }
 
 query getLogs($containerName: String!, $podName: String!, $podNamespace: String!, $clusterName: String!){

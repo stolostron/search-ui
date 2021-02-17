@@ -819,11 +819,13 @@ export type DeleteResourceMutationVariables = Exact<{
 export type DeleteResourceMutation = Pick<Mutation, 'deleteResource'>
 
 export type UserAccessQueryVariables = Exact<{
-    resource: Scalars['String']
+    resource?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
     action: Scalars['String']
     namespace?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
     apiGroup?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    version?: Maybe<Scalars['String']>
 }>
 
 export type UserAccessQuery = Pick<Query, 'userAccess'>
@@ -1046,8 +1048,24 @@ export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<
     DeleteResourceMutationVariables
 >
 export const UserAccessDocument = gql`
-    query userAccess($resource: String!, $action: String!, $namespace: String, $name: String, $apiGroup: String) {
-        userAccess(resource: $resource, action: $action, namespace: $namespace, name: $name, apiGroup: $apiGroup)
+    query userAccess(
+        $resource: String
+        $kind: String
+        $action: String!
+        $namespace: String
+        $apiGroup: String
+        $name: String
+        $version: String
+    ) {
+        userAccess(
+            resource: $resource
+            kind: $kind
+            action: $action
+            namespace: $namespace
+            apiGroup: $apiGroup
+            name: $name
+            version: $version
+        )
     }
 `
 
@@ -1064,10 +1082,12 @@ export const UserAccessDocument = gql`
  * const { data, loading, error } = useUserAccessQuery({
  *   variables: {
  *      resource: // value for 'resource'
+ *      kind: // value for 'kind'
  *      action: // value for 'action'
  *      namespace: // value for 'namespace'
- *      name: // value for 'name'
  *      apiGroup: // value for 'apiGroup'
+ *      name: // value for 'name'
+ *      version: // value for 'version'
  *   },
  * });
  */
