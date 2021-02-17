@@ -48,7 +48,7 @@ export function mapProviderFromLabel(provider: string): Provider {
 }
 
 function getClusterSummary(clusters: any, selectedCloud: string, setSelectedCloud: Dispatch<SetStateAction<string>>) {
-    const clusterSummary = clusters.reduce(
+    return clusters.reduce(
         (prev: any, curr: any, index: number) => {
             // Data for Providers section.
             const cloud = curr.metadata?.labels?.cloud || 'other'
@@ -93,8 +93,6 @@ function getClusterSummary(clusters: any, selectedCloud: string, setSelectedClou
             clusterNames: new Set(),
         }
     )
-
-    return clusterSummary
 }
 
 const searchQueries = (selectedClusters: Array<string>): Array<any> => {
