@@ -165,12 +165,12 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
             return undefined
         }
     }
-    const addons = data?.getResource?.items
+    const clusterAddons = data?.getResource?.items
 
     return (
         <Fragment>
             <AcmActionGroup>
-                {!error && <AcmLaunchLink links={getLaunchLink(addons)} />}
+                {!error && <AcmLaunchLink links={getLaunchLink(clusterAddons)} />}
                 <AcmButton
                     href="/multicloud/add-connection"
                     variant={ButtonVariant.link}
@@ -347,10 +347,11 @@ export default function OverviewPage() {
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
     // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+    function buildNamesFilter(names: Array<string> = []): string {
+        return names.length > 0 ? `%20name:${names.join(',')}` : ''
+    }
     function buildClusterComplianceLinks(clusterNames: Array<string> = []): string {
-        return `/search?filters={"textsearch":"kind:cluster${
-            clusterNames.length > 0 ? `%20name:${clusterNames.join(',')}` : ''
-        }"}&showrelated=policy`
+        return `/search?filters={"textsearch":"kind:cluster${buildNamesFilter(clusterNames)}"}&showrelated=policy`
     }
     const complianceData =
         loading || searchLoading
