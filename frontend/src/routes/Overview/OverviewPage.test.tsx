@@ -20,7 +20,6 @@ describe('Overview Page functions', () => {
     })
 })
 
-
 describe('Overview Page', () => {
     it('should render in loading state', async () => {
         render(
@@ -32,12 +31,14 @@ describe('Overview Page', () => {
         )
         // Test the loading state while apollo query finishes
         expect(screen.getByText('Loading')).toBeInTheDocument()
-    
+
         await wait()
         expect(screen.queryByText('Loading')).not.toBeInTheDocument()
     })
 
     it('should render in error state', async () => {
+        const origConsole = console.error
+        console.error = jest.fn() // console.error messages won't flood test results.
         render(
             <Router history={createBrowserHistory()}>
                 <MockedProvider mocks={mockErrorState}>
@@ -51,6 +52,9 @@ describe('Overview Page', () => {
         await wait()
         // Test that the component has rendered correctly with an error
         await waitFor(() => expect(screen.queryByText('overview.data.error.title')).toBeTruthy())
+
+        expect(console.error).toBeCalledTimes(2)
+        console.error = origConsole // restore console.error to original.
     })
 
     it('should render overview page with expected data', async () => {

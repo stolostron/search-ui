@@ -1,4 +1,3 @@
-
 import { GraphQLError } from 'graphql'
 import { GetResourceDocument, GetOverviewDocument } from '../../console-sdk/console-sdk'
 import { SearchResultCountDocument } from '../../search-sdk/search-sdk'
@@ -95,16 +94,16 @@ const mockGetOverviewQuery = {
             },
         },
     },
-};
+}
 const mockGetResourceQuery = {
     request: {
         query: GetResourceDocument,
-        variables:{
-            selfLink:"/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons",
-            namespace: "open-cluster-management",
-            name: "",
-            cluster: "local-cluster",
-            kind: ""
+        variables: {
+            selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
+            namespace: 'open-cluster-management',
+            name: '',
+            cluster: 'local-cluster',
+            kind: '',
         },
     },
     response: {
@@ -118,22 +117,22 @@ const mockGetResourceQuery = {
                         kind: 'ClusterManagementAddOn',
                         spec: {
                             addOnConfiguration: {
-                              crName: '',
-                              crdName: 'klusterletaddonconfigs.agent.open-cluster-management.io',
+                                crName: '',
+                                crdName: 'klusterletaddonconfigs.agent.open-cluster-management.io',
                             },
                             addOnMeta: {
-                              description: "Processes events and other requests to managed resources.",
-                              displayName: "Application Manager"
-                            }
-                          },
-                    }
-                ]
-            }
-        }
-    }
+                                description: 'Processes events and other requests to managed resources.',
+                                displayName: 'Application Manager',
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+    },
 }
 
-const mockSearchResultCountQuery =  {
+const mockSearchResultCountQuery = {
     request: {
         query: SearchResultCountDocument,
         variables: {
@@ -231,8 +230,7 @@ const mockSearchResultCountQuery =  {
             ],
         },
     },
-};
-
+}
 
 export const mockErrorState = [
     {
@@ -245,11 +243,6 @@ export const mockErrorState = [
     },
     mockGetResourceQuery,
     mockSearchResultCountQuery,
-];
+]
 
-
-export const mockValidState = [
-    mockSearchResultCountQuery,
-    mockGetResourceQuery,
-    mockGetOverviewQuery,   
-];
+export const mockValidState = [mockSearchResultCountQuery, mockGetResourceQuery, mockGetOverviewQuery]
