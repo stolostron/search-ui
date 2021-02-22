@@ -46,7 +46,7 @@ export const DeleteResourceModal = (props: any) => {
             kind: resource?.kind,
             action: 'delete',
             namespace: resource?._hubClusterResource === 'true' ? resource?.namespace : resource?.cluster,
-            apiGroup: resource?.apigroup ?? undefined,
+            apiGroup: resource?.apigroup ?? "",
             version: resource?.apiversion,
         },
     })
