@@ -27,7 +27,7 @@ describe('DeleteResourceModal', () => {
                             reason: 'RBAC: allowed by ...',
                             namespace: 'testNamespace',
                             verb: 'delete',
-                            group: '*',
+                            group: '',
                             version: 'v1',
                             resource: 'pods',
                         },
