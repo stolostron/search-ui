@@ -17,6 +17,7 @@ describe('DeleteResourceModal', () => {
                         kind: 'pod',
                         action: 'delete',
                         namespace: 'testNamespace',
+                        apiGroup: '',
                         version: 'v1',
                     },
                 },
