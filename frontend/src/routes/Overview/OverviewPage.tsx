@@ -42,6 +42,8 @@ export function mapProviderFromLabel(provider: string): Provider {
             return Provider.redhatcloud
         case 'VMware':
             return Provider.vmware
+        case 'OpenStack':
+            return Provider.openstack
         default:
             return Provider.other
     }
