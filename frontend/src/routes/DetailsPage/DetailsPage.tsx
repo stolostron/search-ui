@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import React from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
 import _ from 'lodash'

@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import queryString from 'query-string'
 
 // This function pushes the new search query to the browsers history

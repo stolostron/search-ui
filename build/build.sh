@@ -1,6 +1,7 @@
 #!/bin/bash -e
 ###############################################################################
 # Copyright (c) 2020 Red Hat, Inc.
+# Copyright Contributors to the Open Cluster Management project
 ###############################################################################
 # PARAMETERS
 # $1 - Final image name and tag to be produced
