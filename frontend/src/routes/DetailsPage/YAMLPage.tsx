@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import { useState, useEffect } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmButton, AcmLoadingPage } from '@open-cluster-management/ui-components'

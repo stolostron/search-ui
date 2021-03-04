@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import React from 'react'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'

@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 /* istanbul ignore file */
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {

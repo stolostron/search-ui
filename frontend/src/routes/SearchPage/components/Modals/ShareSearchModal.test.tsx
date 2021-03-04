@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import React from 'react'
 import { render } from '@testing-library/react'
 import { ShareSearchModal } from './ShareSearchModal'
