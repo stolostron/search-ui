@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
 import { AcmButton, AcmLabels, AcmModal } from '@open-cluster-management/ui-components'

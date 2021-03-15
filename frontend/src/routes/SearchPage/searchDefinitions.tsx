@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import _ from 'lodash'
 import React from 'react'
 import { Link } from 'react-router-dom'

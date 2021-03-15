@@ -1,3 +1,5 @@
+// Copyright (c) 2021 Red Hat, Inc.
+// Copyright Contributors to the Open Cluster Management project
 import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { V1Status, V1ObjectMeta } from '@kubernetes/client-node'
 
