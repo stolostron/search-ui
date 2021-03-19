@@ -2,10 +2,15 @@
 
 -include /opt/build-harness/Makefile.prow
 
+
+.PHONY: check
+check:
+    npm run check
+
+.PHONY: lint
+lint:
+    npm run lint
+
 .PHONY: unit-test
 unit-test:
-    npm run lint
-    npm run check
-    npm test
-    # make sonar/js/jest-init
-    # make sonar/js
+	npm test
