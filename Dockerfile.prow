@@ -17,9 +17,9 @@ COPY --from=builder /usr/bin/node /usr/bin/node
 RUN mkdir -p /app
 WORKDIR /app
 ENV NODE_ENV production
-COPY --from=builder /app/backend/node_modules ./node_modules
-COPY --from=builder /app/backend/build ./
-COPY --from=builder /app/frontend/build ./public
+COPY --from=builder ./backend/node_modules ./node_modules
+COPY --from=builder ./backend/build ./
+COPY --from=builder ./frontend/build ./public
 USER 1001
 
 EXPOSE 3000 4000

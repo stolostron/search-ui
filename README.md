@@ -1,6 +1,6 @@
 # Search UI
 
-Red Hat - Advanced Cluster Management for Kubernetes - Search UI
+Open Cluster Management - Search UI
 
 [![Build Status](https://travis-ci.com/open-cluster-management/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/open-cluster-management/search-ui)
 
@@ -10,9 +10,9 @@ Red Hat - Advanced Cluster Management for Kubernetes - Search UI
 
 ### Prerequisites
 
-- Node.js v12.x.x
+- Node.js v14.x.x
 - OpenShift 4.x.x cluster
-- Advanced Cluster Management installed on your OCP cluster
+- Open Cluster Management installed on your OCP cluster
 
 
 1.  Clone this repository
