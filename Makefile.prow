@@ -12,4 +12,4 @@ lint:
 
 .PHONY: unit-test
 unit-test:
-	npm test
+    npm test
