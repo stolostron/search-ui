@@ -1,0 +1,11 @@
+# Copyright Contributors to the Open Cluster Management project
+
+-include /opt/build-harness/Makefile.prow
+
+.PHONY: unit-test
+unit-test:
+    npm run lint
+    npm run check
+    npm test
+    # make sonar/js/jest-init
+    # make sonar/js

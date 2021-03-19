@@ -28,7 +28,7 @@ jobs:
           name: 'Run tests, lint, and prettier check'
           if: type != cron
           language: node_js
-          node_js: '12'
+          node_js: '14'
           install: npm ci
           script:
               - set -e
@@ -41,7 +41,7 @@ jobs:
           if: type != cron
           script:
               - set -e
-              - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/nodejs-12
+              - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/nodejs-14
               - travis_retry timeout 2m docker pull registry.access.redhat.com/ubi8/ubi-minimal
               - if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then export COMPONENT_TAG_EXTENSION="-PR${TRAVIS_PULL_REQUEST}-${TRAVIS_COMMIT}"; fi;
               - make component/build
@@ -58,7 +58,7 @@ jobs:
         - stage: Automated Dependency Upgrade
           if: type = cron AND branch = main
           language: node_js
-          node_js: '12'
+          node_js: '14'
           install: echo skip install
           script:
               - set -e
