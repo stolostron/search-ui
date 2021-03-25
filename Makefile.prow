@@ -7,7 +7,7 @@ check:
     npm run check 
 
 .PHONY: install
-check:
+install:
     npm ci
 
 .PHONY: lint
