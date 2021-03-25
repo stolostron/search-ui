@@ -4,7 +4,11 @@
 
 .PHONY: check
 check:
-    npm run check
+    npm run check 
+
+.PHONY: check
+check:
+    npm ci
 
 .PHONY: lint
 lint:
