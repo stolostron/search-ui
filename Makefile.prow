@@ -6,7 +6,7 @@
 check:
     npm run check 
 
-.PHONY: check
+.PHONY: install
 check:
     npm ci
 
