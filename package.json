@@ -1,6 +1,6 @@
 {
     "name": "@open-cluster-management/search-ui",
-    "version": "0.0.1",
+    "version": "2.3.0",
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
         "setup": "./setup.sh",
