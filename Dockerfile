@@ -4,7 +4,8 @@ FROM registry.ci.openshift.org/open-cluster-management/builder:nodejs14-linux-am
 USER root
 COPY package.json package-lock.json ./
 RUN npm ci
-COPY ./ ./
+COPY ./backend ./backend
+COPY ./frontend ./frontend
 RUN npm run postinstall
 RUN npm run build
 RUN rm -rf backend/node_modules
