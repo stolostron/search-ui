@@ -4,20 +4,20 @@
 
 .PHONY: build
 build:
-    npm run build
+	npm run build
 
 .PHONY: check
 check:
-    npm run check 
+	npm run check 
 
 .PHONY: install
 install:
-    npm ci
+	npm ci
 
 .PHONY: lint
 lint:
-    npm run lint
+	npm run lint
 
 .PHONY: unit-test
 unit-test:
-    npm test
+	npm test
