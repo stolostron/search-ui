@@ -2,6 +2,10 @@
 
 -include /opt/build-harness/Makefile.prow
 
+.PHONY: build
+build:
+    npm run build
+
 .PHONY: check
 check:
     npm run check 
