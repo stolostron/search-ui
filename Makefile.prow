@@ -13,6 +13,7 @@ check:
 .PHONY: install
 install:
 	npm ci
+	npm run postinstall
 
 .PHONY: lint
 lint:
