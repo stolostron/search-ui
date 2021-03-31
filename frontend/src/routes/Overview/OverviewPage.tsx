@@ -144,11 +144,11 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
     const { data, error } = useGetResourceQuery({
         client: consoleClient,
         variables: {
-            selfLink: '/apis/addon.open-cluster-management.io/v1alpha1/clustermanagementaddons',
             namespace: 'open-cluster-management',
             name: null,
             cluster: 'local-cluster',
-            kind: null,
+            kind: 'clustermanagementaddon',
+            apiVersion: 'addon.open-cluster-management.io/v1alpha1',
         },
     })
     if (error) {
