@@ -19,10 +19,6 @@ ENV NODE_ENV production
 COPY --from=builder ./backend/node_modules ./node_modules
 COPY --from=builder ./backend/build ./
 COPY --from=builder ./frontend/build ./public
-USER 1001
-
-EXPOSE 3000 4000
-CMD ["node", "main.js"]
 
 ARG VCS_REF
 ARG VCS_URL
@@ -54,3 +50,11 @@ LABEL org.label-schema.vendor="Red Hat" \
     io.k8s.display-name="$IMAGE_DISPLAY_NAME" \
     io.k8s.description="$IMAGE_DESCRIPTION" \
     io.openshift.tags="$IMAGE_OPENSHIFT_TAGS"
+
+RUN microdnf update &&\
+    microdnf install ca-certificates vi --nodocs &&\
+    microdnf clean all
+
+USER 1001
+EXPOSE 3000 4000
+CMD ["node", "main.js"]
