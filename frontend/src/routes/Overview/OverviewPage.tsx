@@ -188,7 +188,11 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
                 >
                     {t('overview.add.provider')}
                 </AcmButton>
-                <AcmAutoRefreshSelect refetch={props.refetch} refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]} initRefreshTime={30}/>
+                <AcmAutoRefreshSelect
+                    refetch={props.refetch}
+                    refreshIntervals={[30, 60, 5 * 60, 30 * 60, 0]}
+                    initRefreshTime={30}
+                />
             </AcmActionGroup>
             <AcmRefreshTime timestamp={props.timestamp} reloading={props.reloading} />
         </Fragment>
