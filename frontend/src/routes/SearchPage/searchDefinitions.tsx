@@ -1016,6 +1016,40 @@ const searchDefinitions: any = {
             },
         ],
     },
+    policyreport: {
+        columns: [
+            {
+                header: 'Name',
+                sort: 'name',
+                cell: (item: any) => {
+                    return CreateDetailsLink(item)
+                },
+            },
+            {
+                header: 'Namespace',
+                sort: 'namespace',
+                cell: 'namespace',
+            },
+            {
+                header: 'Result',
+                sort: 'result',
+                cell: 'result',
+                tooltip: 'Result will be "error" if the violation is still present or "skip" if it has been remediated',
+            },
+            {
+                header: 'Total Risk',
+                sort: 'risk',
+                cell: 'risk',
+            },
+            {
+                header: 'Categories',
+                sort: 'category',
+                cell: (item: any) => {
+                    return FormatLabels(item)
+                },
+            },
+        ],
+    },
     release: {
         columns: [
             {
@@ -1414,6 +1448,10 @@ export function FormatLabels(item: any) {
         const labels = item.label.split('; ')
         const labelsToHide = labels.slice(3).map((l: string) => l.split('=')[0])
         return <AcmLabels labels={labels} collapse={labelsToHide} />
+    } else if (item.category) {
+        const categories = item.category.split('; ')
+        const categoriesToHide = categories.slice(3)
+        return <AcmLabels labels={categories} collapse={categoriesToHide} />
     }
     return '-'
 }

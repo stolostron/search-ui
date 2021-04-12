@@ -169,6 +169,16 @@ test('Correctly returns label components', () => {
     expect(result).toMatchSnapshot()
 })
 
+test('Correctly returns category components', () => {
+    const item = {
+        name: 'testName',
+        namespace: 'testNamespace',
+        category: 'testcategory=category1; testcategory=category2',
+    }
+    const result = FormatLabels(item)
+    expect(result).toMatchSnapshot()
+})
+
 test('Correctly returns empty labels', () => {
     const item = {
         name: 'testName',
