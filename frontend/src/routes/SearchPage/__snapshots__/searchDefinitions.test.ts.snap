@@ -1414,6 +1414,57 @@ Array [
 ]
 `;
 
+exports[`Correctly returns all resource definitions: SearchDefinitions-policyreport 1`] = `
+Array [
+  Object {
+    "cell": <Link
+      to={
+        Object {
+          "pathname": "/resources",
+          "search": "?cluster%3DtestCluster%26kind%3Dpod%26namespace%3DtestNamespace%26name%3DtestName",
+          "state": Object {
+            "from": "/search",
+          },
+        }
+      }
+    >
+      testName
+    </Link>,
+    "header": "Name",
+    "sort": "name",
+  },
+  Object {
+    "cell": "namespace",
+    "header": "Namespace",
+    "sort": "namespace",
+  },
+  Object {
+    "cell": "result",
+    "header": "Result",
+    "sort": "result",
+    "tooltip": "Result will be \\"error\\" if the violation is still present or \\"skip\\" if it has been remediated",
+  },
+  Object {
+    "cell": "risk",
+    "header": "Total Risk",
+    "sort": "risk",
+  },
+  Object {
+    "cell": <AcmLabels
+      collapse={Array []}
+      labels={
+        Array [
+          "testLabel=label",
+          "testLabel1=label1",
+        ]
+      }
+    />,
+    "header": "Categories",
+    "sort": "category",
+  },
+]
+`;
+
 exports[`Correctly returns all resource definitions: SearchDefinitions-release 1`] = `
 Array [
   Object {
@@ -1774,6 +1825,18 @@ Array [
     "sort": "label",
   },
 ]
+`;
+
+exports[`Correctly returns category components 1`] = `
+<AcmLabels
+  collapse={Array []}
+  labels={
+    Array [
+      "testcategory=category1",
+      "testcategory=category2",
+    ]
+  }
+/>
 `;
 
 exports[`Correctly returns empty CreateDashboardLink 1`] = `"-"`;
