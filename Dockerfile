@@ -1,6 +1,6 @@
 # Copyright (c) 2021 Red Hat, Inc.
 # Copyright Contributors to the Open Cluster Management project
-FROM registry.ci.openshift.org/open-cluster-management/builder:nodejs14-linux-amd64 as builder
+FROM registry.ci.openshift.org/open-cluster-management/builder:nodejs14-linux as builder
 USER root
 COPY package.json package-lock.json ./
 RUN npm ci
