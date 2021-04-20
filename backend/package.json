@@ -16,7 +16,7 @@
         "generate-certs": "mkdir -p certs && openssl req -subj '/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout certs/tls.key -out certs/tls.crt"
     },
     "dependencies": {
-        "@kubernetes/client-node": "^0.13.2",
+        "@kubernetes/client-node": "^0.14.3",
         "@types/yamljs": "^0.2.31",
         "axios": "^0.21.1",
         "dotenv": "^8.2.0",
