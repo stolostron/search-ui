@@ -50,7 +50,10 @@ function App() {
 
                     {/* Old UI Redirects */}
                     <Redirect from={'/multicloud/overview'} to={'/overview'} />
-                    <Redirect from={'/multicloud/search'} to={{ pathname: '/search', search: window.location.search }} />
+                    <Redirect
+                        from={'/multicloud/search'}
+                        to={{ pathname: '/search', search: window.location.search }}
+                    />
                     <Redirect
                         from={'/multicloud/details'}
                         to={{
@@ -64,8 +67,8 @@ function App() {
                         <Redirect to={'/search'} />
                     </Route>
                 </Switch>
-            </AcmHeader> 
-        </BrowserRouter>  
+            </AcmHeader>
+        </BrowserRouter>
     )
 }
 
