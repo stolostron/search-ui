@@ -64,7 +64,7 @@ function getResourceData() {
 export default function DetailsPage() {
     const { t } = useTranslation(['details'])
     const [, setRoute] = useRecoilState(acmRouteState)
-    useEffect(() => setRoute(AcmRoute.Overview), [setRoute])
+    useEffect(() => setRoute(AcmRoute.Resources), [setRoute])
     const { cluster, kind, apiversion, namespace, name } = getResourceData()
     let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`
