@@ -1,7 +1,7 @@
 {
     "details": "Details",
     "details.breadcrumb.search": "Search",
-    "logs.request.error": "Error querying for resource:",
+    "logs.request.error": "Error querying resource logs:",
     "yaml.editor.cancel": "Cancel",
     "yaml.editor.edit": "Edit",
     "yaml.editor.mode.editing": "Editing mode",

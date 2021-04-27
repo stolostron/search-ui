@@ -8,6 +8,7 @@ import {
     AcmLaunchLink,
     AcmPage,
     AcmPageHeader,
+    AcmRoute,
     AcmScrollable,
     AcmSearchbar,
     AcmActionGroup,
@@ -16,6 +17,8 @@ import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
@@ -215,6 +218,8 @@ function RenderDropDownAndNewTab(props: {
 }
 
 export default function SearchPage() {
+    const [, setRoute] = useRecoilState(acmRouteState)
+    useEffect(() => setRoute(AcmRoute.Search), [setRoute])
     // Only using setCurrentQuery to trigger a re-render
     // useEffect using window.location to trigger re-render doesn't work cause react hooks can't use window
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

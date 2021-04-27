@@ -1,7 +1,8 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import React from 'react'
+
 import { Router } from 'react-router-dom'
+import { RecoilRoot } from 'recoil'
 import { createBrowserHistory } from 'history'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
@@ -13,22 +14,24 @@ import { SearchResultCountDocument } from '../../search-sdk/search-sdk'
 
 it('should responsed with correct value for mapProviderFromLabel function', () => {
     expect(mapProviderFromLabel('Amazon')).toEqual('aws')
-    expect(mapProviderFromLabel('Azure')).toEqual('azure')
-    expect(mapProviderFromLabel('Baremetal')).toEqual('baremetal')
+    expect(mapProviderFromLabel('Azure')).toEqual('azr')
+    expect(mapProviderFromLabel('Baremetal')).toEqual('bmc')
     expect(mapProviderFromLabel('Google')).toEqual('gcp')
     expect(mapProviderFromLabel('IBM')).toEqual('ibm')
-    expect(mapProviderFromLabel('RedHat')).toEqual('redhatcloud')
-    expect(mapProviderFromLabel('VMware')).toEqual('vmware')
+    expect(mapProviderFromLabel('RedHat')).toEqual('rhocm')
+    expect(mapProviderFromLabel('VMware')).toEqual('vmw')
     expect(mapProviderFromLabel('other')).toEqual('other')
 })
 
 it('should render overview page in loading state', async () => {
     render(
-        <Router history={createBrowserHistory()}>
-            <MockedProvider mocks={[]}>
-                <OverviewPage />
-            </MockedProvider>
-        </Router>
+        <RecoilRoot>
+            <Router history={createBrowserHistory()}>
+                <MockedProvider mocks={[]}>
+                    <OverviewPage />
+                </MockedProvider>
+            </Router>
+        </RecoilRoot>
     )
     // Test the loading state while apollo query finishes
     expect(screen.getByText('Loading')).toBeInTheDocument()
@@ -47,11 +50,13 @@ it('should render overview page in error state', async () => {
     ]
 
     render(
-        <Router history={createBrowserHistory()}>
-            <MockedProvider mocks={mocks}>
-                <OverviewPage />
-            </MockedProvider>
-        </Router>
+        <RecoilRoot>
+            <Router history={createBrowserHistory()}>
+                <MockedProvider mocks={mocks}>
+                    <OverviewPage />
+                </MockedProvider>
+            </Router>
+        </RecoilRoot>
     )
     // Test the loading state while apollo query finishes
     expect(screen.getByText('Loading')).toBeInTheDocument()
@@ -258,11 +263,13 @@ it('should render overview page with expected data', async () => {
     ]
 
     const { getAllByText, getByText, queryByText } = render(
-        <Router history={createBrowserHistory()}>
-            <MockedProvider mocks={mocks}>
-                <OverviewPage />
-            </MockedProvider>
-        </Router>
+        <RecoilRoot>
+            <Router history={createBrowserHistory()}>
+                <MockedProvider mocks={mocks}>
+                    <OverviewPage />
+                </MockedProvider>
+            </Router>
+        </RecoilRoot>
     )
     // Test the loading state while apollo query finishes
     expect(getByText('Loading')).toBeInTheDocument()

@@ -1,6 +1,7 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import React from 'react'
+
+import { RecoilRoot } from 'recoil'
 import { Router } from 'react-router-dom'
 import { createBrowserHistory } from 'history'
 import { render, screen, waitFor } from '@testing-library/react'
@@ -46,11 +47,13 @@ describe('SearchPage', () => {
             },
         ]
         render(
-            <Router history={createBrowserHistory()}>
-                <MockedProvider mocks={mocks}>
-                    <SearchPage />
-                </MockedProvider>
-            </Router>
+            <RecoilRoot>
+                <Router history={createBrowserHistory()}>
+                    <MockedProvider mocks={mocks}>
+                        <SearchPage />
+                    </MockedProvider>
+                </Router>
+            </RecoilRoot>
         )
         // Test the loading state while apollo query finishes - testing that saved searches card label is not present
         expect(screen.getAllByText('Saved searches')[1]).toBeFalsy()
@@ -92,11 +95,13 @@ describe('SearchPage', () => {
             },
         ]
         render(
-            <Router history={createBrowserHistory()}>
-                <MockedProvider mocks={mocks}>
-                    <SearchPage />
-                </MockedProvider>
-            </Router>
+            <RecoilRoot>
+                <Router history={createBrowserHistory()}>
+                    <MockedProvider mocks={mocks}>
+                        <SearchPage />
+                    </MockedProvider>
+                </Router>
+            </RecoilRoot>
         )
         // Test the loading state while apollo query finishes - testing that saved searches card label is not present
         expect(screen.getAllByText('Saved searches')[1]).toBeFalsy()
@@ -159,11 +164,13 @@ describe('SearchPage', () => {
             },
         ]
         render(
-            <Router history={createBrowserHistory()}>
-                <MockedProvider mocks={mocks}>
-                    <SearchPage />
-                </MockedProvider>
-            </Router>
+            <RecoilRoot>
+                <Router history={createBrowserHistory()}>
+                    <MockedProvider mocks={mocks}>
+                        <SearchPage />
+                    </MockedProvider>
+                </Router>
+            </RecoilRoot>
         )
         // Test the loading state while apollo query finishes - testing that saved searches card label is not present
         expect(screen.getAllByText('Saved searches')[1]).toBeFalsy()

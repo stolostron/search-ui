@@ -1,18 +1,22 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import React from 'react'
+
+import { useEffect } from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
 import _ from 'lodash'
 import {
     AcmButton,
     AcmPage,
     AcmPageHeader,
+    AcmRoute,
     AcmSecondaryNav,
     AcmSecondaryNavItem,
 } from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { acmRouteState } from '../../util'
 import YAMLPage from './YAMLPage'
 import LogsPage from './LogsPage'
 import { consoleClient } from '../../console-sdk/console-client'
@@ -59,6 +63,8 @@ function getResourceData() {
 
 export default function DetailsPage() {
     const { t } = useTranslation(['details'])
+    const [, setRoute] = useRecoilState(acmRouteState)
+    useEffect(() => setRoute(AcmRoute.Resources), [setRoute])
     const { cluster, kind, apiversion, namespace, name } = getResourceData()
     let resourceUrlParams = ''
     resourceUrlParams = `${resourceUrlParams}${cluster !== '' ? `cluster=${cluster}` : ''}`

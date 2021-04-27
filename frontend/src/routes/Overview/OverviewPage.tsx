@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import React, { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import {
     AcmAlert,
     AcmChartGroup,
@@ -17,10 +17,13 @@ import {
     AcmLaunchLink,
     AcmAutoRefreshSelect,
     AcmRefreshTime,
+    AcmRoute,
 } from '@open-cluster-management/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import { acmRouteState } from '../../util'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewLazyQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
 import { useSearchResultCountLazyQuery } from '../../search-sdk/search-sdk'
@@ -197,6 +200,8 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
 
 export default function OverviewPage() {
     const { t } = useTranslation(['overview'])
+    const [, setRoute] = useRecoilState(acmRouteState)
+    useEffect(() => setRoute(AcmRoute.Overview), [setRoute])
     const [clusters, setClusters] = useState<any[]>([])
     const [selectedCloud, setSelectedCloud] = useState<string>('')
     const [selectedClusterNames, setSelectedClusterNames] = useState<string[]>([])

@@ -1,7 +1,8 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import React from 'react'
+
 import { Router } from 'react-router-dom'
+import { RecoilRoot } from 'recoil'
 import { createBrowserHistory } from 'history'
 import { render, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
@@ -96,11 +97,13 @@ describe('DetailsPage', () => {
         ]
 
         render(
-            <Router history={createBrowserHistory()}>
-                <MockedProvider mocks={mocks}>
-                    <DetailsPage />
-                </MockedProvider>
-            </Router>
+            <RecoilRoot>
+                <Router history={createBrowserHistory()}>
+                    <MockedProvider mocks={mocks}>
+                        <DetailsPage />
+                    </MockedProvider>
+                </Router>
+            </RecoilRoot>
         )
         // Test the loading state while apollo query finishes
         // expect(screen.getByText('Loading')).toBeInTheDocument()

@@ -2,11 +2,12 @@
 // Copyright Contributors to the Open Cluster Management project
 /* istanbul ignore file */
 
-import React from 'react'
+import '@patternfly/react-core/dist/styles/base.css'
+import { StrictMode, Suspense, Fragment } from 'react'
 import ReactDOM from 'react-dom'
+import { RecoilRoot } from 'recoil'
 import { config } from 'dotenv'
 import App from './App'
-import './lib/acm-header'
 import { validateSessionToken } from './lib/resource-request'
 
 // config loads .env file vars
@@ -16,10 +17,12 @@ config()
 validateSessionToken()
 
 ReactDOM.render(
-    <React.StrictMode>
-        <React.Suspense fallback={<React.Fragment />}>
-            <App />
-        </React.Suspense>
-    </React.StrictMode>,
+    <StrictMode>
+        <Suspense fallback={<Fragment />}>
+            <RecoilRoot>
+                <App />
+            </RecoilRoot>
+        </Suspense>
+    </StrictMode>,
     document.getElementById('root')
 )

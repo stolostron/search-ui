@@ -126,41 +126,6 @@ export async function startServer(): Promise<FastifyInstance> {
         preHandler: csrfProtection,
     })
 
-    // CONSOLE-HEADER
-    /* istanbul ignore next */
-    if (process.env.NODE_ENV === 'development') {
-        const acmUrl = process.env.API_SERVER_URL.replace('api', 'multicloud-console.apps').replace(':6443', '')
-        await fastify.register(fastifyReplyFrom, {
-            base: acmUrl,
-        })
-
-        fastify.all('/multicloud/header/*', (req, res) => {
-            req.headers.authorization = `Bearer ${req.cookies['acm-access-token-cookie']}`
-            res.from(req.raw.url)
-        })
-
-        fastify.all('/search/header', async (req, res) => {
-            let headerResponse: AxiosResponse
-            logger.debug({ msg: 'search/header call', cookies: req.cookies })
-            try {
-                const isDevelopment = process.env.NODE_ENV === 'development' ? 'true' : 'false'
-                headerResponse = await Axios.request({
-                    url: `${acmUrl}/multicloud/header/api/v1/header?serviceId=mcm-ui&dev=${isDevelopment}`,
-                    method: 'GET',
-                    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-                    headers: {
-                        Authorization: `Bearer ${req.cookies['acm-access-token-cookie']}`,
-                    },
-                    responseType: 'json',
-                    validateStatus: () => true,
-                })
-            } catch (err) {
-                return res.code(500).send(err)
-            }
-            return res.code(headerResponse.status).send(headerResponse?.data)
-        })
-    }
-
     fastify.addHook('onRequest', (request, reply, done) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ;(request as any).start = process.hrtime()
