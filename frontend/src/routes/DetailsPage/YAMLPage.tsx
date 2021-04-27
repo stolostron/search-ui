@@ -123,7 +123,19 @@ export default function YAMLPage(props: {
                     variant={'danger'}
                     isInline={true}
                     title={`${t('yaml.getresource.error')} ${name}`}
-                    subtitle={error.message}
+                    subtitle={error?.message}
+                />
+            </PageSection>
+        )
+    } else if (resource?.getResource?.message) {
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={`${t('yaml.getresource.error')} ${name}`}
+                    subtitle={resource?.getResource?.message}
                 />
             </PageSection>
         )

@@ -33,7 +33,7 @@ const searchDefinitions: any = {
                 header: 'Dashboard',
                 sort: 'dashboard',
                 cell: (item: any) => {
-                    return CreateDashboardLink(item)
+                    return CreateApplicationLink(item)
                 },
             },
             {
@@ -1417,10 +1417,12 @@ export function CreateDetailsLink(item: any) {
     }
 }
 
-export function CreateDashboardLink(item: any) {
-    if (item.dashboard !== null && item.dashboard !== '') {
+export function CreateApplicationLink(item: any) {
+    if (item.apiversion && item.apigroup) {
+        const apiversion = encodeURIComponent(`${item.apigroup}/${item.apiversion}`)
+        const link = `multicloud/applications/${item.namespace}/${item.name}?apiVersion=${apiversion}`
         return (
-            <a target="_blank" rel="noopener noreferrer" href={item.dashboard}>
+            <a target="_blank" rel="noopener noreferrer" href={link}>
                 {/* TODO Not translating - caused issue: https://github.com/open-cluster-management/backlog/issues/9184 */}
                 {'Launch health view'}
             </a>

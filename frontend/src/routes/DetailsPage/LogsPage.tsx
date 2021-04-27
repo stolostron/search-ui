@@ -4,11 +4,19 @@ import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { useTranslation } from 'react-i18next'
-import { useGetLogsQuery } from '../../console-sdk/console-sdk'
+import { ApolloError } from '@apollo/client'
+import { useGetLogsQuery, Query } from '../../console-sdk/console-sdk'
 import { consoleClient } from '../../console-sdk/console-client'
 
-export default function LogsPage(props: { containers: string[]; cluster: string; namespace: string; name: string }) {
-    const { containers, cluster, namespace, name } = props
+export default function LogsPage(props: {
+    getResource: Pick<Query, 'getResource'> | undefined
+    getResourceError: ApolloError | undefined
+    containers: string[]
+    cluster: string
+    namespace: string
+    name: string
+}) {
+    const { getResource, getResourceError, containers, cluster, namespace, name } = props
     const { t } = useTranslation(['details'])
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
@@ -21,7 +29,31 @@ export default function LogsPage(props: { containers: string[]; cluster: string;
             clusterName: cluster,
         },
     })
-    if (error) {
+    if (getResourceError) {
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={`${t('logs.request.error')} ${name}`}
+                    subtitle={getResourceError}
+                />
+            </PageSection>
+        )
+    } else if (getResource?.getResource?.message) {
+        return (
+            <PageSection>
+                <AcmAlert
+                    noClose={true}
+                    variant={'danger'}
+                    isInline={true}
+                    title={`${t('logs.request.error')} ${name}`}
+                    subtitle={getResource?.getResource?.message}
+                />
+            </PageSection>
+        )
+    } else if (error) {
         return (
             <PageSection>
                 <AcmAlert

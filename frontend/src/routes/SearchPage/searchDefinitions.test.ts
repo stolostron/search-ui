@@ -3,7 +3,7 @@
 import searchDefinitions, {
     GetAge,
     CreateDetailsLink,
-    CreateDashboardLink,
+    CreateApplicationLink,
     CreateExternalLink,
     FormatLabels,
     GetUrlSearchParam,
@@ -110,23 +110,23 @@ test('Correctly returns CreateDetailsLink - Default', () => {
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns CreateDashboardLink', () => {
+test('Correctly returns CreateApplicationLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         dashboard: 'http://dashboard',
     }
-    const result = CreateDashboardLink(item)
+    const result = CreateApplicationLink(item)
     expect(result).toMatchSnapshot()
 })
 
-test('Correctly returns empty CreateDashboardLink', () => {
+test('Correctly returns empty CreateApplicationLink', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         dashboard: '',
     }
-    const result = CreateDashboardLink(item)
+    const result = CreateApplicationLink(item)
     expect(result).toMatchSnapshot()
 })
 
