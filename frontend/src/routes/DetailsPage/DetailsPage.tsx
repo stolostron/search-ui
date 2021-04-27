@@ -140,6 +140,8 @@ export default function DetailsPage() {
                 {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
                     <Route path={'/resources/logs'}>
                         <LogsPage
+                            getResource={getResourceResponse.data}
+                            getResourceError={getResourceResponse.error}
                             containers={_.get(getResourceResponse, 'data.getResource.spec.containers', []).map(
                                 (container: any) => container.name
                             )}
