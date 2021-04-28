@@ -99,11 +99,13 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
-    if (searchSchemaResults?.error || searchCompleteResults?.error) {
-        setQueryErrors(true)
-    } else if (queryErrors) {
-        setQueryErrors(false)
-    }
+    useEffect(() => {
+        if (searchSchemaResults?.error || searchCompleteResults?.error) {
+            setQueryErrors(true)
+        } else if (queryErrors) {
+            setQueryErrors(false)
+        }
+    }, [searchSchemaResults, searchCompleteResults])
     return (
         <Fragment>
             <PageSection>
