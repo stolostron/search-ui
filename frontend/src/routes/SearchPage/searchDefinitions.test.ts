@@ -6,6 +6,7 @@ import searchDefinitions, {
     CreateApplicationLink,
     CreateExternalLink,
     FormatLabels,
+    FormatInsightData,
     GetUrlSearchParam,
 } from './searchDefinitions'
 
@@ -175,7 +176,7 @@ test('Correctly returns category components', () => {
         namespace: 'testNamespace',
         category: 'testcategory=category1; testcategory=category2',
     }
-    const result = FormatLabels(item)
+    const result = FormatInsightData(item.category)
     expect(result).toMatchSnapshot()
 })
 

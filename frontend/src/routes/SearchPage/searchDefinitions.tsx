@@ -1031,21 +1031,24 @@ const searchDefinitions: any = {
                 cell: 'namespace',
             },
             {
-                header: 'Result',
-                sort: 'result',
-                cell: 'result',
-                tooltip: 'Result will be "error" if the violation is still present or "skip" if it has been remediated',
+                header: 'Total insight policies',
+                sort: 'numInsightPolicies',
+                cell: 'numInsightPolicies',
+                tooltip:
+                    'This field is indexed as numInsightPolicies. If you would like to filter PolicyReports by number of violations please use: numInsightPolicies > x',
             },
             {
-                header: 'Total Risk',
-                sort: 'risk',
-                cell: 'risk',
+                header: 'Insight policies',
+                cell: (item: any) => {
+                    return FormatInsightData(item.insightPolicies)
+                },
+                tooltip:
+                    'This field is indexed as insightPolicies. If you would like to filter PolicyReports containing specific policies please use: insightPolicies:<policyName>',
             },
             {
                 header: 'Categories',
-                sort: 'category',
                 cell: (item: any) => {
-                    return FormatLabels(item)
+                    return FormatInsightData(item.category)
                 },
             },
         ],
@@ -1450,12 +1453,18 @@ export function FormatLabels(item: any) {
         const labels = item.label.split('; ')
         const labelsToHide = labels.slice(3).map((l: string) => l.split('=')[0])
         return <AcmLabels labels={labels} collapse={labelsToHide} />
-    } else if (item.category) {
-        const categories = item.category.split('; ')
-        const categoriesToHide = categories.slice(3)
-        return <AcmLabels labels={categories} collapse={categoriesToHide} />
+    }
+    return '-'
+}
+
+export function FormatInsightData(data: string) {
+    if (data) {
+        const dataArray = data.split('; ')
+        const dataToHide = dataArray.slice(3)
+        return <AcmLabels labels={dataArray} collapse={dataToHide} />
     }
     return '-'
 }
 
 export default searchDefinitions
+

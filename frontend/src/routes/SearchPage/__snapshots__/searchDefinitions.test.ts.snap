@@ -1426,28 +1426,19 @@ Array [
     "sort": "namespace",
   },
   Object {
-    "cell": "result",
-    "header": "Result",
-    "sort": "result",
-    "tooltip": "Result will be \\"error\\" if the violation is still present or \\"skip\\" if it has been remediated",
+    "cell": "numInsightPolicies",
+    "header": "Total insight policies",
+    "sort": "numInsightPolicies",
+    "tooltip": "This field is indexed as numInsightPolicies. If you would like to filter PolicyReports by number of violations please use: numInsightPolicies > x",
   },
   Object {
-    "cell": "risk",
-    "header": "Total Risk",
-    "sort": "risk",
+    "cell": "-",
+    "header": "Insight policies",
+    "tooltip": "This field is indexed as insightPolicies. If you would like to filter PolicyReports containing specific policies please use: insightPolicies:<policyName>",
   },
   Object {
-    "cell": <AcmLabels
-      collapse={Array []}
-      labels={
-        Array [
-          "testLabel=label",
-          "testLabel1=label1",
-        ]
-      }
-    />,
+    "cell": "-",
     "header": "Categories",
-    "sort": "category",
   },
 ]
 `;
