@@ -1467,4 +1467,3 @@ export function FormatInsightData(data: string) {
 }
 
 export default searchDefinitions
-
