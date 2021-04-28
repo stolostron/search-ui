@@ -62,7 +62,7 @@ function HandleErrors(schemaError: ApolloError | undefined, completeError: Apoll
                     variant={'danger'}
                     isInline
                     title={t('search.filter.errors.title')}
-                    subtitle={t('search.filter.errors.description')}
+                    subtitle={schemaError?.message || completeError?.message}
                 />
             </div>
         )
@@ -99,14 +99,13 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
-    if (
-        (!searchSchemaResults.data && searchSchemaResults.error) ||
-        (!searchCompleteResults.data && searchCompleteResults.error)
-    ) {
-        setQueryErrors(true)
-    } else if (queryErrors) {
-        setQueryErrors(false)
-    }
+    useEffect(() => {
+        if (searchSchemaResults?.error || searchCompleteResults?.error) {
+            setQueryErrors(true)
+        } else if (queryErrors) {
+            setQueryErrors(false)
+        }
+    }, [searchSchemaResults, searchCompleteResults])
     return (
         <Fragment>
             <PageSection>

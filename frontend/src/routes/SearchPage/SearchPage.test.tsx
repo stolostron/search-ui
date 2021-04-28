@@ -109,7 +109,8 @@ describe('SearchPage', () => {
         await wait()
         // Test that the component has rendered correctly with data
         await waitFor(() => expect(screen.queryByText('search.filter.errors.title')).toBeTruthy())
-        await waitFor(() => expect(screen.queryByText('search.filter.errors.description')).toBeTruthy())
+        // Test that UI shows the error message received from API.
+        await waitFor(() => expect(screen.queryByText('Error getting search schema data')).toBeTruthy())
     })
 
     it('should render search page correctly and add a search', async () => {
