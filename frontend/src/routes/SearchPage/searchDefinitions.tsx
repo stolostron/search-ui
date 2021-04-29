@@ -1036,8 +1036,7 @@ const searchDefinitions: any = {
                 cell: (item: any) => {
                     return FormatInsightPolicies(item)
                 },
-                tooltip:
-                    `Total number of insight policies violated by the cluster. To view clusters based on number of violations,
+                tooltip: `Total number of insight policies violated by the cluster. To view clusters based on number of violations,
                      search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.`,
             },
             {
