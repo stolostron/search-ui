@@ -1426,28 +1426,14 @@ Array [
     "sort": "namespace",
   },
   Object {
-    "cell": "result",
-    "header": "Result",
-    "sort": "result",
-    "tooltip": "Result will be \\"error\\" if the violation is still present or \\"skip\\" if it has been remediated",
+    "cell": "-",
+    "header": "Insight policy violations",
+    "tooltip": "Total number of insight policies violated by the cluster. To view clusters based on number of violations,
+                     search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.",
   },
   Object {
-    "cell": "risk",
-    "header": "Total Risk",
-    "sort": "risk",
-  },
-  Object {
-    "cell": <AcmLabels
-      collapse={Array []}
-      labels={
-        Array [
-          "testLabel=label",
-          "testLabel1=label1",
-        ]
-      }
-    />,
+    "cell": "-",
     "header": "Categories",
-    "sort": "category",
   },
 ]
 `;
@@ -1837,6 +1823,78 @@ exports[`Correctly returns formatSearchbarSuggestions no timestamp 1`] = `"-"`;
 exports[`Correctly returns formatSearchbarSuggestions with T in timestamp 1`] = `"3 days ago"`;
 
 exports[`Correctly returns formatSearchbarSuggestions without T in timestamp 1`] = `"3 days ago"`;
+
+exports[`Correctly returns insight policies 1`] = `
+<LabelGroup
+  aria-label="Label group category"
+  categoryName=""
+  closeBtnAriaLabel="Close label group"
+  collapsedText="3 more"
+  defaultIsOpen={false}
+  expandedText="Show less"
+  isClosable={false}
+  isVertical={false}
+  numLabels={2}
+  onClick={[Function]}
+  tooltipPosition="top"
+>
+  <Label
+    render={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "padding": "0 .25rem 0 0",
+      }
+    }
+  >
+    AUTH_OPERATOR_PROXY_ERROR
+  </Label>
+  <Label
+    render={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "padding": "0 .25rem 0 0",
+      }
+    }
+  >
+    CONTAINER_ROOT_PARTITION_SIZE
+  </Label>
+  <Label
+    render={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "padding": "0 .25rem 0 0",
+      }
+    }
+  >
+    MASTER_DEFINED_AS_MACHINESETS
+  </Label>
+  <Label
+    render={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "padding": "0 .25rem 0 0",
+      }
+    }
+  >
+    NODES_MINIMUM_REQUIREMENTS_NOT_MET
+  </Label>
+  <Label
+    render={[Function]}
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "padding": "0 .25rem 0 0",
+      }
+    }
+  >
+    UNSUPPORT_SDN_PLUGIN
+  </Label>
+</LabelGroup>
+`;
 
 exports[`Correctly returns label components 1`] = `
 <AcmLabels

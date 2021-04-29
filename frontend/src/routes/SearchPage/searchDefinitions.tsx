@@ -1,7 +1,8 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
+
 import _ from 'lodash'
-import React from 'react'
+import { Label, LabelGroup } from '@patternfly/react-core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
@@ -1031,21 +1032,17 @@ const searchDefinitions: any = {
                 cell: 'namespace',
             },
             {
-                header: 'Result',
-                sort: 'result',
-                cell: 'result',
-                tooltip: 'Result will be "error" if the violation is still present or "skip" if it has been remediated',
-            },
-            {
-                header: 'Total Risk',
-                sort: 'risk',
-                cell: 'risk',
+                header: 'Insight policy violations',
+                cell: (item: any) => {
+                    return FormatInsightPolicies(item)
+                },
+                tooltip: `Total number of insight policies violated by the cluster. To view clusters based on number of violations,
+                     search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.`,
             },
             {
                 header: 'Categories',
-                sort: 'category',
                 cell: (item: any) => {
-                    return FormatLabels(item)
+                    return FormatInsightCategories(item.category)
                 },
             },
         ],
@@ -1450,10 +1447,43 @@ export function FormatLabels(item: any) {
         const labels = item.label.split('; ')
         const labelsToHide = labels.slice(3).map((l: string) => l.split('=')[0])
         return <AcmLabels labels={labels} collapse={labelsToHide} />
-    } else if (item.category) {
-        const categories = item.category.split('; ')
-        const categoriesToHide = categories.slice(3)
-        return <AcmLabels labels={categories} collapse={categoriesToHide} />
+    }
+    return '-'
+}
+
+export function FormatInsightPolicies(item: any) {
+    if (item.insightPolicies) {
+        const policyArray = item.insightPolicies.split('; ')
+        const policiesToHide = policyArray.slice(2)
+        return (
+            <LabelGroup collapsedText={`${policiesToHide.length} more`} expandedText={'Show less'} numLabels={2}>
+                {policyArray.map((policy: any, index: number) => {
+                    return (
+                        <Label
+                            style={{ backgroundColor: '#fff', padding: '0 .25rem 0 0' }}
+                            key={policy}
+                            render={({ content }) => (
+                                <span>
+                                    {content}
+                                    {index < policyArray.length - 1 && ', '}
+                                </span>
+                            )}
+                        >
+                            {policy}
+                        </Label>
+                    )
+                })}
+            </LabelGroup>
+        )
+    }
+    return '-'
+}
+
+export function FormatInsightCategories(data: string) {
+    if (data) {
+        const dataArray = data.split('; ')
+        const dataToHide = dataArray.slice(3)
+        return <AcmLabels labels={dataArray} collapse={dataToHide} />
     }
     return '-'
 }
