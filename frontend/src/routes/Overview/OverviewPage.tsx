@@ -415,7 +415,7 @@ export default function OverviewPage() {
                         isInline
                         variant={'danger'}
                         title={t('overview.data.error.title')}
-                        subtitle={t('overview.data.error.message')}
+                        subtitle={searchError?.graphQLErrors[0]?.message || t('overview.data.error.message')}
                     />
                 </PageSection>
             </AcmPage>
