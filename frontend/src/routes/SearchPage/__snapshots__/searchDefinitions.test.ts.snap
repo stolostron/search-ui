@@ -1428,7 +1428,8 @@ Array [
   Object {
     "cell": "-",
     "header": "Insight policy violations",
-    "tooltip": "Total number of insight policies violated by the cluster. To view clusters based on number of violations, search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies",
+    "tooltip": "Total number of insight policies violated by the cluster. To view clusters based on number of violations,
+                     search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.",
   },
   Object {
     "cell": "-",
