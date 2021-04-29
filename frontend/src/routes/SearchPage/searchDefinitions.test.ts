@@ -6,7 +6,8 @@ import searchDefinitions, {
     CreateApplicationLink,
     CreateExternalLink,
     FormatLabels,
-    FormatInsightData,
+    FormatInsightPolicies,
+    FormatInsightCategories,
     GetUrlSearchParam,
 } from './searchDefinitions'
 
@@ -170,13 +171,25 @@ test('Correctly returns label components', () => {
     expect(result).toMatchSnapshot()
 })
 
+test('Correctly returns insight policies', () => {
+    const item = {
+        name: 'testName',
+        namespace: 'testNamespace',
+        insightPolicies:
+            'AUTH_OPERATOR_PROXY_ERROR; CONTAINER_ROOT_PARTITION_SIZE; MASTER_DEFINED_AS_MACHINESETS; NODES_MINIMUM_REQUIREMENTS_NOT_MET; UNSUPPORT_SDN_PLUGIN',
+        category: 'testcategory=category1; testcategory=category2',
+    }
+    const result = FormatInsightPolicies(item)
+    expect(result).toMatchSnapshot()
+})
+
 test('Correctly returns category components', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
         category: 'testcategory=category1; testcategory=category2',
     }
-    const result = FormatInsightData(item.category)
+    const result = FormatInsightCategories(item.category)
     expect(result).toMatchSnapshot()
 })
 

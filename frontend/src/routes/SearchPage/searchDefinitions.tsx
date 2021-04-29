@@ -1,7 +1,8 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
+
 import _ from 'lodash'
-import React from 'react'
+import { Label, LabelGroup } from '@patternfly/react-core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
@@ -1031,24 +1032,17 @@ const searchDefinitions: any = {
                 cell: 'namespace',
             },
             {
-                header: 'Total insight policies',
-                sort: 'numInsightPolicies',
-                cell: 'numInsightPolicies',
-                tooltip:
-                    'This field is indexed as numInsightPolicies. If you would like to filter PolicyReports by number of violations please use: numInsightPolicies > x',
-            },
-            {
-                header: 'Insight policies',
+                header: 'Insight policy violations',
                 cell: (item: any) => {
-                    return FormatInsightData(item.insightPolicies)
+                    return FormatInsightPolicies(item)
                 },
                 tooltip:
-                    'This field is indexed as insightPolicies. If you would like to filter PolicyReports containing specific policies please use: insightPolicies:<policyName>',
+                    'Total number of insight policies violated by the cluster. To view clusters based on number of violations, search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies',
             },
             {
                 header: 'Categories',
                 cell: (item: any) => {
-                    return FormatInsightData(item.category)
+                    return FormatInsightCategories(item.category)
                 },
             },
         ],
@@ -1457,7 +1451,35 @@ export function FormatLabels(item: any) {
     return '-'
 }
 
-export function FormatInsightData(data: string) {
+export function FormatInsightPolicies(item: any) {
+    if (item.insightPolicies) {
+        const policyArray = item.insightPolicies.split('; ')
+        const policiesToHide = policyArray.slice(2)
+        return (
+            <LabelGroup collapsedText={`${policiesToHide.length} more`} expandedText={'Show less'} numLabels={2}>
+                {policyArray.map((policy: any, index: number) => {
+                    return (
+                        <Label
+                            style={{ backgroundColor: '#fff', padding: '0 .25rem 0 0' }}
+                            key={policy}
+                            render={({ content }) => (
+                                <span>
+                                    {content}
+                                    {index < policyArray.length - 1 && ', '}
+                                </span>
+                            )}
+                        >
+                            {policy}
+                        </Label>
+                    )
+                })}
+            </LabelGroup>
+        )
+    }
+    return '-'
+}
+
+export function FormatInsightCategories(data: string) {
     if (data) {
         const dataArray = data.split('; ')
         const dataToHide = dataArray.slice(3)
