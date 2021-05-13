@@ -134,6 +134,8 @@ export const SaveAndEditSearchModal = (props: any) => {
                         value={searchName}
                         onChange={onChange}
                         maxLength={50}
+                        placeholder={t('search.modal.save.input.name.placeholder')}
+                        isRequired={true}
                     />
                     <AcmTextArea
                         id="add-query-desc"
@@ -143,6 +145,7 @@ export const SaveAndEditSearchModal = (props: any) => {
                         onChange={onChange}
                         required
                         maxLength={120}
+                        placeholder={t('search.modal.save.input.description.placeholder')}
                     />
                 </AcmForm>
             </AcmModal>
