@@ -2,7 +2,7 @@
     "search": "Search",
     "search.filter.errors.description": "The search service is unavailable.",
     "search.filter.errors.title": "An unexpected error occurred.",
-    "search.filter.info.title": "Please read the comment below.",
+    "search.filter.info.title": "Configuration alert",
     "search.modal.delete.resource.action.cancel": "Cancel",
     "search.modal.delete.resource.action.delete": "Delete",
     "search.modal.delete.resource.text": "Removing {{resourceName}} is irreversible. Are you sure that you want to continue?",
