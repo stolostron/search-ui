@@ -414,7 +414,11 @@ export default function OverviewPage() {
                         noClose
                         isInline
                         variant={searchError?.graphQLErrors[0]?.message.includes('not enabled') ? 'info' : 'danger'}
-                        title={t('overview.data.error.title')}
+                        title={
+                            searchError?.graphQLErrors[0]?.message.includes('not enabled')
+                                ? t('overview.data.info.title')
+                                : t('overview.data.error.title')
+                        }
                         subtitle={searchError?.graphQLErrors[0]?.message || t('overview.data.error.message')}
                     />
                 </PageSection>
