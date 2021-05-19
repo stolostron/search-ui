@@ -54,11 +54,6 @@ export const SearchInfoModal = (props: any) => {
                 width={'50%'}
                 onClose={props.onClose}
                 isOpen={props.isOpen}
-                actions={[
-                    <AcmButton key="close" variant={ButtonVariant.primary} onClick={props.onClose}>
-                        {t('search.modal.info.action.cancel')}
-                    </AcmButton>,
-                ]}
             >
                 <div>
                     <h2>{t('search.modal.info.subtitle')}</h2>
