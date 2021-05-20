@@ -58,7 +58,7 @@ test('Correctly returns CreateDetailsLink - ACM-Application', () => {
         name: 'testApplicationName',
         namespace: 'testApplicationNamespace',
         kind: 'application',
-        apigroup: 'argoproj.io',
+        apigroup: 'app.k8s.io',
         cluster: 'cluster',
         apiversion: 'apiversion',
 
@@ -66,19 +66,6 @@ test('Correctly returns CreateDetailsLink - ACM-Application', () => {
     const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
 })
-
-
-// test('Correctly returns CreateDetailsLink - ACM-Application', () => {
-//     const item = {
-//         name: 'testApplicationName',
-//         namespace: 'testApplicationNamespace',
-//         kind: 'application',
-//         apigroup: 'app.k8s.io',
-//     }
-//     const result = CreateDetailsLink(item)
-//     expect(result).toMatchSnapshot()
-// })
-
 
 
 test('Correctly returns CreateDetailsLink - NON-Application', () => {
