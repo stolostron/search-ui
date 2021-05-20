@@ -59,6 +59,7 @@ test('Correctly returns CreateDetailsLink - ACM-Application', () => {
         namespace: 'testApplicationNamespace',
         kind: 'application',
         apigroup: 'app.k8s.io',
+        apiversion: '',
     }
     const result = CreateDetailsLink(item)
     expect(result).toMatchSnapshot()
