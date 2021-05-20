@@ -1365,8 +1365,13 @@ export function CreateDetailsLink(item: any) {
             if (item.apigroup === 'app.k8s.io' || item.apigroup === 'argoproj.io') {
                 // only redirect to apps page if it is an ACM application
 
-                return <a href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}$cluster=${item.cluster}`}>{item.name}</a>
-
+                return (
+                    <a
+                        href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}$cluster=${item.cluster}`}
+                    >
+                        {item.name}
+                    </a>
+                )
             }
             return (
                 <Link
