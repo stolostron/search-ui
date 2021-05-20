@@ -413,8 +413,12 @@ export default function OverviewPage() {
                     <AcmAlert
                         noClose
                         isInline
-                        variant={'danger'}
-                        title={t('overview.data.error.title')}
+                        variant={searchError?.graphQLErrors[0]?.message.includes('not enabled') ? 'info' : 'danger'}
+                        title={
+                            searchError?.graphQLErrors[0]?.message.includes('not enabled')
+                                ? t('overview.data.info.title')
+                                : t('overview.data.error.title')
+                        }
                         subtitle={searchError?.graphQLErrors[0]?.message || t('overview.data.error.message')}
                     />
                 </PageSection>

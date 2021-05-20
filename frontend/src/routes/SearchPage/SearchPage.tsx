@@ -59,9 +59,17 @@ function HandleErrors(schemaError: ApolloError | undefined, completeError: Apoll
             <div style={{ marginBottom: '1rem' }}>
                 <AcmAlert
                     noClose
-                    variant={'danger'}
+                    variant={
+                        schemaError?.message.includes('not enabled') || completeError?.message.includes('not enabled')
+                            ? 'info'
+                            : 'danger'
+                    }
                     isInline
-                    title={t('search.filter.errors.title')}
+                    title={
+                        schemaError?.message.includes('not enabled') || completeError?.message.includes('not enabled')
+                            ? t('search.filter.info.title')
+                            : t('search.filter.errors.title')
+                    }
                     subtitle={schemaError?.message || completeError?.message}
                 />
             </div>

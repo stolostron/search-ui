@@ -1365,9 +1365,8 @@ export function CreateDetailsLink(item: any) {
             if (item.apigroup === 'app.k8s.io' || item.apigroup === 'argoproj.io') {
                 // only redirect to apps page if it is an ACM application
 
-                return <a href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}&cluster=${item.cluster}`}>{item.name}</a>
-                // /multicloud/applications/openshift-gitops/helloworld-remote-kevin?apiVersion=argoproj.io%2Fv1alpha1&cluster=ui-managed
-                // /multicloud/applications/magchen-private-new-ns/magchen-private-new?apiVersion=app.k8s.io%2Fv1beta1&cluster=local-cluster
+                return <a href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}$cluster=${item.cluster}`}>{item.name}</a>
+
             }
             return (
                 <Link
