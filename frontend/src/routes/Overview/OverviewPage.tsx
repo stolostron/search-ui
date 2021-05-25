@@ -163,11 +163,13 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
         if (addons && addons.metadata.name === 'observability-controller') {
-            return [{
+            return [
+                {
                     id: addons.metadata.annotations![textKey] ?? '',
                     text: addons.metadata.annotations![textKey] ?? '',
                     href: addons.metadata.annotations![pathKey] ?? '',
-                }]
+                },
+            ]
         } else {
             return []
         }
