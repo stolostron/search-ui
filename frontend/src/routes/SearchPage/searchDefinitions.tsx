@@ -1030,7 +1030,7 @@ const searchDefinitions: any = {
                 header: 'Scope',
                 sort: 'scope',
                 cell: 'scope',
-                tooltip: 'Scope refers to the cluster that is affected by the PolicyReport.',
+                tooltip: 'Scope refers to the cluster associated to the PolicyReport.',
             },
             {
                 header: 'Insight policy violations',
