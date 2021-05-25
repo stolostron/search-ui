@@ -143,7 +143,6 @@ const searchQueries = (selectedClusters: Array<string>): Array<any> => {
 }
 
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
-    console.log('fkfkfkf',consoleClient)
     const { t } = useTranslation(['overview'])
     const { data, error } = useGetResourceQuery({
         client: consoleClient,
@@ -160,7 +159,6 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         console.error(error)
     }
     const addons = data?.getResource
-    console.log('addons',addons)
     function getLaunchLink(addons: ClusterManagementAddOn) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
@@ -171,7 +169,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
                     href: addons.metadata.annotations![pathKey] ?? '',
                 }]
         } else {
-            return undefined
+            return []
         }
     }
 
