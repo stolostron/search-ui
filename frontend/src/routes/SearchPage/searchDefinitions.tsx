@@ -1027,9 +1027,10 @@ const searchDefinitions: any = {
                 },
             },
             {
-                header: 'Namespace',
-                sort: 'namespace',
-                cell: 'namespace',
+                header: 'Scope',
+                sort: 'scope',
+                cell: 'scope',
+                tooltip: 'Scope refers to the cluster associated to the PolicyReport.',
             },
             {
                 header: 'Insight policy violations',

@@ -1421,9 +1421,10 @@ Array [
     "sort": "name",
   },
   Object {
-    "cell": "namespace",
-    "header": "Namespace",
-    "sort": "namespace",
+    "cell": "scope",
+    "header": "Scope",
+    "sort": "scope",
+    "tooltip": "Scope refers to the cluster associated to the PolicyReport.",
   },
   Object {
     "cell": "-",
