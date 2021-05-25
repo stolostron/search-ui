@@ -143,12 +143,13 @@ const searchQueries = (selectedClusters: Array<string>): Array<any> => {
 }
 
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
+    console.log('fkfkfkf',consoleClient)
     const { t } = useTranslation(['overview'])
     const { data, error } = useGetResourceQuery({
         client: consoleClient,
         variables: {
             namespace: 'open-cluster-management',
-            name: null,
+            name: 'observability-controller',
             cluster: 'local-cluster',
             kind: 'clustermanagementaddon',
             apiVersion: 'addon.open-cluster-management.io/v1alpha1',
@@ -158,19 +159,17 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         // TODO: Better error handling
         console.error(error)
     }
-    const addons = data?.getResource.items
-
-    function getLaunchLink(addons: ClusterManagementAddOn[]) {
+    const addons = data?.getResource
+    console.log('addons',addons)
+    function getLaunchLink(addons: ClusterManagementAddOn) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
-        if (addons && addons.filter((addon) => addon.metadata.name === 'observability-controller')) {
-            return addons
-                ?.filter((addon) => addon.metadata.name === 'observability-controller')
-                ?.map((addon) => ({
-                    id: addon.metadata.annotations![textKey] ?? '',
-                    text: addon.metadata.annotations![textKey] ?? '',
-                    href: addon.metadata.annotations![pathKey] ?? '',
-                }))
+        if (addons && addons.metadata.name === 'observability-controller') {
+            return [{
+                    id: addons.metadata.annotations![textKey] ?? '',
+                    text: addons.metadata.annotations![textKey] ?? '',
+                    href: addons.metadata.annotations![pathKey] ?? '',
+                }]
         } else {
             return undefined
         }
