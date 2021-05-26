@@ -148,7 +148,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         client: consoleClient,
         variables: {
             namespace: 'open-cluster-management',
-            name: null,
+            name: 'observability-controller',
             cluster: 'local-cluster',
             kind: 'clustermanagementaddon',
             apiVersion: 'addon.open-cluster-management.io/v1alpha1',
@@ -158,21 +158,20 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         // TODO: Better error handling
         console.error(error)
     }
-    const addons = data?.getResource.items
-
-    function getLaunchLink(addons: ClusterManagementAddOn[]) {
+    const addons = data?.getResource
+    function getLaunchLink(addon: ClusterManagementAddOn) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
-        if (addons && addons.filter((addon) => addon.metadata.name === 'observability-controller')) {
-            return addons
-                ?.filter((addon) => addon.metadata.name === 'observability-controller')
-                ?.map((addon) => ({
-                    id: addon.metadata.annotations![textKey] ?? '',
-                    text: addon.metadata.annotations![textKey] ?? '',
-                    href: addon.metadata.annotations![pathKey] ?? '',
-                }))
+        if (addon && addon.metadata.name === 'observability-controller') {
+            return [
+                {
+                    id: addon.metadata.annotations?.[textKey] || '',
+                    text: addon.metadata.annotations?.[textKey] || '',
+                    href: addon.metadata.annotations?.[pathKey] || '',
+                },
+            ]
         } else {
-            return undefined
+            return []
         }
     }
 
