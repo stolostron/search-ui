@@ -165,9 +165,9 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         if (addon && addon.metadata.name === 'observability-controller') {
             return [
                 {
-                    id: addon.metadata.annotations![textKey],
-                    text: addon.metadata.annotations![textKey],
-                    href: addon.metadata.annotations![pathKey],
+                    id: addon.metadata.annotations?.[textKey] || '',
+                    text: addon.metadata.annotations?.[textKey] || '',
+                    href: addon.metadata.annotations?.[pathKey] || '',
                 },
             ]
         } else {
