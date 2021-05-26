@@ -159,15 +159,15 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
         console.error(error)
     }
     const addons = data?.getResource
-    function getLaunchLink(addons: ClusterManagementAddOn) {
+    function getLaunchLink(addon: ClusterManagementAddOn) {
         const pathKey = 'console.open-cluster-management.io/launch-link'
         const textKey = 'console.open-cluster-management.io/launch-link-text'
-        if (addons && addons.metadata.name === 'observability-controller') {
+        if (addon && addon.metadata.name === 'observability-controller') {
             return [
                 {
-                    id: addons.metadata.annotations![textKey] ?? '',
-                    text: addons.metadata.annotations![textKey] ?? '',
-                    href: addons.metadata.annotations![pathKey] ?? '',
+                    id: addon.metadata.annotations![textKey],
+                    text: addon.metadata.annotations![textKey],
+                    href: addon.metadata.annotations![pathKey],
                 },
             ]
         } else {
