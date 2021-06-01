@@ -1368,7 +1368,7 @@ export function CreateDetailsLink(item: any) {
 
                 return (
                     <a
-                        href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}$cluster=${item.cluster}`}
+                        href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}&cluster=${item.cluster}`}
                     >
                         {item.name}
                     </a>
