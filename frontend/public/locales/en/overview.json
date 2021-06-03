@@ -7,5 +7,6 @@
     "overview.donut.compliance.description": "Overview of {{compliance}} status",
     "overview.donut.pod.description": "Overview of {{pod}} count and status",
     "overview.donut.status.description": "Overview of {{cluster}} status",
+    "overview.donut.insight.description": "Overview of cluster insights",
     "overview.summary.title": "Summary"
 }

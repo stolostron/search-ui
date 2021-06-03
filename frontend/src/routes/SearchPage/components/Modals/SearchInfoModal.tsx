@@ -2,9 +2,8 @@
 // Copyright Contributors to the Open Cluster Management project
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
-import { AcmButton, AcmLabels, AcmModal } from '@open-cluster-management/ui-components'
+import { AcmLabels, AcmModal } from '@open-cluster-management/ui-components'
 import { makeStyles } from '@material-ui/styles'
-import { ButtonVariant } from '@patternfly/react-core'
 import { useTranslation } from 'react-i18next'
 
 const useStyles = makeStyles({

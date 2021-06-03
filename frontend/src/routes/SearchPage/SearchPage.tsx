@@ -248,13 +248,17 @@ export default function SearchPage() {
     const query = convertStringToQuery(searchQuery)
     const { t } = useTranslation(['search'])
     return (
-        <AcmPage>
-            <AcmPageHeader title={t('search')} />
-            <RenderDropDownAndNewTab
-                selectedSearch={selectedSearch}
-                setSelectedSearch={setSelectedSearch}
-                setCurrentQuery={setCurrentQuery}
-            />
+        <AcmPage
+            header={
+                <div>
+                    <AcmPageHeader title={t('search')} />
+                    <RenderDropDownAndNewTab
+                        selectedSearch={selectedSearch}
+                        setSelectedSearch={setSelectedSearch}
+                        setCurrentQuery={setCurrentQuery}
+                    />
+                </div>
+            } >
             <AcmScrollable>
                 <RenderSearchBar
                     setSelectedSearch={setSelectedSearch}

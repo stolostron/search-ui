@@ -116,8 +116,15 @@ export const getSearchCompleteString = (searchQuery: string) => {
     const queryTags = searchQuery.split(' ')
     if (queryTags[queryTags.length - 1].endsWith(':')) {
         return queryTags[queryTags.length - 1].replace(':', '')
-    } else if (operators.some((op) => queryTags[queryTags.length - 1].endsWith(op))) {
-        return queryTags[queryTags.length - 1].substring(0, queryTags[queryTags.length - 1].length - 2)
+    } else if (
+        operators.some(
+            (op) => queryTags[queryTags.length - 1].substring(queryTags[queryTags.length - 1].length - op.length) === op
+        )
+    ) {
+        const op = operators.filter(
+            (op) => queryTags[queryTags.length - 1].substring(queryTags[queryTags.length - 1].length - op.length) === op
+        )
+        return queryTags[queryTags.length - 1].replace(':', '').replace(op[op.length - 1], '')
     }
     return ''
 }
