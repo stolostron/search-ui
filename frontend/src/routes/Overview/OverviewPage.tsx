@@ -317,7 +317,6 @@ export default function OverviewPage() {
     useEffect(() => {
         let clustersToSearch =
             selectedClusterNames.length > 0 ? selectedClusterNames : clusters.map((cluster) => cluster.metadata.name)
-        clustersToSearch = [...clustersToSearch, 'test-cluster']
         if (!searchPolicyReportCalled && clustersToSearch.length > 0) {
             // The console call needs to finish first.
             firePolicyReportQuery({
@@ -470,22 +469,30 @@ export default function OverviewPage() {
                       key: 'Critical',
                       value: policyReportCriticalCount,
                       isPrimary: true,
-                      link: `/search?filters={"textsearch":"kind%3Apolicyreport%20critical%3A>0"}`,
+                      link: policyReportCriticalCount > 0 
+                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20critical%3A>0"}`
+                        : undefined,
                   },
                   {
                       key: 'Important',
                       value: policyReportImportantCount,
-                      link: `/search?filters={"textsearch":"kind%3Apolicyreport%20important%3A>0"}`,
+                      link: policyReportImportantCount > 0 
+                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20important%3A>0"}`
+                        : undefined,
                   },
                   {
                       key: 'Moderate',
                       value: policyReportModerateCount,
-                      link: `/search?filters={"textsearch":"kind%3Apolicyreport%20moderate%3A>0"}`,
+                      link: policyReportModerateCount > 0 
+                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20moderate%3A>0"}`
+                        : undefined,
                   },
                   {
                       key: 'Low',
                       value: policyReportLowCount,
-                      link: `/search?filters={"textsearch":"kind%3Apolicyreport%20low%3A>0"}`,
+                      link: policyReportLowCount > 0 
+                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20low%3A>0"}`
+                        : undefined,
                   },
               ]
 
@@ -602,6 +609,10 @@ export default function OverviewPage() {
                                 title="Cluster issues"
                                 description={t('overview.donut.insight.description')}
                                 data={policyReportData}
+                                donutLabel={{
+                                    title: `${policyReportItems.length}`,
+                                    subTitle: t('overview.donut.insight.pie.label'),
+                                }}
                                 colorScale={['#E62325', '#EC7A08', '#F4C145', '#2B9AF3', '#72767B']}
                             />
                         </AcmChartGroup>
