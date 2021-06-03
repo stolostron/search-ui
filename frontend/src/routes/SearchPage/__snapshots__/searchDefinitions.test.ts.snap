@@ -1427,6 +1427,26 @@ Array [
     "tooltip": "Scope refers to the cluster associated to the PolicyReport.",
   },
   Object {
+    "cell": "critical",
+    "header": "Critical",
+    "sort": "critical",
+  },
+  Object {
+    "cell": "important",
+    "header": "Important",
+    "sort": "important",
+  },
+  Object {
+    "cell": "moderate",
+    "header": "Moderate",
+    "sort": "moderate",
+  },
+  Object {
+    "cell": "low",
+    "header": "Low",
+    "sort": "low",
+  },
+  Object {
     "cell": "-",
     "header": "Insight policy violations",
     "tooltip": "Total number of insight policies violated by the cluster. To view clusters based on number of violations,
