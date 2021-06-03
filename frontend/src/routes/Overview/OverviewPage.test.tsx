@@ -307,7 +307,7 @@ it('should render overview page with expected data', async () => {
                                     important: 1,
                                     moderate: 0,
                                     low: 0,
-                                }
+                                },
                             ],
                             __typename: 'SearchResult',
                         },
