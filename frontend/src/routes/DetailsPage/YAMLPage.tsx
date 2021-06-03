@@ -100,7 +100,11 @@ export default function YAMLPage(props: {
     // Need to split the apigroup & apiversion (ex: for deployments = apps/v1)
     const apiGroup = apiversion.includes('/') ? apiversion.split('/')[0] : ''
     const version = apiversion.includes('/') ? apiversion.split('/')[1] : apiversion.split('/')[0]
-    const { data: userAccessData, loading: userAccessLoading, error: userAccessError } = useUserAccessQuery({
+    const {
+        data: userAccessData,
+        loading: userAccessLoading,
+        error: userAccessError,
+    } = useUserAccessQuery({
         client: consoleClient,
         variables: {
             kind,

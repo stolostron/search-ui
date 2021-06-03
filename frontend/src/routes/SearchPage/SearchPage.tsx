@@ -258,7 +258,8 @@ export default function SearchPage() {
                         setCurrentQuery={setCurrentQuery}
                     />
                 </div>
-            } >
+            }
+        >
             <AcmScrollable>
                 <RenderSearchBar
                     setSelectedSearch={setSelectedSearch}

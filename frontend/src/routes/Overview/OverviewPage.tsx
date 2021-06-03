@@ -338,10 +338,22 @@ export default function OverviewPage() {
     ])
     const searchPolicyReportResult = searchPolicyReportData?.searchResult || []
     let policyReportItems = searchPolicyReportResult[0]?.items || []
-    const policyReportCriticalCount = policyReportItems.reduce((total: any, currentValue: any) => total + currentValue.critical, 0)
-    const policyReportImportantCount = policyReportItems.reduce((total: any, currentValue: any) => total + currentValue.important, 0)
-    const policyReportModerateCount = policyReportItems.reduce((total: any, currentValue: any) => total + currentValue.moderate, 0)
-    const policyReportLowCount = policyReportItems.reduce((total: any, currentValue: any) => total + currentValue.low, 0)
+    const policyReportCriticalCount = policyReportItems.reduce(
+        (total: any, currentValue: any) => total + currentValue.critical,
+        0
+    )
+    const policyReportImportantCount = policyReportItems.reduce(
+        (total: any, currentValue: any) => total + currentValue.important,
+        0
+    )
+    const policyReportModerateCount = policyReportItems.reduce(
+        (total: any, currentValue: any) => total + currentValue.moderate,
+        0
+    )
+    const policyReportLowCount = policyReportItems.reduce(
+        (total: any, currentValue: any) => total + currentValue.low,
+        0
+    )
 
     const refetchData = () => {
         refetch && refetch()
@@ -469,30 +481,34 @@ export default function OverviewPage() {
                       key: 'Critical',
                       value: policyReportCriticalCount,
                       isPrimary: true,
-                      link: policyReportCriticalCount > 0 
-                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20critical%3A>0"}`
-                        : undefined,
+                      link:
+                          policyReportCriticalCount > 0
+                              ? `/search?filters={"textsearch":"kind%3Apolicyreport%20critical%3A>0"}`
+                              : undefined,
                   },
                   {
                       key: 'Important',
                       value: policyReportImportantCount,
-                      link: policyReportImportantCount > 0 
-                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20important%3A>0"}`
-                        : undefined,
+                      link:
+                          policyReportImportantCount > 0
+                              ? `/search?filters={"textsearch":"kind%3Apolicyreport%20important%3A>0"}`
+                              : undefined,
                   },
                   {
                       key: 'Moderate',
                       value: policyReportModerateCount,
-                      link: policyReportModerateCount > 0 
-                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20moderate%3A>0"}`
-                        : undefined,
+                      link:
+                          policyReportModerateCount > 0
+                              ? `/search?filters={"textsearch":"kind%3Apolicyreport%20moderate%3A>0"}`
+                              : undefined,
                   },
                   {
                       key: 'Low',
                       value: policyReportLowCount,
-                      link: policyReportLowCount > 0 
-                        ? `/search?filters={"textsearch":"kind%3Apolicyreport%20low%3A>0"}`
-                        : undefined,
+                      link:
+                          policyReportLowCount > 0
+                              ? `/search?filters={"textsearch":"kind%3Apolicyreport%20low%3A>0"}`
+                              : undefined,
                   },
               ]
 
@@ -504,7 +520,8 @@ export default function OverviewPage() {
                         title={t('overview')}
                         actions={<PageActions timestamp={timestamp} reloading={loading} refetch={refetchData} />}
                     />
-                } >
+                }
+            >
                 <PageSection>
                     <AcmAlert
                         noClose
@@ -531,7 +548,8 @@ export default function OverviewPage() {
                         <PageActions timestamp={timestamp} reloading={loading || searchLoading} refetch={refetchData} />
                     }
                 />
-            } >
+            }
+        >
             <AcmScrollable>
                 {!called || loading || searchLoading || searchPolicyReportLoading ? (
                     <AcmLoadingPage />

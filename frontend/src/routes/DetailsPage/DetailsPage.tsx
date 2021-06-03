@@ -127,7 +127,8 @@ export default function DetailsPage() {
                         }
                     />
                 </div>
-            } >
+            }
+        >
             <Switch>
                 <Route exact path={'/resources'}>
                     <YAMLPage

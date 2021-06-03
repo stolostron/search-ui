@@ -1433,7 +1433,7 @@ export function CreateDetailsLink(item: any) {
                         pathname: `/multicloud/clusters/${item.namespace}/overview`,
                         state: {
                             from: '/search',
-                            filter: 'policyreport'
+                            filter: 'policyreport',
                         },
                     }}
                 >
