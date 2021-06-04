@@ -12,7 +12,7 @@ exports[`Correctly returns CreateDetailsLink - ACM-Application 1`] = `
 
 exports[`Correctly returns CreateDetailsLink - Cluster 1`] = `
 <a
-  href="/multicloud/clusters/testClusterName/overview"
+  href="/multicloud/clusters/testClusterName/overview?showSidebar%3Dtrue"
 >
   testClusterName
 </a>
