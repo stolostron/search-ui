@@ -10,7 +10,7 @@ import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import OverviewPage, { mapProviderFromLabel } from './OverviewPage'
 import { GetOverviewDocument } from '../../console-sdk/console-sdk'
-import { SearchResultCountDocument } from '../../search-sdk/search-sdk'
+import { SearchResultCountDocument, SearchResultItemsDocument } from '../../search-sdk/search-sdk'
 
 it('should responsed with correct value for mapProviderFromLabel function', () => {
     expect(mapProviderFromLabel('Amazon')).toEqual('aws')
@@ -260,6 +260,61 @@ it('should render overview page with expected data', async () => {
                 },
             },
         },
+        {
+            request: {
+                query: SearchResultItemsDocument,
+                variables: {
+                    input: [
+                        {
+                            keywords: [],
+                            filters: [
+                                {
+                                    property: 'kind',
+                                    values: ['policyreport'],
+                                },
+                                {
+                                    property: 'scope',
+                                    values: ['local-cluster', 'managed-cluster'],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            },
+            result: {
+                data: {
+                    searchResult: [
+                        {
+                            items: [
+                                {
+                                    kind: 'policyreport',
+                                    name: 'local-cluster-policyreport',
+                                    namespace: 'local-cluster',
+                                    numInsightPolicies: 1,
+                                    scope: 'local-cluster',
+                                    critical: 1,
+                                    important: 0,
+                                    moderate: 0,
+                                    low: 0,
+                                },
+                                {
+                                    kind: 'policyreport',
+                                    name: 'managed-cluster-policyreport',
+                                    namespace: 'managed-cluster',
+                                    numInsightPolicies: 2,
+                                    scope: 'managed-cluster',
+                                    critical: 1,
+                                    important: 1,
+                                    moderate: 0,
+                                    low: 0,
+                                },
+                            ],
+                            __typename: 'SearchResult',
+                        },
+                    ],
+                },
+            },
+        },
     ]
 
     const { getAllByText, getByText, queryByText } = render(
@@ -282,4 +337,8 @@ it('should render overview page with expected data', async () => {
     expect(getAllByText('Cluster compliance')).toHaveLength(2)
     expect(getByText('1 Compliant')).toBeTruthy()
     expect(getByText('1 Non-compliant')).toBeTruthy()
+
+    // Check Insight chart
+    expect(getByText('2 Critical')).toBeTruthy()
+    expect(getByText('1 Important')).toBeTruthy()
 })

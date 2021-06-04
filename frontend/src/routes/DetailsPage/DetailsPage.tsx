@@ -87,43 +87,48 @@ export default function DetailsPage() {
     const history = useHistory()
 
     return (
-        <AcmPage>
-            <div className={classes.customBreadcrumb}>
-                <AcmButton
-                    variant={'link'}
-                    onClick={() => {
-                        const prevLocState = window.history?.state?.state
-                        if (prevLocState && prevLocState.from === '/search') {
-                            // If we came to resources page from search - return to search with previous search filters
-                            history.goBack()
-                        } else {
-                            // If we were redirected to search from elsewhere (ex: application page) - go to blank search page
-                            window.location.href = '/search'
+        <AcmPage
+            header={
+                <div>
+                    <div className={classes.customBreadcrumb}>
+                        <AcmButton
+                            variant={'link'}
+                            onClick={() => {
+                                const prevLocState = window.history?.state?.state
+                                if (prevLocState && prevLocState.from === '/search') {
+                                    // If we came to resources page from search - return to search with previous search filters
+                                    history.goBack()
+                                } else {
+                                    // If we were redirected to search from elsewhere (ex: application page) - go to blank search page
+                                    window.location.href = '/search'
+                                }
+                            }}
+                        >
+                            {t('details.breadcrumb.search')}
+                        </AcmButton>
+                    </div>
+                    <AcmPageHeader
+                        title={name}
+                        navigation={
+                            <AcmSecondaryNav>
+                                <AcmSecondaryNavItem isActive={location.pathname === '/resources'}>
+                                    <Link replace to={`/resources?${encodeURIComponent(resourceUrlParams)}`}>
+                                        YAML
+                                    </Link>
+                                </AcmSecondaryNavItem>
+                                {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
+                                    <AcmSecondaryNavItem isActive={location.pathname === '/resources/logs'}>
+                                        <Link replace to={`/resources/logs?${encodeURIComponent(resourceUrlParams)}`}>
+                                            Logs
+                                        </Link>
+                                    </AcmSecondaryNavItem>
+                                )}
+                            </AcmSecondaryNav>
                         }
-                    }}
-                >
-                    {t('details.breadcrumb.search')}
-                </AcmButton>
-            </div>
-            <AcmPageHeader
-                title={name}
-                navigation={
-                    <AcmSecondaryNav>
-                        <AcmSecondaryNavItem isActive={location.pathname === '/resources'}>
-                            <Link replace to={`/resources?${encodeURIComponent(resourceUrlParams)}`}>
-                                YAML
-                            </Link>
-                        </AcmSecondaryNavItem>
-                        {(kind.toLowerCase() === 'pod' || kind.toLowerCase() === 'pods') && (
-                            <AcmSecondaryNavItem isActive={location.pathname === '/resources/logs'}>
-                                <Link replace to={`/resources/logs?${encodeURIComponent(resourceUrlParams)}`}>
-                                    Logs
-                                </Link>
-                            </AcmSecondaryNavItem>
-                        )}
-                    </AcmSecondaryNav>
-                }
-            />
+                    />
+                </div>
+            }
+        >
             <Switch>
                 <Route exact path={'/resources'}>
                     <YAMLPage

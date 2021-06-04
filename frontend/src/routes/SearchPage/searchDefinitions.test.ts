@@ -102,6 +102,18 @@ test('Correctly returns CreateDetailsLink - Managed-Policy', () => {
     expect(result).toMatchSnapshot()
 })
 
+test('Correctly returns CreateDetailsLink - PolicyReport', () => {
+    const item = {
+        name: 'testPolicyReport',
+        namespace: 'testPolicyReportNamespace',
+        kind: 'policyreport',
+        cluster: 'testCluster',
+        selfLink: '/self/link',
+    }
+    const result = CreateDetailsLink(item)
+    expect(result).toMatchSnapshot()
+})
+
 test('Correctly returns CreateDetailsLink - Default', () => {
     const item = {
         name: 'testPodName',

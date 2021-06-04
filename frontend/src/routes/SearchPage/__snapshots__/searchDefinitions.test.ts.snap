@@ -74,6 +74,14 @@ exports[`Correctly returns CreateDetailsLink - NON-Application 1`] = `
 </Link>
 `;
 
+exports[`Correctly returns CreateDetailsLink - PolicyReport 1`] = `
+<a
+  href="/multicloud/clusters/testPolicyReportNamespace/overview?showClusterIssues%3Dtrue"
+>
+  testPolicyReport
+</a>
+`;
+
 exports[`Correctly returns CreateExternalLink from clusterip 1`] = `"http://clusterip"`;
 
 exports[`Correctly returns CreateExternalLink from consoleURL 1`] = `
@@ -1425,6 +1433,26 @@ Array [
     "header": "Scope",
     "sort": "scope",
     "tooltip": "Scope refers to the cluster associated to the PolicyReport.",
+  },
+  Object {
+    "cell": "critical",
+    "header": "Critical",
+    "sort": "critical",
+  },
+  Object {
+    "cell": "important",
+    "header": "Important",
+    "sort": "important",
+  },
+  Object {
+    "cell": "moderate",
+    "header": "Moderate",
+    "sort": "moderate",
+  },
+  Object {
+    "cell": "low",
+    "header": "Low",
+    "sort": "low",
   },
   Object {
     "cell": "-",

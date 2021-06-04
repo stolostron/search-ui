@@ -1033,6 +1033,26 @@ const searchDefinitions: any = {
                 tooltip: 'Scope refers to the cluster associated to the PolicyReport.',
             },
             {
+                header: 'Critical',
+                sort: 'critical',
+                cell: 'critical',
+            },
+            {
+                header: 'Important',
+                sort: 'important',
+                cell: 'important',
+            },
+            {
+                header: 'Moderate',
+                sort: 'moderate',
+                cell: 'moderate',
+            },
+            {
+                header: 'Low',
+                sort: 'low',
+                cell: 'low',
+            },
+            {
                 header: 'Insight policy violations',
                 cell: (item: any) => {
                     return FormatInsightPolicies(item)
@@ -1406,6 +1426,16 @@ export function CreateDetailsLink(item: any) {
                     {item.name}
                 </Link>
             )
+        case 'policyreport':
+            return (
+                <a
+                    href={`/multicloud/clusters/${item.namespace}/overview?${encodeURIComponent(
+                        'showClusterIssues=true'
+                    )}`}
+                >
+                    {item.name}
+                </a>
+            )
         default:
             return (
                 <Link
@@ -1472,10 +1502,10 @@ export function FormatInsightPolicies(item: any) {
                             style={{ backgroundColor: '#fff', padding: '0 .25rem 0 0' }}
                             key={policy}
                             render={({ content }) => (
-                                <span>
+                                <div>
                                     {content}
                                     {index < policyArray.length - 1 && ', '}
-                                </span>
+                                </div>
                             )}
                         >
                             {policy}
