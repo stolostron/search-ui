@@ -3,7 +3,7 @@
 
 import _ from 'lodash'
 import { Label, LabelGroup } from '@patternfly/react-core'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
 
