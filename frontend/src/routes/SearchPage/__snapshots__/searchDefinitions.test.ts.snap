@@ -76,7 +76,7 @@ exports[`Correctly returns CreateDetailsLink - NON-Application 1`] = `
 
 exports[`Correctly returns CreateDetailsLink - PolicyReport 1`] = `
 <a
-  href="/multicloud/clusters/testPolicyReportNamespace/overview?showSidebar%3Dtrue"
+  href="/multicloud/clusters/testPolicyReportNamespace/overview?showClusterIssues%3Dtrue"
 >
   testPolicyReport
 </a>

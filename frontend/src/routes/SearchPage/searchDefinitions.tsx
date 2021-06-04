@@ -1428,7 +1428,7 @@ export function CreateDetailsLink(item: any) {
             )
         case 'policyreport':
             return (
-                <a href={`/multicloud/clusters/${item.namespace}/overview?${encodeURIComponent('showSidebar=true')}`}>
+                <a href={`/multicloud/clusters/${item.namespace}/overview?${encodeURIComponent('showClusterIssues=true')}`}>
                     {item.name}
                 </a>
             )
