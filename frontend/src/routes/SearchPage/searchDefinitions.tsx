@@ -1427,20 +1427,7 @@ export function CreateDetailsLink(item: any) {
                 </Link>
             )
         case 'policyreport':
-            // return <a href={`/multicloud/clusters/${item.namespace}/overview`}>{item.name}</a>
-            return (
-                <Redirect
-                    to={{
-                        pathname: `/multicloud/clusters/${item.namespace}/overview`,
-                        state: {
-                            from: '/search',
-                            filter: 'policyreport',
-                        },
-                    }}
-                >
-                    {item.name}
-                </Redirect>
-            )
+            return <a href={`/multicloud/clusters/${item.namespace}/overview`}>{item.name}</a>
         default:
             return (
                 <Link
