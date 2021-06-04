@@ -3,7 +3,7 @@
 
 import _ from 'lodash'
 import { Label, LabelGroup } from '@patternfly/react-core'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
 
@@ -1427,8 +1427,9 @@ export function CreateDetailsLink(item: any) {
                 </Link>
             )
         case 'policyreport':
+            // return <a href={`/multicloud/clusters/${item.namespace}/overview`}>{item.name}</a>
             return (
-                <Link
+                <Redirect
                     to={{
                         pathname: `/multicloud/clusters/${item.namespace}/overview`,
                         state: {
@@ -1438,7 +1439,7 @@ export function CreateDetailsLink(item: any) {
                     }}
                 >
                     {item.name}
-                </Link>
+                </Redirect>
             )
         default:
             return (
