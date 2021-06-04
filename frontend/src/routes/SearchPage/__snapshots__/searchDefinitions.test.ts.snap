@@ -74,6 +74,14 @@ exports[`Correctly returns CreateDetailsLink - NON-Application 1`] = `
 </Link>
 `;
 
+exports[`Correctly returns CreateDetailsLink - PolicyReport 1`] = `
+<a
+  href="/multicloud/clusters/testPolicyReportNamespace/overview"
+>
+  testPolicyReport
+</a>
+`;
+
 exports[`Correctly returns CreateExternalLink from clusterip 1`] = `"http://clusterip"`;
 
 exports[`Correctly returns CreateExternalLink from consoleURL 1`] = `
