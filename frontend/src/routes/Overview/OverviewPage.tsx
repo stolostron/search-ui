@@ -315,7 +315,7 @@ export default function OverviewPage() {
     }
 
     useEffect(() => {
-        let clustersToSearch =
+        const clustersToSearch =
             selectedClusterNames.length > 0 ? selectedClusterNames : clusters.map((cluster) => cluster.metadata.name)
         if (!searchPolicyReportCalled && clustersToSearch.length > 0) {
             // The console call needs to finish first.
@@ -337,7 +337,7 @@ export default function OverviewPage() {
         searchPolicyReportRefetch,
     ])
     const searchPolicyReportResult = searchPolicyReportData?.searchResult || []
-    let policyReportItems = searchPolicyReportResult[0]?.items || []
+    const policyReportItems = searchPolicyReportResult[0]?.items || []
     const policyReportCriticalCount = policyReportItems.reduce(
         (total: any, currentValue: any) => total + currentValue.critical,
         0
@@ -358,7 +358,7 @@ export default function OverviewPage() {
     const refetchData = () => {
         refetch && refetch()
         searchRefetch && searchRefetch({ input: searchQueries(selectedClusterNames) })
-        let clustersToSearch =
+        const clustersToSearch =
             selectedClusterNames.length > 0 ? selectedClusterNames : clusters.map((cluster) => cluster.metadata.name)
         searchPolicyReportRefetch && searchPolicyReportRefetch({ input: policyReportQuery(clustersToSearch) })
     }

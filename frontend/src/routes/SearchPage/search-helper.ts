@@ -121,10 +121,10 @@ export const getSearchCompleteString = (searchQuery: string) => {
             (op) => queryTags[queryTags.length - 1].substring(queryTags[queryTags.length - 1].length - op.length) === op
         )
     ) {
-        const op = operators.filter(
+        const operator = operators.filter(
             (op) => queryTags[queryTags.length - 1].substring(queryTags[queryTags.length - 1].length - op.length) === op
         )
-        return queryTags[queryTags.length - 1].replace(':', '').replace(op[op.length - 1], '')
+        return queryTags[queryTags.length - 1].replace(':', '').replace(operator[operator.length - 1], '')
     }
     return ''
 }
