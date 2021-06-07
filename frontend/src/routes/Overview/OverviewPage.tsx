@@ -597,7 +597,7 @@ export default function OverviewPage() {
                                 loading
                                 key="chart-loading-4"
                                 title="Clusters with issues"
-                                description={t('overview.donut.insight.description')}
+                                description={t('overview.donut.policyreport.description')}
                                 data={[]}
                             />
                         </AcmChartGroup>
@@ -625,11 +625,11 @@ export default function OverviewPage() {
                             />
                             <AcmDonutChart
                                 title="Cluster issues"
-                                description={t('overview.donut.insight.description')}
+                                description={t('overview.donut.policyreport.description')}
                                 data={policyReportData}
                                 donutLabel={{
                                     title: `${policyReportItems.length}`,
-                                    subTitle: t('overview.donut.insight.pie.label'),
+                                    subTitle: t('overview.donut.policyreport.pie.label'),
                                 }}
                                 colorScale={['#E62325', '#EC7A08', '#F4C145', '#2B9AF3', '#72767B']}
                             />

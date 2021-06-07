@@ -1456,9 +1456,9 @@ Array [
   },
   Object {
     "cell": "-",
-    "header": "Insight policy violations",
-    "tooltip": "Total number of insight policies violated by the cluster. To view clusters based on number of violations,
-                     search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.",
+    "header": "Policy results",
+    "tooltip": "Total number of policies violated by the cluster. To view clusters based on number of violations,
+                     search for numPolicyViolations. To search for PolicyReports that contain specific policies, search for policyViolations.",
   },
   Object {
     "cell": "-",
@@ -1853,7 +1853,19 @@ exports[`Correctly returns formatSearchbarSuggestions with T in timestamp 1`] = 
 
 exports[`Correctly returns formatSearchbarSuggestions without T in timestamp 1`] = `"3 days ago"`;
 
-exports[`Correctly returns insight policies 1`] = `
+exports[`Correctly returns label components 1`] = `
+<AcmLabels
+  collapse={Array []}
+  labels={
+    Array [
+      "testlabel=label1",
+      "testlabel=label2",
+    ]
+  }
+/>
+`;
+
+exports[`Correctly returns policyreport policies 1`] = `
 <LabelGroup
   aria-label="Label group category"
   categoryName=""
@@ -1923,18 +1935,6 @@ exports[`Correctly returns insight policies 1`] = `
     UNSUPPORT_SDN_PLUGIN
   </Label>
 </LabelGroup>
-`;
-
-exports[`Correctly returns label components 1`] = `
-<AcmLabels
-  collapse={Array []}
-  labels={
-    Array [
-      "testlabel=label1",
-      "testlabel=label2",
-    ]
-  }
-/>
 `;
 
 exports[`Correctly returns url search params with 0 params 1`] = `"?cluster%3DtestCluster"`;

@@ -1053,17 +1053,17 @@ const searchDefinitions: any = {
                 cell: 'low',
             },
             {
-                header: 'Insight policy violations',
+                header: 'Policy results',
                 cell: (item: any) => {
-                    return FormatInsightPolicies(item)
+                    return FormatPolicyReportPolicies(item)
                 },
-                tooltip: `Total number of insight policies violated by the cluster. To view clusters based on number of violations,
-                     search for numInsightPolicies. To search for PolicyReports that contain specific policies, search for insightPolicies.`,
+                tooltip: `Total number of policies violated by the cluster. To view clusters based on number of violations,
+                     search for numPolicyViolations. To search for PolicyReports that contain specific policies, search for policyViolations.`,
             },
             {
                 header: 'Categories',
                 cell: (item: any) => {
-                    return FormatInsightCategories(item.category)
+                    return FormatPolicyReportCategories(item.category)
                 },
             },
         ],
@@ -1490,9 +1490,9 @@ export function FormatLabels(item: any) {
     return '-'
 }
 
-export function FormatInsightPolicies(item: any) {
-    if (item.insightPolicies) {
-        const policyArray = item.insightPolicies.split('; ')
+export function FormatPolicyReportPolicies(item: any) {
+    if (item.policyViolations) {
+        const policyArray = item.policyViolations.split('; ')
         const policiesToHide = policyArray.slice(2)
         return (
             <LabelGroup collapsedText={`${policiesToHide.length} more`} expandedText={'Show less'} numLabels={2}>
@@ -1518,7 +1518,7 @@ export function FormatInsightPolicies(item: any) {
     return '-'
 }
 
-export function FormatInsightCategories(data: string) {
+export function FormatPolicyReportCategories(data: string) {
     if (data) {
         const dataArray = data.split('; ')
         const dataToHide = dataArray.slice(3)
