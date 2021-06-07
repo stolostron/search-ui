@@ -131,7 +131,7 @@ export default function YAMLPage(props: {
                 />
             </PageSection>
         )
-    } else if (resource?.getResource.message ?? (resource?.getResource[0] && resource?.getResource[0].message)) {
+    } else if (resource?.getResource?.message ?? (resource?.getResource[0] && resource?.getResource[0].message)) {
         return (
             <PageSection>
                 <AcmAlert
@@ -140,7 +140,7 @@ export default function YAMLPage(props: {
                     isInline={true}
                     title={`${t('yaml.getresource.error')} ${name}`}
                     subtitle={
-                        resource?.getResource.message ?? (resource?.getResource[0] && resource?.getResource[0].message)
+                        resource?.getResource?.message ?? (resource?.getResource[0] && resource?.getResource[0].message)
                     }
                 />
             </PageSection>
