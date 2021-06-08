@@ -189,7 +189,7 @@ test('Correctly returns policyreport policies', () => {
     const item = {
         name: 'testName',
         namespace: 'testNamespace',
-        policyViolations:
+        rules:
             'AUTH_OPERATOR_PROXY_ERROR; CONTAINER_ROOT_PARTITION_SIZE; MASTER_DEFINED_AS_MACHINESETS; NODES_MINIMUM_REQUIREMENTS_NOT_MET; UNSUPPORT_SDN_PLUGIN',
         category: 'testcategory=category1; testcategory=category2',
     }

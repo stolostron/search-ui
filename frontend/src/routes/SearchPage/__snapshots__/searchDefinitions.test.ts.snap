@@ -1456,9 +1456,8 @@ Array [
   },
   Object {
     "cell": "-",
-    "header": "Policy results",
-    "tooltip": "Total number of policies violated by the cluster. To view clusters based on number of violations,
-                     search for numPolicyViolations. To search for PolicyReports that contain specific policies, search for policyViolations.",
+    "header": "Rules",
+    "tooltip": "Use the rules filter to search for PolicyReports that contain a specific rule.",
   },
   Object {
     "cell": "-",

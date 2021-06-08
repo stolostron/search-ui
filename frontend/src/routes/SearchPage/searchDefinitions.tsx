@@ -1053,12 +1053,11 @@ const searchDefinitions: any = {
                 cell: 'low',
             },
             {
-                header: 'Policy results',
+                header: 'Rules',
                 cell: (item: any) => {
                     return FormatPolicyReportPolicies(item)
                 },
-                tooltip: `Total number of policies violated by the cluster. To view clusters based on number of violations,
-                     search for numPolicyViolations. To search for PolicyReports that contain specific policies, search for policyViolations.`,
+                tooltip: `Use the rules filter to search for PolicyReports that contain a specific rule.`,
             },
             {
                 header: 'Categories',
@@ -1491,8 +1490,8 @@ export function FormatLabels(item: any) {
 }
 
 export function FormatPolicyReportPolicies(item: any) {
-    if (item.policyViolations) {
-        const policyArray = item.policyViolations.split('; ')
+    if (item.rules) {
+        const policyArray = item.rules.split('; ')
         const policiesToHide = policyArray.slice(2)
         return (
             <LabelGroup collapsedText={`${policiesToHide.length} more`} expandedText={'Show less'} numLabels={2}>
