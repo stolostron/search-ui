@@ -290,7 +290,7 @@ it('should render overview page with expected data', async () => {
                                     kind: 'policyreport',
                                     name: 'local-cluster-policyreport',
                                     namespace: 'local-cluster',
-                                    numInsightPolicies: 1,
+                                    numRuleViolations: 1,
                                     scope: 'local-cluster',
                                     critical: 1,
                                     important: 0,
@@ -301,7 +301,7 @@ it('should render overview page with expected data', async () => {
                                     kind: 'policyreport',
                                     name: 'managed-cluster-policyreport',
                                     namespace: 'managed-cluster',
-                                    numInsightPolicies: 2,
+                                    numRuleViolations: 2,
                                     scope: 'managed-cluster',
                                     critical: 1,
                                     important: 1,
@@ -338,7 +338,7 @@ it('should render overview page with expected data', async () => {
     expect(getByText('1 Compliant')).toBeTruthy()
     expect(getByText('1 Non-compliant')).toBeTruthy()
 
-    // Check Insight chart
+    // Check PolicyReport chart
     expect(getByText('2 Critical')).toBeTruthy()
     expect(getByText('1 Important')).toBeTruthy()
 })
