@@ -22,11 +22,13 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
+import { MinimizedInfoAlert } from './components/MinimizedInfoAlert'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
     useSavedSearchesQuery,
     UserSearch,
+    Message,
 } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
@@ -93,6 +95,7 @@ function RenderSearchBar(props: {
         skip: searchQuery.endsWith(':') || operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
+    // const Message = 
 
     const searchCompleteValue = getSearchCompleteString(searchQuery)
     const searchCompleteQuery = convertStringToQuery(searchQuery)
@@ -107,6 +110,7 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
+
     useEffect(() => {
         if (searchSchemaResults?.error || searchCompleteResults?.error) {
             setQueryErrors(true)
@@ -114,6 +118,11 @@ function RenderSearchBar(props: {
             setQueryErrors(false)
         }
     }, [searchSchemaResults, searchCompleteResults])
+
+
+
+
+
     return (
         <Fragment>
             <PageSection>
@@ -252,6 +261,7 @@ export default function SearchPage() {
             header={
                 <div>
                     <AcmPageHeader title={t('search')} />
+                    <MinimizedInfoAlert text=""/>
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
@@ -265,7 +275,7 @@ export default function SearchPage() {
                     setSelectedSearch={setSelectedSearch}
                     searchQuery={searchQuery}
                     setCurrentQuery={setCurrentQuery}
-                    queryErrors={queryErrors}
+                    queryErrors={queryErrors} //will have to remove this since we are moving into the minimizedinfoalert above.
                     setQueryErrors={setQueryErrors}
                 />
                 {!queryErrors ? (
