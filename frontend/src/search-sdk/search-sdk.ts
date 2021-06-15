@@ -254,6 +254,11 @@ export type SearchResultRelatedItemsQueryVariables = Exact<{
 
 export type SearchResultRelatedItemsQuery = { searchResult?: Maybe<Array<Maybe<{ related?: Maybe<Array<Maybe<Pick<SearchRelatedResult, 'kind' | 'items'>>>> }>>> };
 
+export type GetMessagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMessagesQuery = { messages?: Maybe<Array<Maybe<Pick<Message, 'id' | 'kind' | 'description'>>>> };
+
 
 export const SaveSearchDocument = gql`
     mutation saveSearch($resource: JSON!) {
@@ -606,3 +611,39 @@ export function useSearchResultRelatedItemsLazyQuery(baseOptions?: Apollo.LazyQu
 export type SearchResultRelatedItemsQueryHookResult = ReturnType<typeof useSearchResultRelatedItemsQuery>;
 export type SearchResultRelatedItemsLazyQueryHookResult = ReturnType<typeof useSearchResultRelatedItemsLazyQuery>;
 export type SearchResultRelatedItemsQueryResult = Apollo.QueryResult<SearchResultRelatedItemsQuery, SearchResultRelatedItemsQueryVariables>;
+export const GetMessagesDocument = gql`
+    query getMessages {
+  messages {
+    id
+    kind
+    description
+  }
+}
+    `;
+
+/**
+ * __useGetMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMessagesQuery(baseOptions?: Apollo.QueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+      }
+export function useGetMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options);
+        }
+export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>;
+export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>;
+export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>;

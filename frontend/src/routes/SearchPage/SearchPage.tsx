@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import _ from 'lodash'
+import _, { isNull } from 'lodash'
 import {
     AcmAlert,
     AcmButton,
@@ -22,7 +22,7 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
-import { MinimizedInfoAlert } from './components/MinimizedInfoAlert'
+import {MinimizedInfoAlert} from './components/MinimizedInfoAlert'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
@@ -120,7 +120,17 @@ function RenderSearchBar(props: {
     }, [searchSchemaResults, searchCompleteResults])
 
 
+    // useEffect(
+    //     () => {
+    //         if (Message?){
 
+    //         }
+    //     },
+    //     // optional dependency array
+    //     [
+    //         // 0 or more entries
+    //     ] 
+    // )
 
 
     return (
@@ -261,7 +271,7 @@ export default function SearchPage() {
             header={
                 <div>
                     <AcmPageHeader title={t('search')} />
-                    <MinimizedInfoAlert text=""/>
+                    <MinimizedInfoAlert/>
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
