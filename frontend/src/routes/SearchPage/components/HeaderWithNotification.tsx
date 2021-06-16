@@ -9,6 +9,8 @@ import { AcmAlert } from '@open-cluster-management/ui-components'
 import { empty, gql, useQuery } from '@apollo/client'
 import { searchClient } from '../../../search-sdk/search-client'
 import { printIntrospectionSchema } from 'graphql'
+import { Alert, AlertActionCloseButton } from '@patternfly/react-core'
+import { type } from '@testing-library/user-event/dist/type'
 
 
 
@@ -71,45 +73,69 @@ import { printIntrospectionSchema } from 'graphql'
 // }
 
 
-export const HeaderWithNotification: React.FC<any> = () => {
+// export const HeaderWithNotification: React.FC<any> = () => {
 
-    const messages = useGetMessagesQuery({
-    client: process.env.NODE_ENV === 'test' ? undefined : searchClient})
+//     const messages = useGetMessagesQuery({
+//     client: process.env.NODE_ENV === 'test' ? undefined : searchClient})
 
-    //using translations:
-    const { t } = useTranslation(['search'])
+//     //using translations:
+//     const { t } = useTranslation(['search'])
 
-    const displayTextShort = t('messages.S20.short')
-    const displayTextLong = t('messages.S20.long') 
+//     const displayTextShort = t('messages.S20.short')
+//     const displayTextLong = t('messages.S20.long') 
+
+// //     const[message, setMessage] = useState<string>(displayTextLong) //initial state to long text
+
+
+// //     const minimizedMessage = () => setMessage(displayTextShort) 
+// //     const maximizedMessage = () => setMessage(displayTextLong)
+
+// //     const toggleMessage = () =>  setMessage(message => !maximizedMessage) //setMessage will 
+
+// //         return (
+            
+// //             <AcmPageHeader title={"Search"}/>
+           
+// //             message.length >0 && minimizedMessage ? <AcmLabels labels={{displayTextShort}}/> : ''
+// //             message.length >0 && maximizedMessage ? <AcmAlert title={displayTextLong} onClose={toggleMessage}/> : ''
+         
+// //         )
+// // }
 
 //     const[message, setMessage] = useState<string>(displayTextLong) //initial state to long text
-
-
-//     const minimizedMessage = () => setMessage(displayTextShort) 
-//     const maximizedMessage = () => setMessage(displayTextLong)
-
-//     const toggleMessage = () =>  setMessage(message => !maximizedMessage) //setMessage will 
-
+//     const toggleMessage = () =>  setMessage(message === displayTextLong ? displayTextShort : displayTextLong) //setMessage will
 //         return (
-            
-//             <AcmPageHeader title={"Search"}/>
-           
-//             message.length >0 && minimizedMessage ? <AcmLabels labels={{displayTextShort}}/> : ''
-//             message.length >0 && maximizedMessage ? <AcmAlert title={displayTextLong} onClose={toggleMessage}/> : ''
-         
-//         )
+//         <AcmPageHeader title={"Search"}/>
+//         message === displayTextShort && <AcmLabels labels={{displayTextShort}}/>
+//         message === displayTextLong &&  <AcmAlert title={displayTextLong} onClose={toggleMessage}/>
+//     )
 // }
 
+
+
+export const HeaderWithNotification: React.FC<any> = (onClose) => {
+    const messages = useGetMessagesQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient
+    })
+    //using translations:
+    const { t } = useTranslation(['search'])
+    const displayTextShort = t('messages.S20.short')
+    const displayTextLong = t('messages.S20.long') 
     const[message, setMessage] = useState<string>(displayTextLong) //initial state to long text
     const toggleMessage = () =>  setMessage(message === displayTextLong ? displayTextShort : displayTextLong) //setMessage will
-        return (
-        <AcmPageHeader title={"Search"}/>
-        message === displayTextShort && <AcmLabels labels={{displayTextShort}}/>
-        message === displayTextLong &&  <AcmAlert title={displayTextLong} onClose={toggleMessage}/>
+    // console.log(messages.length)
+
+
+    return (
+        <div>
+            {[messages].length > 0 && message === displayTextShort && 
+            <AcmLabels labels={{displayTextShort}}/>}
+            {[messages].length > 0 && message === displayTextLong && 
+             <Alert title={displayTextLong} 
+            actionClose={<AlertActionCloseButton onClose={() => toggleMessage}/>}/>}
+        </div>
     )
 }
-
-
 
 // React.cloneElement(AcmAlert,
     //     [])
