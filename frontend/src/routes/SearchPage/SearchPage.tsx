@@ -22,7 +22,7 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
-import {MessageComponent} from './components/MessageComponent'
+import {HeaderWithNotification} from './components/HeaderWithNotification'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
@@ -122,7 +122,7 @@ function RenderSearchBar(props: {
 
     // useEffect(
     //     () => {
-    //         if (Message?){
+    //         if (Message !== ){
 
     //         }
     //     },
@@ -271,7 +271,7 @@ export default function SearchPage() {
             header={
                 <div>
                     <AcmPageHeader title={t('search')} />
-                    <MessageComponent/>
+                    <HeaderWithNotification/>
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
