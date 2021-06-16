@@ -22,7 +22,7 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
-import {MinimizedInfoAlert} from './components/MinimizedInfoAlert'
+import {MessageComponent} from './components/MessageComponent'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
@@ -271,7 +271,7 @@ export default function SearchPage() {
             header={
                 <div>
                     <AcmPageHeader title={t('search')} />
-                    <MinimizedInfoAlert/>
+                    <MessageComponent/>
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
