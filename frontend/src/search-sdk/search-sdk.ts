@@ -61,7 +61,7 @@ export type Channel = {
 
 
 export type Message = {
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
   kind?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
 };

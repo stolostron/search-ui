@@ -22,7 +22,7 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
-import {HeaderWithNotification} from './components/HeaderWithNotification'
+import HeaderWithNotification from './components/HeaderWithNotification'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
@@ -36,7 +36,7 @@ import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchMod
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 import { ApolloError } from '@apollo/client'
-
+import { Flex, FlexItem } from '@patternfly/react-core';
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 
 const useStyles = makeStyles({
