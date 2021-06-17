@@ -5,7 +5,8 @@ import {
     AcmAlert,
     AcmButton,
     AcmDropdown,
-    AcmLaunchLink,
+    AcmIconVariant,
+    AcmIcon,
     AcmPage,
     AcmPageHeader,
     AcmRoute,
@@ -13,7 +14,7 @@ import {
     AcmSearchbar,
     AcmActionGroup,
 } from '@open-cluster-management/ui-components'
-import { PageSection } from '@patternfly/react-core'
+import { PageSection, ButtonVariant } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -218,7 +219,18 @@ function RenderDropDownAndNewTab(props: {
         <div className={classes.actionGroup}>
             <AcmActionGroup>
                 <SavedSearchDropdown selectedSearch={props.selectedSearch} />
-                <AcmLaunchLink links={[{ id: 'search', text: t('search.new.tab'), href: '/search' }]} />
+                <AcmButton
+                    href={'/search'}
+                    variant={ButtonVariant.link}
+                    component="a"
+                    target="_blank"
+                    rel="noreferrer"
+                    id={'newsearchtab'}
+                    icon={<AcmIcon icon={AcmIconVariant.openNewTab} />}
+                    iconPosition="right"
+                >
+                    {t('search.new.tab')}
+                </AcmButton>
             </AcmActionGroup>
         </div>
     )
