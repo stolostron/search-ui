@@ -114,7 +114,7 @@ function RenderSearchBar(props: {
         } else if (queryErrors) {
             setQueryErrors(false)
         }
-    }, [searchSchemaResults, searchCompleteResults])
+    }, [searchSchemaResults, searchCompleteResults, queryErrors, setQueryErrors])
     return (
         <Fragment>
             <PageSection>

@@ -30,8 +30,8 @@
     "dependencies": {
         "@kubernetes/client-node": "^0.14.3",
         "@material-ui/styles": "^4.11.4",
-        "concurrently": "^6.1.0",
-        "typescript": "^4.2.4"
+        "concurrently": "^6.2.0",
+        "typescript": "^4.3.2"
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
