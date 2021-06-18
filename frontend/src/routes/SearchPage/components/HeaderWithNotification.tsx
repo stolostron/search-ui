@@ -7,8 +7,9 @@ import { useGetMessagesQuery, Message } from '../../../search-sdk/search-sdk'
 import { AcmAlert, AcmButton, AcmDrawer, AcmLabels, AcmPageContent, AcmPageHeader, AcmAlertGroup, AcmExpandableCard, AcmInlineStatus, StatusType} from '@open-cluster-management/ui-components'
 import { empty, gql, useQuery } from '@apollo/client'
 import { searchClient } from '../../../search-sdk/search-client'
-import { Alert, AlertGroup, AlertVariant, Popover, PopoverPosition, Button, Card, CardBody} from '@patternfly/react-core';
+import { Alert, AlertGroup, AlertVariant, Popover, PopoverPosition, Button, Card, CardBody, Flex} from '@patternfly/react-core';
 import { type } from '@testing-library/user-event/dist/type'
+import { convertToObject } from 'typescript'
 
 
 // 1. Needed to export as default function.
@@ -55,19 +56,26 @@ export default function HeaderWithNotification() {
 // }
     return (
 
-        <div style={{display: 'flex', justifyContent:'flex-end'}}>
+       
+        <div style={{outline: "none", display: 'flex', justifyContent:'flex-end'}}>
+            
+        <p style={{flex: 1}}><AcmPageHeader title={t('search')}/></p>
+
         {messages?.map(msg => {
             const displayShortText = t(`messages.${msg?.id}.short`)
             const displayLongText = t(`messages.${msg?.id}.long`)
+            console.log(displayLongText)
+            console.log(displayShortText)
         return (
-        <Card>
+        
+        <Card style= {{ border: "none", boxShadow: "none"}} > 
             <CardBody>
                 <AcmInlineStatus
                     type={StatusType.warning}
-                    status="More on disabled clusters."
+                    status={displayShortText}
                     popover={{
                         // headerContent: 'More on disabled clusters.',
-                        bodyContent: 'Currently, search is disabled on some of your managed clusters. Some data might be missing from the console view. See ______ to enable search.',
+                        bodyContent: {displayLongText},
                         footerContent: (
                             <a href="#">
                                 View disabled clusters
@@ -76,10 +84,11 @@ export default function HeaderWithNotification() {
                             }}
                 />
             </CardBody>
-        </Card> 
+        </Card>
                 )
                    })}
         </div>
+    
     )
 }
 

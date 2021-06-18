@@ -270,7 +270,7 @@ export default function SearchPage() {
         <AcmPage
             header={
                 <div>
-                    <AcmPageHeader title={t('search')} />
+                    
                     <HeaderWithNotification/>
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
