@@ -11,29 +11,37 @@ import { Alert, AlertGroup, AlertVariant, Popover, PopoverPosition, Button, Card
 import { type } from '@testing-library/user-event/dist/type'
 import { convertToObject } from 'typescript'
 
+//props:
+//ACM page search title
+//define showMessage
+
+
+// const showMessage: [];
+
+// const overview: string;
+
+// React.FC<any> = (onClose) =
+
 
 // 1. Needed to export as default function.
-export default function HeaderWithNotification() {
+export default function HeaderWithNotification(props: {showMessages:{}}) {
     const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient
     })
+    // const[showMessage, setShowMessages] = useState<string[]>([])
 
-    // TODO: Use local storage to save minimizedMessages.
-    const[minimizedMessages, setMinimizedMessages] = useState<string[]>([])
     const { t } = useTranslation(['search'])
 
     // 2. Needed to extract `messages` from the `msgQuery`
     const messages = msgQuery.data?.messages
-   
 
+    
 
-    const handleAlertClose = (messageId:any) => {
-        console.log(`Alert with id ${messageId} was closed.`) // TODO: remove this line
-        // TODO: Save in browser's local storage.
-        minimizedMessages.push(messageId)
-        setMinimizedMessages(minimizedMessages)
+    // const handleAlertClose = (messageId:string) => {
+    //     showMessage.push(messageId)
+    //     setShowMessages(showMessage)
         // localStorage.setItem(refreshIntervalCookie, `${pollInterval}`)
-    }
+    // }
 
 //     return (
 //     <div>   
@@ -55,42 +63,45 @@ export default function HeaderWithNotification() {
 //     )
 // }
     return (
-
-       
+        <div>
         <div style={{outline: "none", display: 'flex', justifyContent:'flex-end'}}>
-            
         <p style={{flex: 1}}><AcmPageHeader title={t('search')}/></p>
 
         {messages?.map(msg => {
-            const displayShortText = t(`messages.${msg?.id}.short`)
-            const displayLongText = t(`messages.${msg?.id}.long`)
-            console.log(displayLongText)
-            console.log(displayShortText)
-        return (
+                const displayShortText = t(`messages.${msg?.id}.short`)
+                const displayLongText = t(`messages.${msg?.id}.long`)
+
+            return (
         
-        <Card style= {{ border: "none", boxShadow: "none"}} > 
-            <CardBody>
-                <AcmInlineStatus
-                    type={StatusType.warning}
-                    status={displayShortText}
-                    popover={{
-                        // headerContent: 'More on disabled clusters.',
-                        bodyContent: {displayLongText},
-                        footerContent: (
-                            <a href="#">
-                                View disabled clusters
-                            </a>
-                        ),
-                            }}
-                />
-            </CardBody>
-        </Card>
-                )
-                   })}
+            <Card style= {{ border: "none", boxShadow: "none"}} > 
+                <CardBody>
+                    <AcmInlineStatus
+                        type={StatusType.warning}
+                        status={displayShortText}
+                        popover={{
+                            headerContent: (
+                                <div>{displayShortText}</div>
+                            ),
+                            bodyContent: (
+                                <div>{displayLongText}</div>
+                                ),
+                            footerContent: (
+                                <a href='/search?filters={"textsearch":"kind%3Acluster%20addon%3Asearch-collector%3Dfalse%20name%3A!local-cluster"}'>
+                                    View disabled clusters
+                                </a>
+                            ),
+                                }}
+                    />
+                </CardBody>
+            </Card>
+                    )
+                    })}
+            </div>
         </div>
     
     )
 }
+
 
 
 

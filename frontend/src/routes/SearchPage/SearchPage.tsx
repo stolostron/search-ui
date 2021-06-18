@@ -28,7 +28,7 @@ import {
     useSearchCompleteQuery,
     useSavedSearchesQuery,
     UserSearch,
-    Message,
+    useGetMessagesQuery
 } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
@@ -95,7 +95,7 @@ function RenderSearchBar(props: {
         skip: searchQuery.endsWith(':') || operators.some((operator: string) => searchQuery.endsWith(operator)),
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
-    // const Message = 
+
 
     const searchCompleteValue = getSearchCompleteString(searchQuery)
     const searchCompleteQuery = convertStringToQuery(searchQuery)
@@ -119,18 +119,6 @@ function RenderSearchBar(props: {
         }
     }, [searchSchemaResults, searchCompleteResults])
 
-
-    // useEffect(
-    //     () => {
-    //         if (Message !== ){
-
-    //         }
-    //     },
-    //     // optional dependency array
-    //     [
-    //         // 0 or more entries
-    //     ] 
-    // )
 
 
     return (
@@ -256,6 +244,8 @@ export default function SearchPage() {
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
     const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const [queryErrors, setQueryErrors] = useState(false)
+
+
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
@@ -264,14 +254,32 @@ export default function SearchPage() {
             setSelectedSearch('Saved searches')
         }
     }, [searchQuery])
+
+
+
+
+    const[queryMessages, setQueryMessages] = useState<any[]>([])
+    const msgQuery = useGetMessagesQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient
+    })
+
+    useEffect(() => {
+        if (msgQuery.data?.messages) {
+            setQueryMessages(msgQuery.data?.messages)
+        }
+    }, [queryMessages])
+
+
     const query = convertStringToQuery(searchQuery)
     const { t } = useTranslation(['search'])
     return (
         <AcmPage
             header={
                 <div>
+                    <HeaderWithNotification
+                     showMessages={setQueryMessages}
                     
-                    <HeaderWithNotification/>
+                    />
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
