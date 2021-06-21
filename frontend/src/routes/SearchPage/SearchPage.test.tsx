@@ -10,7 +10,8 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import SearchPage from './SearchPage'
-import { SavedSearchesDocument, SearchSchemaDocument, SearchCompleteDocument } from '../../search-sdk/search-sdk'
+import { SavedSearchesDocument, SearchSchemaDocument, SearchCompleteDocument, GetMessagesDocument } from '../../search-sdk/search-sdk'
+import HeaderWithNotification from './components/HeaderWithNotification'
 
 describe('SearchPage', () => {
     it('should render default search page correctly', async () => {
@@ -44,7 +45,7 @@ describe('SearchPage', () => {
                         },
                     },
                 },
-            },
+            },            
         ]
         render(
             <RecoilRoot>
@@ -133,6 +134,9 @@ describe('SearchPage', () => {
                     },
                 },
             },
+
+
+
             {
                 request: {
                     query: SearchSchemaDocument,

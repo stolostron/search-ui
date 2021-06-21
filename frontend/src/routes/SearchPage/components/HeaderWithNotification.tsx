@@ -11,17 +11,6 @@ import { Alert, AlertGroup, AlertVariant, Popover, PopoverPosition, Button, Card
 import { type } from '@testing-library/user-event/dist/type'
 import { convertToObject } from 'typescript'
 
-//props:
-//ACM page search title
-//define showMessage
-
-
-// const showMessage: [];
-
-// const overview: string;
-
-// React.FC<any> = (onClose) =
-
 
 // 1. Needed to export as default function.
 export default function HeaderWithNotification(props: {showMessages:{}}) {
