@@ -5,24 +5,11 @@ import '@patternfly/react-core/dist/styles/base.css'
 import { useTranslation } from 'react-i18next'
 import { AcmPageHeader, AcmInlineStatus, StatusType } from '@open-cluster-management/ui-components'
 import { Card, CardBody } from '@patternfly/react-core'
-import { useGetMessagesQuery } from '../../../search-sdk/search-sdk'
-import { searchClient } from '../../../search-sdk/search-client'
 
 // 1. Needed to export as default function.
 export default function HeaderWithNotification(props: { queryMessages: any[] }) {
-    const msgQuery = useGetMessagesQuery({
-        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
-    })
-    // const[showMessage, setShowMessages] = useState<string[]>([])
-
     const { t } = useTranslation(['search'])
-
-    // 2. Needed to extract `messages` from the `msgQuery`
-    const messages = msgQuery.data?.messages
-
-    // const { t } = useTranslation(['search'])
-
-    // const messages:any[] = props.queryMessages
+    const messages: any[] = props.queryMessages
 
     return (
         <div>
