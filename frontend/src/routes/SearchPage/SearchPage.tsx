@@ -117,12 +117,9 @@ function RenderSearchBar(props: {
             setQueryErrors(false)
         }
     }, [searchSchemaResults, searchCompleteResults, queryErrors, setQueryErrors])
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> e8594c56e101c0fc69b2e76a85170fa2effbefb1
     return (
         <Fragment>
             <PageSection>

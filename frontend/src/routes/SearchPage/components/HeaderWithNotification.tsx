@@ -23,8 +23,6 @@ export default function HeaderWithNotification(props: {queryMessages:any[] }) {
     const messages = msgQuery.data?.messages
 
 
-    console.log('showMessages:', props.queryMessages)
-
     // const { t } = useTranslation(['search'])
  
     // const messages:any[] = props.queryMessages
