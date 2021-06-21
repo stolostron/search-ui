@@ -245,7 +245,7 @@ export async function startServer(): Promise<FastifyInstance> {
             const query = request.query as { code: string; state: string }
             validStates.add(query.state)
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            const openshift = ((this as unknown) as any).openshift as OAuth2Namespace
+            const openshift = (this as unknown as any).openshift as OAuth2Namespace
             const token = await openshift.getAccessTokenFromAuthorizationCodeFlow(request)
             logger.debug({ msg: 'search/login/callback token', token: token.access_token })
             return reply
