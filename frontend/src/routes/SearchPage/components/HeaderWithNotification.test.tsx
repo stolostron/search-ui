@@ -16,7 +16,7 @@ test('renders clusters disabled message', () => {
 
 //case where we have no message
 test('renders empty message', () => {
-    const { getByText } = render(<HeaderWithNotification showMessages={null} />)
+    const { getByText } = render(<HeaderWithNotification showMessages={[]} />)
     expect(getByText).toMatchSnapshot();
 })
 

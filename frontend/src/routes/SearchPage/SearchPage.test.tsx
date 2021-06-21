@@ -11,7 +11,6 @@ import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import SearchPage from './SearchPage'
 import { SavedSearchesDocument, SearchSchemaDocument, SearchCompleteDocument, GetMessagesDocument } from '../../search-sdk/search-sdk'
-import HeaderWithNotification from './components/HeaderWithNotification'
 
 describe('SearchPage', () => {
     it('should render default search page correctly', async () => {
@@ -45,7 +44,26 @@ describe('SearchPage', () => {
                         },
                     },
                 },
-            },            
+            },    
+            
+            
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: {
+                            id: 'S20',
+                            kind: 'info',
+                            description: 'Search is disabled on some of your managed clusters.'
+                        }
+                    },
+                },
+            }
+
+
+
         ]
         render(
             <RecoilRoot>
@@ -85,6 +103,7 @@ describe('SearchPage', () => {
                     },
                 },
             },
+            
             {
                 request: {
                     query: SearchSchemaDocument,
@@ -94,6 +113,26 @@ describe('SearchPage', () => {
                     errors: [new GraphQLError('Error getting search schema data')],
                 },
             },
+
+
+
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: {
+                            id: '',
+                            kind: '',
+                            description: ''
+                        }
+                    },
+                },
+            }
+
+
+            
         ]
         render(
             <RecoilRoot>
@@ -167,6 +206,28 @@ describe('SearchPage', () => {
                     },
                 },
             },
+
+
+
+       
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: {
+                            id: 'S10',
+                            kind: 'warning',
+                            description: 'This is a new warning message.'
+                        }
+                    },
+                },
+            }
+
+
+
+
         ]
         render(
             <RecoilRoot>
