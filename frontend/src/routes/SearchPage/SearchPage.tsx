@@ -263,21 +263,17 @@ export default function SearchPage() {
 
     const query = convertStringToQuery(searchQuery)
 
-
     const [queryMessages, setQueryMessages] = useState<any[]>([])
     const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     useEffect(() => {
-        
         if (msgQuery.data?.messages) {
             setQueryMessages(msgQuery.data?.messages)
         }
     }, [queryMessages, msgQuery])
 
-
-    
     return (
         <AcmPage
             header={
