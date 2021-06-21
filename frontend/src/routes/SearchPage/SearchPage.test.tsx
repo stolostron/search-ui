@@ -53,11 +53,12 @@ describe('SearchPage', () => {
                 },
                 result: {
                     data: {
-                        messages: {
+                    
                             id: 'S20',
                             kind: 'info',
-                            description: 'Search is disabled on some of your managed clusters.'
-                        }
+                            description: 'Search is disabled on some of your managed clusters.',
+                            __typename: 'Message',
+                        
                     },
                 },
             }
@@ -115,18 +116,18 @@ describe('SearchPage', () => {
             },
 
 
-
             {
                 request: {
                     query: GetMessagesDocument,
                 },
                 result: {
                     data: {
-                        messages: {
+                    
                             id: '',
                             kind: '',
-                            description: ''
-                        }
+                            description: '',
+                            __typename: '',
+                        
                     },
                 },
             }
@@ -216,14 +217,16 @@ describe('SearchPage', () => {
                 },
                 result: {
                     data: {
-                        messages: {
-                            id: 'S10',
+                    
+                            id: 'S90',
                             kind: 'warning',
-                            description: 'This is a new warning message.'
-                        }
+                            description: 'This is a new message',
+                            __typename: 'Message',
+                        
                     },
                 },
             }
+
 
 
 

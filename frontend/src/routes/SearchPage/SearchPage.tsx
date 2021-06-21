@@ -7,7 +7,6 @@ import {
     AcmDropdown,
     AcmLaunchLink,
     AcmPage,
-    AcmPageHeader,
     AcmRoute,
     AcmScrollable,
     AcmSearchbar,
@@ -36,7 +35,6 @@ import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchMod
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 import { ApolloError } from '@apollo/client'
-import { Flex, FlexItem } from '@patternfly/react-core';
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 
 const useStyles = makeStyles({
@@ -117,7 +115,7 @@ function RenderSearchBar(props: {
         } else if (queryErrors) {
             setQueryErrors(false)
         }
-    }, [searchSchemaResults, searchCompleteResults])
+    }, [searchSchemaResults, searchCompleteResults, queryErrors, setQueryErrors])
 
 
 
@@ -256,10 +254,10 @@ export default function SearchPage() {
     }, [searchQuery])
 
 
-
-
     const[queryMessages, setQueryMessages] = useState<any[]>([])
-    const msgQuery = useGetMessagesQuery({
+
+
+      const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient
     })
 
@@ -277,7 +275,7 @@ export default function SearchPage() {
             header={
                 <div>
                     <HeaderWithNotification
-                     showMessages={setQueryMessages}
+                     queryMessages={queryMessages}
                     
                     />
                     <RenderDropDownAndNewTab

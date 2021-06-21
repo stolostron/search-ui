@@ -3,28 +3,40 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import HeaderWithNotification from './HeaderWithNotification'
-
-
+import { MockedProvider } from '@apollo/client/testing'
 
 ///case where we have a message about disabled search (current message)
 test('renders clusters disabled message', () => {
-    const { getByText } = render(<HeaderWithNotification showMessages={[{id: 'S20', kind: 'info', description: 'Search is disabled on some of your managed clusters.'}]} />)
-    // expect(getByText(`Search is disabled on some of your managed clusters.`)).toBeInTheDocument()
+    const disableSearch = [{id: 'S20', kind: 'info', description: 'Search is disabled on some of your managed clusters.'}]
+    const { getByText } = render(
+        <MockedProvider mocks={[]}>
+            <HeaderWithNotification queryMessages={disableSearch} />
+            </MockedProvider>
+            )
     expect(getByText).toMatchSnapshot();
 })
 
 
 //case where we have no message
 test('renders empty message', () => {
-    const { getByText } = render(<HeaderWithNotification showMessages={[]} />)
+    const emptyMessage = [{}]
+    const { getByText } = render(
+        <MockedProvider mocks={[]}>
+            <HeaderWithNotification queryMessages={emptyMessage} />
+            </MockedProvider>
+            )
     expect(getByText).toMatchSnapshot();
 })
 
 
 // case where we have a different message
 test('renders unknown message', () => {
-    const { getByText } = render(<HeaderWithNotification showMessages={[{id: 'S99', kind:'warning', message:'This is a new warning'}]} />)
-    // expect(getByText(`This is a new warning`)).toBeInTheDocument()
+    const newMessage =  [{id: 'S90', kind:'warning', message:'This is a new message'}]
+    const { getByText } = render(
+        <MockedProvider mocks={[]}>
+            <HeaderWithNotification queryMessages={newMessage} />
+            </MockedProvider>
+            )
    expect(getByText).toMatchSnapshot();
 })
 
