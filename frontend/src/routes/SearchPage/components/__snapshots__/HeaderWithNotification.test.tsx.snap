@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders clusters disabled message 1`] = `[Function]`;
+
+exports[`renders empty message 1`] = `[Function]`;
+
+exports[`renders unknown message 1`] = `[Function]`;
