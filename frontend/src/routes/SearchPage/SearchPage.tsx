@@ -261,20 +261,23 @@ export default function SearchPage() {
         }
     }, [searchQuery])
 
-    const [queryMessages, setQueryMessages] = useState<any[]>([])
+    const query = convertStringToQuery(searchQuery)
 
+
+    const [queryMessages, setQueryMessages] = useState<any[]>([])
     const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     useEffect(() => {
+        
         if (msgQuery.data?.messages) {
             setQueryMessages(msgQuery.data?.messages)
         }
-    }, [queryMessages])
+    }, [queryMessages, msgQuery])
 
-    const query = convertStringToQuery(searchQuery)
-    const { t } = useTranslation(['search'])
+
+    
     return (
         <AcmPage
             header={
@@ -293,7 +296,7 @@ export default function SearchPage() {
                     setSelectedSearch={setSelectedSearch}
                     searchQuery={searchQuery}
                     setCurrentQuery={setCurrentQuery}
-                    queryErrors={queryErrors} 
+                    queryErrors={queryErrors}
                     setQueryErrors={setQueryErrors}
                 />
                 {!queryErrors ? (
