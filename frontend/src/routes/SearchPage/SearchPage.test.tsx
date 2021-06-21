@@ -10,7 +10,12 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import SearchPage from './SearchPage'
-import { SavedSearchesDocument, SearchSchemaDocument, SearchCompleteDocument, GetMessagesDocument } from '../../search-sdk/search-sdk'
+import {
+    SavedSearchesDocument,
+    SearchSchemaDocument,
+    SearchCompleteDocument,
+    GetMessagesDocument,
+} from '../../search-sdk/search-sdk'
 
 describe('SearchPage', () => {
     it('should render default search page correctly', async () => {
@@ -44,27 +49,21 @@ describe('SearchPage', () => {
                         },
                     },
                 },
-            },    
-            
-            
+            },
+
             {
                 request: {
                     query: GetMessagesDocument,
                 },
                 result: {
                     data: {
-                    
-                            id: 'S20',
-                            kind: 'info',
-                            description: 'Search is disabled on some of your managed clusters.',
-                            __typename: 'Message',
-                        
+                        id: 'S20',
+                        kind: 'info',
+                        description: 'Search is disabled on some of your managed clusters.',
+                        __typename: 'Message',
                     },
                 },
-            }
-
-
-
+            },
         ]
         render(
             <RecoilRoot>
@@ -104,7 +103,7 @@ describe('SearchPage', () => {
                     },
                 },
             },
-            
+
             {
                 request: {
                     query: SearchSchemaDocument,
@@ -115,25 +114,19 @@ describe('SearchPage', () => {
                 },
             },
 
-
             {
                 request: {
                     query: GetMessagesDocument,
                 },
                 result: {
                     data: {
-                    
-                            id: '',
-                            kind: '',
-                            description: '',
-                            __typename: '',
-                        
+                        id: '',
+                        kind: '',
+                        description: '',
+                        __typename: '',
                     },
                 },
-            }
-
-
-            
+            },
         ]
         render(
             <RecoilRoot>
@@ -175,8 +168,6 @@ describe('SearchPage', () => {
                 },
             },
 
-
-
             {
                 request: {
                     query: SearchSchemaDocument,
@@ -208,29 +199,19 @@ describe('SearchPage', () => {
                 },
             },
 
-
-
-       
             {
                 request: {
                     query: GetMessagesDocument,
                 },
                 result: {
                     data: {
-                    
-                            id: 'S90',
-                            kind: 'warning',
-                            description: 'This is a new message',
-                            __typename: 'Message',
-                        
+                        id: 'S90',
+                        kind: 'warning',
+                        description: 'This is a new message',
+                        __typename: 'Message',
                     },
                 },
-            }
-
-
-
-
-
+            },
         ]
         render(
             <RecoilRoot>

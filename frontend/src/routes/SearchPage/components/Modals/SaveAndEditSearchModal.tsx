@@ -94,14 +94,11 @@ export const SaveAndEditSearchModal = (props: any) => {
         return state.searchName === '' || (!props.editSearch && props.saveSearch === '')
     }
 
+    // create a warning component for overwriting saved search ( danger label)
 
-// create a warning component for overwriting saved search ( danger label)
+    // create a state of the search overwrite warning and set default to blank
 
-// create a state of the search overwrite warning and set default to blank
-
-// if saved search name  === previously saved search then set state over search overwrite warning to true
-
-
+    // if saved search name  === previously saved search then set state over search overwrite warning to true
 
     return (
         <Fragment>

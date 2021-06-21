@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import _, { isNull } from 'lodash'
+import _ from 'lodash'
 import {
     AcmAlert,
     AcmButton,
@@ -28,7 +28,7 @@ import {
     useSearchCompleteQuery,
     useSavedSearchesQuery,
     UserSearch,
-    useGetMessagesQuery
+    useGetMessagesQuery,
 } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
@@ -95,7 +95,6 @@ function RenderSearchBar(props: {
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
-
     const searchCompleteValue = getSearchCompleteString(searchQuery)
     const searchCompleteQuery = convertStringToQuery(searchQuery)
     searchCompleteQuery.filters = searchCompleteQuery.filters.filter((filter) => {
@@ -117,8 +116,6 @@ function RenderSearchBar(props: {
             setQueryErrors(false)
         }
     }, [searchSchemaResults, searchCompleteResults, queryErrors, setQueryErrors])
-
-
 
     return (
         <Fragment>
@@ -255,7 +252,6 @@ export default function SearchPage() {
     const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const [queryErrors, setQueryErrors] = useState(false)
 
-
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
@@ -265,12 +261,10 @@ export default function SearchPage() {
         }
     }, [searchQuery])
 
+    const [queryMessages, setQueryMessages] = useState<any[]>([])
 
-    const[queryMessages, setQueryMessages] = useState<any[]>([])
-
-
-      const msgQuery = useGetMessagesQuery({
-        client: process.env.NODE_ENV === 'test' ? undefined : searchClient
+    const msgQuery = useGetMessagesQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
 
     useEffect(() => {
@@ -279,17 +273,13 @@ export default function SearchPage() {
         }
     }, [queryMessages])
 
-
     const query = convertStringToQuery(searchQuery)
     const { t } = useTranslation(['search'])
     return (
         <AcmPage
             header={
                 <div>
-                    <HeaderWithNotification
-                     queryMessages={queryMessages}
-                    
-                    />
+                    <HeaderWithNotification queryMessages={queryMessages} />
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
@@ -303,7 +293,7 @@ export default function SearchPage() {
                     setSelectedSearch={setSelectedSearch}
                     searchQuery={searchQuery}
                     setCurrentQuery={setCurrentQuery}
-                    queryErrors={queryErrors} //will have to remove this since we are moving into the minimizedinfoalert above.
+                    queryErrors={queryErrors} 
                     setQueryErrors={setQueryErrors}
                 />
                 {!queryErrors ? (
