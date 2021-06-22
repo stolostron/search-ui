@@ -50,6 +50,7 @@ export const SearchInfoModal = (props: any) => {
             <AcmModal
                 className={classes.root}
                 title={t('search.modal.info.title')}
+                titleIconVariant={'info'}
                 width={'50%'}
                 onClose={props.onClose}
                 isOpen={props.isOpen}

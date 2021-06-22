@@ -234,7 +234,6 @@ export default function YAMLPage(props: {
                     fontSize: 12,
                     wordWrap: 'wordWrapColumn',
                     wordWrapColumn: 132,
-                    wordWrapMinified: false,
                     scrollBeyondLastLine: false,
                     smoothScrolling: true,
                     glyphMargin: true,

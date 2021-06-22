@@ -197,11 +197,9 @@ export const DeleteResourceModal = (props: any) => {
                 variant={ModalVariant.medium}
                 isOpen={open}
                 title={t('search.modal.delete.resource.title', { resourceKind: resource?.kind })}
+                titleIconVariant={'warning'}
                 onClose={close}
                 actions={[
-                    <AcmButton key="cancel" variant={ButtonVariant.secondary} onClick={close}>
-                        {t('search.modal.delete.resource.action.cancel')}
-                    </AcmButton>,
                     <AcmButton
                         isDisabled={
                             userAccessResponse.loading ||
@@ -212,6 +210,9 @@ export const DeleteResourceModal = (props: any) => {
                         onClick={() => deleteResourceFn()}
                     >
                         {t('search.modal.delete.resource.action.delete')}
+                    </AcmButton>,
+                    <AcmButton key="cancel" variant={ButtonVariant.secondary} onClick={close}>
+                        {t('search.modal.delete.resource.action.cancel')}
                     </AcmButton>,
                 ]}
             >
