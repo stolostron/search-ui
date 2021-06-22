@@ -54,5 +54,5 @@
     "searchbar.button.save.search": "Save search",
     "messages.S20.short": "More on disabled clusters",
     "messages.S20.long": "Currently, search is disabled on some of your managed clusters. Some data might be missing from the console view.",
-    "messages.s20.additional.info": "View disabled clusters"
+    "messages.S20.additional.info": "View disabled clusters"
 }

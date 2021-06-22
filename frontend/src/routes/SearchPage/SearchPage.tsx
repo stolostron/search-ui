@@ -36,6 +36,7 @@ import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchMod
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
 import { makeStyles } from '@material-ui/styles'
 import { ApolloError } from '@apollo/client'
+
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 
 const useStyles = makeStyles({
@@ -278,7 +279,7 @@ export default function SearchPage() {
         <AcmPage
             header={
                 <div>
-                    <HeaderWithNotification queryMessages={queryMessages} />
+                    <HeaderWithNotification messages={queryMessages} />
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
