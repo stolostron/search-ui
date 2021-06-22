@@ -53,5 +53,5 @@
     "search.suggested.searches.seaction.title": "Suggested search templates",
     "searchbar.button.save.search": "Save search",
     "messages.S20.short": "More on disabled clusters",
-    "messages.S20.long": "Currently, search is disabled on some of your managed clusters. Some data might be missing from the console view. See ______ to enable search."
+    "messages.S20.long": "Currently, search is disabled on some of your managed clusters. Some data might be missing from the console view."
 }
