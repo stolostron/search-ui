@@ -43,13 +43,14 @@ export const DeleteSearchModal = (props: any) => {
                 variant={ModalVariant.medium}
                 isOpen={props.deleteSearch !== undefined}
                 title={t('search.modal.delete.search.title')}
+                titleIconVariant={'warning'}
                 onClose={props.onClose}
                 actions={[
-                    <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
-                        {t('search.modal.delete.search.action.cancel')}
-                    </AcmButton>,
                     <AcmButton key="confirm" variant={ButtonVariant.danger} onClick={() => deleteSearch()}>
                         {t('search.modal.delete.search.action.delete')}
+                    </AcmButton>,
+                    <AcmButton key="cancel" variant={ButtonVariant.link} onClick={props.onClose}>
+                        {t('search.modal.delete.search.action.cancel')}
                     </AcmButton>,
                 ]}
             >
@@ -61,7 +62,7 @@ export const DeleteSearchModal = (props: any) => {
                         title={error!.message}
                     />
                 )}
-                <p>{t('search.modal.delete.search.text')}</p>
+                <p>{t('search.modal.delete.search.text', { savedSearchName: props.deleteSearch?.name })}</p>
             </AcmModal>
         </Fragment>
     )
