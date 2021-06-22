@@ -8,7 +8,6 @@ import {
     AcmIconVariant,
     AcmIcon,
     AcmPage,
-    AcmPageHeader,
     AcmRoute,
     AcmScrollable,
     AcmSearchbar,
@@ -23,11 +22,13 @@ import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
 import SavedSearchQueries from './components/SavedSearchQueries'
 import SearchResults from './components/SearchResults'
+import HeaderWithNotification from './components/HeaderWithNotification'
 import {
     useSearchSchemaQuery,
     useSearchCompleteQuery,
     useSavedSearchesQuery,
     UserSearch,
+    useGetMessagesQuery,
 } from '../../search-sdk/search-sdk'
 import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
 import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
@@ -108,6 +109,7 @@ function RenderSearchBar(props: {
             query: searchCompleteQuery,
         },
     })
+
     useEffect(() => {
         if (searchSchemaResults?.error || searchCompleteResults?.error) {
             setQueryErrors(true)
@@ -115,6 +117,7 @@ function RenderSearchBar(props: {
             setQueryErrors(false)
         }
     }, [searchSchemaResults, searchCompleteResults, queryErrors, setQueryErrors])
+
     return (
         <Fragment>
             <PageSection>
@@ -249,6 +252,7 @@ export default function SearchPage() {
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
     const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const [queryErrors, setQueryErrors] = useState(false)
+
     useEffect(() => {
         setCurrentQuery(currentQuery)
     }, [currentQuery])
@@ -257,13 +261,25 @@ export default function SearchPage() {
             setSelectedSearch('Saved searches')
         }
     }, [searchQuery])
+
     const query = convertStringToQuery(searchQuery)
-    const { t } = useTranslation(['search'])
+
+    const [queryMessages, setQueryMessages] = useState<any[]>([])
+    const msgQuery = useGetMessagesQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
+    })
+
+    useEffect(() => {
+        if (msgQuery.data?.messages) {
+            setQueryMessages(msgQuery.data?.messages)
+        }
+    }, [queryMessages, msgQuery])
+
     return (
         <AcmPage
             header={
                 <div>
-                    <AcmPageHeader title={t('search')} />
+                    <HeaderWithNotification messages={queryMessages} />
                     <RenderDropDownAndNewTab
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}

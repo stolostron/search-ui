@@ -10,7 +10,12 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import SearchPage from './SearchPage'
-import { SavedSearchesDocument, SearchSchemaDocument, SearchCompleteDocument } from '../../search-sdk/search-sdk'
+import {
+    SavedSearchesDocument,
+    SearchSchemaDocument,
+    SearchCompleteDocument,
+    GetMessagesDocument,
+} from '../../search-sdk/search-sdk'
 
 describe('SearchPage', () => {
     it('should render default search page correctly', async () => {
@@ -45,6 +50,16 @@ describe('SearchPage', () => {
                     },
                 },
             },
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: [],
+                    },
+                },
+            },
         ]
         render(
             <RecoilRoot>
@@ -62,6 +77,9 @@ describe('SearchPage', () => {
         // Test that the component has rendered correctly with data
         await waitFor(() => expect(screen.queryByText('search.new.tab')).toBeTruthy())
         await waitFor(() => expect(screen.queryByText('Saved searches')).toBeTruthy())
+
+        // Validate that message about disabled cluster doesn't appear.
+        await waitFor(() => expect(screen.queryByText('More on disabled clusters')).toBeFalsy())
     })
 
     it('should render page with errors', async () => {
@@ -84,6 +102,7 @@ describe('SearchPage', () => {
                     },
                 },
             },
+
             {
                 request: {
                     query: SearchSchemaDocument,
@@ -91,6 +110,16 @@ describe('SearchPage', () => {
                 result: {
                     data: {},
                     errors: [new GraphQLError('Error getting search schema data')],
+                },
+            },
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: [],
+                    },
                 },
             },
         ]
@@ -111,6 +140,8 @@ describe('SearchPage', () => {
         await waitFor(() => expect(screen.queryByText('search.filter.errors.title')).toBeTruthy())
         // Test that UI shows the error message received from API.
         await waitFor(() => expect(screen.queryByText('Error getting search schema data')).toBeTruthy())
+        // Validate message when managed clusters are disabled.
+        await waitFor(() => expect(screen.queryByText('More on disabled clusters')).toBeFalsy())
     })
 
     it('should render search page correctly and add a search', async () => {
@@ -133,6 +164,7 @@ describe('SearchPage', () => {
                     },
                 },
             },
+
             {
                 request: {
                     query: SearchSchemaDocument,
@@ -160,6 +192,23 @@ describe('SearchPage', () => {
                 result: {
                     data: {
                         searchComplete: ['cluster', 'pod', 'deployment'],
+                    },
+                },
+            },
+            {
+                request: {
+                    query: GetMessagesDocument,
+                },
+                result: {
+                    data: {
+                        messages: [
+                            {
+                                id: 'S20',
+                                kind: 'info',
+                                description: 'Search is disabled on some of your managed clusters.',
+                                __typename: 'Message',
+                            },
+                        ],
                     },
                 },
             },
@@ -198,5 +247,8 @@ describe('SearchPage', () => {
 
         // check searchbar updated properly
         await waitFor(() => expect(screen.queryByText('kind:deployment')).toBeTruthy())
+
+        // Validate message when managed clusters are disabled. We don't have translation in this context.
+        await waitFor(() => expect(screen.queryByText('messages.S20.short')).toBeTruthy())
     })
 })

@@ -1,9 +1,13 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
+
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] }
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> }
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> }
+const defaultOptions = {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
     ID: string
@@ -19,41 +23,30 @@ export type Scalars = {
 
 export type Application = {
     _uid?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
     created?: Maybe<Scalars['String']>
     dashboard?: Maybe<Scalars['String']>
     labels?: Maybe<Array<Maybe<Scalars['String']>>>
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
-    selfLink?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
     clusterCount?: Maybe<Scalars['JSON']>
     hubChannels?: Maybe<Array<Maybe<Scalars['JSON']>>>
     hubSubscriptions?: Maybe<Array<Maybe<Subscription>>>
-    podStatusCount?: Maybe<Scalars['JSON']>
-    remoteSubscriptionStatusCount?: Maybe<Scalars['JSON']>
+    applicationSet?: Maybe<Scalars['String']>
+    destinationName?: Maybe<Scalars['String']>
+    destinationServer?: Maybe<Scalars['String']>
+    destinationCluster?: Maybe<Scalars['String']>
+    destinationNamespace?: Maybe<Scalars['String']>
+    repoURL?: Maybe<Scalars['String']>
+    path?: Maybe<Scalars['String']>
+    chart?: Maybe<Scalars['String']>
+    targetRevision?: Maybe<Scalars['String']>
 }
 
-export type Subscription = {
-    _uid?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-    namespace?: Maybe<Scalars['String']>
-    created?: Maybe<Scalars['String']>
-    selfLink?: Maybe<Scalars['String']>
-    channel?: Maybe<Scalars['String']>
-    appCount?: Maybe<Scalars['Int']>
-    clusterCount?: Maybe<Scalars['JSON']>
-    timeWindow?: Maybe<Scalars['String']>
-    localPlacement?: Maybe<Scalars['Boolean']>
-    status?: Maybe<Scalars['String']>
-}
-
-export type PlacementRule = {
-    _uid?: Maybe<Scalars['String']>
-    name?: Maybe<Scalars['String']>
-    namespace?: Maybe<Scalars['String']>
-    created?: Maybe<Scalars['String']>
-    selfLink?: Maybe<Scalars['String']>
-    clusterCount?: Maybe<Scalars['JSON']>
-    replicas?: Maybe<Scalars['Int']>
+export enum CacheControlScope {
+    Public = 'PUBLIC',
+    Private = 'PRIVATE',
 }
 
 export type Channel = {
@@ -61,7 +54,6 @@ export type Channel = {
     name?: Maybe<Scalars['String']>
     namespace?: Maybe<Scalars['String']>
     created?: Maybe<Scalars['String']>
-    selfLink?: Maybe<Scalars['String']>
     type?: Maybe<Scalars['String']>
     pathname?: Maybe<Scalars['String']>
     localPlacement?: Maybe<Scalars['Boolean']>
@@ -69,11 +61,32 @@ export type Channel = {
     clusterCount?: Maybe<Scalars['JSON']>
 }
 
-export type GlobalAppData = {
-    channelsCount?: Maybe<Scalars['Int']>
-    clusterCount?: Maybe<Scalars['Int']>
-    hubSubscriptionCount?: Maybe<Scalars['Int']>
-    remoteSubscriptionStatusCount?: Maybe<Scalars['JSON']>
+export type Message = {
+    id: Scalars['String']
+    kind?: Maybe<Scalars['String']>
+    description?: Maybe<Scalars['String']>
+}
+
+export type Mutation = {
+    deleteSearch?: Maybe<Scalars['JSON']>
+    saveSearch?: Maybe<Scalars['JSON']>
+}
+
+export type MutationDeleteSearchArgs = {
+    resource?: Maybe<Scalars['JSON']>
+}
+
+export type MutationSaveSearchArgs = {
+    resource?: Maybe<Scalars['JSON']>
+}
+
+export type PlacementRule = {
+    _uid?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    created?: Maybe<Scalars['String']>
+    clusterCount?: Maybe<Scalars['JSON']>
+    replicas?: Maybe<Scalars['Int']>
 }
 
 export type Query = {
@@ -81,8 +94,8 @@ export type Query = {
     subscriptions?: Maybe<Array<Maybe<Subscription>>>
     placementRules?: Maybe<Array<Maybe<PlacementRule>>>
     channels?: Maybe<Array<Maybe<Channel>>>
-    globalAppData?: Maybe<GlobalAppData>
     search?: Maybe<Array<Maybe<SearchResult>>>
+    messages?: Maybe<Array<Maybe<Message>>>
     searchComplete?: Maybe<Array<Maybe<Scalars['String']>>>
     searchSchema?: Maybe<Scalars['JSON']>
     savedSearches?: Maybe<Array<Maybe<UserSearch>>>
@@ -118,19 +131,6 @@ export type QuerySearchCompleteArgs = {
     limit?: Maybe<Scalars['Int']>
 }
 
-export type Mutation = {
-    deleteSearch?: Maybe<Scalars['JSON']>
-    saveSearch?: Maybe<Scalars['JSON']>
-}
-
-export type MutationDeleteSearchArgs = {
-    resource?: Maybe<Scalars['JSON']>
-}
-
-export type MutationSaveSearchArgs = {
-    resource?: Maybe<Scalars['JSON']>
-}
-
 export type SearchFilter = {
     property: Scalars['String']
     values?: Maybe<Array<Maybe<Scalars['String']>>>
@@ -143,16 +143,29 @@ export type SearchInput = {
     relatedKinds?: Maybe<Array<Maybe<Scalars['String']>>>
 }
 
+export type SearchRelatedResult = {
+    kind: Scalars['String']
+    count?: Maybe<Scalars['Int']>
+    items?: Maybe<Scalars['JSON']>
+}
+
 export type SearchResult = {
     count?: Maybe<Scalars['Int']>
     items?: Maybe<Scalars['JSON']>
     related?: Maybe<Array<Maybe<SearchRelatedResult>>>
 }
 
-export type SearchRelatedResult = {
-    kind: Scalars['String']
-    count?: Maybe<Scalars['Int']>
-    items?: Maybe<Scalars['JSON']>
+export type Subscription = {
+    _uid?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    created?: Maybe<Scalars['String']>
+    channel?: Maybe<Scalars['String']>
+    appCount?: Maybe<Scalars['Int']>
+    clusterCount?: Maybe<Scalars['JSON']>
+    timeWindow?: Maybe<Scalars['String']>
+    localPlacement?: Maybe<Scalars['Boolean']>
+    status?: Maybe<Scalars['String']>
 }
 
 export type UserSearch = {
@@ -160,11 +173,6 @@ export type UserSearch = {
     name?: Maybe<Scalars['String']>
     description?: Maybe<Scalars['String']>
     searchText?: Maybe<Scalars['String']>
-}
-
-export enum CacheControlScope {
-    Public = 'PUBLIC',
-    Private = 'PRIVATE',
 }
 
 export type SaveSearchMutationVariables = Exact<{
@@ -198,19 +206,19 @@ export type SearchCompleteQueryVariables = Exact<{
 export type SearchCompleteQuery = Pick<Query, 'searchComplete'>
 
 export type SearchResultItemsQueryVariables = Exact<{
-    input?: Maybe<Array<Maybe<SearchInput>>>
+    input?: Maybe<Array<Maybe<SearchInput>> | Maybe<SearchInput>>
 }>
 
 export type SearchResultItemsQuery = { searchResult?: Maybe<Array<Maybe<Pick<SearchResult, 'items'>>>> }
 
 export type SearchResultCountQueryVariables = Exact<{
-    input?: Maybe<Array<Maybe<SearchInput>>>
+    input?: Maybe<Array<Maybe<SearchInput>> | Maybe<SearchInput>>
 }>
 
 export type SearchResultCountQuery = { searchResult?: Maybe<Array<Maybe<Pick<SearchResult, 'count'>>>> }
 
 export type SearchResultCountAndRelatedCountQueryVariables = Exact<{
-    input?: Maybe<Array<Maybe<SearchInput>>>
+    input?: Maybe<Array<Maybe<SearchInput>> | Maybe<SearchInput>>
 }>
 
 export type SearchResultCountAndRelatedCountQuery = {
@@ -226,7 +234,7 @@ export type SearchResultCountAndRelatedCountQuery = {
 }
 
 export type SearchResultRelatedCountQueryVariables = Exact<{
-    input?: Maybe<Array<Maybe<SearchInput>>>
+    input?: Maybe<Array<Maybe<SearchInput>> | Maybe<SearchInput>>
 }>
 
 export type SearchResultRelatedCountQuery = {
@@ -234,12 +242,16 @@ export type SearchResultRelatedCountQuery = {
 }
 
 export type SearchResultRelatedItemsQueryVariables = Exact<{
-    input?: Maybe<Array<Maybe<SearchInput>>>
+    input?: Maybe<Array<Maybe<SearchInput>> | Maybe<SearchInput>>
 }>
 
 export type SearchResultRelatedItemsQuery = {
     searchResult?: Maybe<Array<Maybe<{ related?: Maybe<Array<Maybe<Pick<SearchRelatedResult, 'kind' | 'items'>>>> }>>>
 }
+
+export type GetMessagesQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetMessagesQuery = { messages?: Maybe<Array<Maybe<Pick<Message, 'id' | 'kind' | 'description'>>>> }
 
 export const SaveSearchDocument = gql`
     mutation saveSearch($resource: JSON!) {
@@ -268,7 +280,8 @@ export type SaveSearchMutationFn = Apollo.MutationFunction<SaveSearchMutation, S
 export function useSaveSearchMutation(
     baseOptions?: Apollo.MutationHookOptions<SaveSearchMutation, SaveSearchMutationVariables>
 ) {
-    return Apollo.useMutation<SaveSearchMutation, SaveSearchMutationVariables>(SaveSearchDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useMutation<SaveSearchMutation, SaveSearchMutationVariables>(SaveSearchDocument, options)
 }
 export type SaveSearchMutationHookResult = ReturnType<typeof useSaveSearchMutation>
 export type SaveSearchMutationResult = Apollo.MutationResult<SaveSearchMutation>
@@ -300,7 +313,8 @@ export type DeleteSearchMutationFn = Apollo.MutationFunction<DeleteSearchMutatio
 export function useDeleteSearchMutation(
     baseOptions?: Apollo.MutationHookOptions<DeleteSearchMutation, DeleteSearchMutationVariables>
 ) {
-    return Apollo.useMutation<DeleteSearchMutation, DeleteSearchMutationVariables>(DeleteSearchDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useMutation<DeleteSearchMutation, DeleteSearchMutationVariables>(DeleteSearchDocument, options)
 }
 export type DeleteSearchMutationHookResult = ReturnType<typeof useDeleteSearchMutation>
 export type DeleteSearchMutationResult = Apollo.MutationResult<DeleteSearchMutation>
@@ -337,12 +351,14 @@ export const SavedSearchesDocument = gql`
 export function useSavedSearchesQuery(
     baseOptions?: Apollo.QueryHookOptions<SavedSearchesQuery, SavedSearchesQueryVariables>
 ) {
-    return Apollo.useQuery<SavedSearchesQuery, SavedSearchesQueryVariables>(SavedSearchesDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<SavedSearchesQuery, SavedSearchesQueryVariables>(SavedSearchesDocument, options)
 }
 export function useSavedSearchesLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SavedSearchesQuery, SavedSearchesQueryVariables>
 ) {
-    return Apollo.useLazyQuery<SavedSearchesQuery, SavedSearchesQueryVariables>(SavedSearchesDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<SavedSearchesQuery, SavedSearchesQueryVariables>(SavedSearchesDocument, options)
 }
 export type SavedSearchesQueryHookResult = ReturnType<typeof useSavedSearchesQuery>
 export type SavedSearchesLazyQueryHookResult = ReturnType<typeof useSavedSearchesLazyQuery>
@@ -371,12 +387,14 @@ export const SearchSchemaDocument = gql`
 export function useSearchSchemaQuery(
     baseOptions?: Apollo.QueryHookOptions<SearchSchemaQuery, SearchSchemaQueryVariables>
 ) {
-    return Apollo.useQuery<SearchSchemaQuery, SearchSchemaQueryVariables>(SearchSchemaDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<SearchSchemaQuery, SearchSchemaQueryVariables>(SearchSchemaDocument, options)
 }
 export function useSearchSchemaLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchSchemaQuery, SearchSchemaQueryVariables>
 ) {
-    return Apollo.useLazyQuery<SearchSchemaQuery, SearchSchemaQueryVariables>(SearchSchemaDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<SearchSchemaQuery, SearchSchemaQueryVariables>(SearchSchemaDocument, options)
 }
 export type SearchSchemaQueryHookResult = ReturnType<typeof useSearchSchemaQuery>
 export type SearchSchemaLazyQueryHookResult = ReturnType<typeof useSearchSchemaLazyQuery>
@@ -406,14 +424,16 @@ export const SearchCompleteDocument = gql`
  * });
  */
 export function useSearchCompleteQuery(
-    baseOptions?: Apollo.QueryHookOptions<SearchCompleteQuery, SearchCompleteQueryVariables>
+    baseOptions: Apollo.QueryHookOptions<SearchCompleteQuery, SearchCompleteQueryVariables>
 ) {
-    return Apollo.useQuery<SearchCompleteQuery, SearchCompleteQueryVariables>(SearchCompleteDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<SearchCompleteQuery, SearchCompleteQueryVariables>(SearchCompleteDocument, options)
 }
 export function useSearchCompleteLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchCompleteQuery, SearchCompleteQueryVariables>
 ) {
-    return Apollo.useLazyQuery<SearchCompleteQuery, SearchCompleteQueryVariables>(SearchCompleteDocument, baseOptions)
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<SearchCompleteQuery, SearchCompleteQueryVariables>(SearchCompleteDocument, options)
 }
 export type SearchCompleteQueryHookResult = ReturnType<typeof useSearchCompleteQuery>
 export type SearchCompleteLazyQueryHookResult = ReturnType<typeof useSearchCompleteLazyQuery>
@@ -445,17 +465,16 @@ export const SearchResultItemsDocument = gql`
 export function useSearchResultItemsQuery(
     baseOptions?: Apollo.QueryHookOptions<SearchResultItemsQuery, SearchResultItemsQueryVariables>
 ) {
-    return Apollo.useQuery<SearchResultItemsQuery, SearchResultItemsQueryVariables>(
-        SearchResultItemsDocument,
-        baseOptions
-    )
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<SearchResultItemsQuery, SearchResultItemsQueryVariables>(SearchResultItemsDocument, options)
 }
 export function useSearchResultItemsLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchResultItemsQuery, SearchResultItemsQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useLazyQuery<SearchResultItemsQuery, SearchResultItemsQueryVariables>(
         SearchResultItemsDocument,
-        baseOptions
+        options
     )
 }
 export type SearchResultItemsQueryHookResult = ReturnType<typeof useSearchResultItemsQuery>
@@ -488,17 +507,16 @@ export const SearchResultCountDocument = gql`
 export function useSearchResultCountQuery(
     baseOptions?: Apollo.QueryHookOptions<SearchResultCountQuery, SearchResultCountQueryVariables>
 ) {
-    return Apollo.useQuery<SearchResultCountQuery, SearchResultCountQueryVariables>(
-        SearchResultCountDocument,
-        baseOptions
-    )
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<SearchResultCountQuery, SearchResultCountQueryVariables>(SearchResultCountDocument, options)
 }
 export function useSearchResultCountLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchResultCountQuery, SearchResultCountQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useLazyQuery<SearchResultCountQuery, SearchResultCountQueryVariables>(
         SearchResultCountDocument,
-        baseOptions
+        options
     )
 }
 export type SearchResultCountQueryHookResult = ReturnType<typeof useSearchResultCountQuery>
@@ -538,9 +556,10 @@ export function useSearchResultCountAndRelatedCountQuery(
         SearchResultCountAndRelatedCountQueryVariables
     >
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useQuery<SearchResultCountAndRelatedCountQuery, SearchResultCountAndRelatedCountQueryVariables>(
         SearchResultCountAndRelatedCountDocument,
-        baseOptions
+        options
     )
 }
 export function useSearchResultCountAndRelatedCountLazyQuery(
@@ -549,9 +568,10 @@ export function useSearchResultCountAndRelatedCountLazyQuery(
         SearchResultCountAndRelatedCountQueryVariables
     >
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useLazyQuery<SearchResultCountAndRelatedCountQuery, SearchResultCountAndRelatedCountQueryVariables>(
         SearchResultCountAndRelatedCountDocument,
-        baseOptions
+        options
     )
 }
 export type SearchResultCountAndRelatedCountQueryHookResult = ReturnType<
@@ -594,17 +614,19 @@ export const SearchResultRelatedCountDocument = gql`
 export function useSearchResultRelatedCountQuery(
     baseOptions?: Apollo.QueryHookOptions<SearchResultRelatedCountQuery, SearchResultRelatedCountQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useQuery<SearchResultRelatedCountQuery, SearchResultRelatedCountQueryVariables>(
         SearchResultRelatedCountDocument,
-        baseOptions
+        options
     )
 }
 export function useSearchResultRelatedCountLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchResultRelatedCountQuery, SearchResultRelatedCountQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useLazyQuery<SearchResultRelatedCountQuery, SearchResultRelatedCountQueryVariables>(
         SearchResultRelatedCountDocument,
-        baseOptions
+        options
     )
 }
 export type SearchResultRelatedCountQueryHookResult = ReturnType<typeof useSearchResultRelatedCountQuery>
@@ -643,17 +665,19 @@ export const SearchResultRelatedItemsDocument = gql`
 export function useSearchResultRelatedItemsQuery(
     baseOptions?: Apollo.QueryHookOptions<SearchResultRelatedItemsQuery, SearchResultRelatedItemsQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useQuery<SearchResultRelatedItemsQuery, SearchResultRelatedItemsQueryVariables>(
         SearchResultRelatedItemsDocument,
-        baseOptions
+        options
     )
 }
 export function useSearchResultRelatedItemsLazyQuery(
     baseOptions?: Apollo.LazyQueryHookOptions<SearchResultRelatedItemsQuery, SearchResultRelatedItemsQueryVariables>
 ) {
+    const options = { ...defaultOptions, ...baseOptions }
     return Apollo.useLazyQuery<SearchResultRelatedItemsQuery, SearchResultRelatedItemsQueryVariables>(
         SearchResultRelatedItemsDocument,
-        baseOptions
+        options
     )
 }
 export type SearchResultRelatedItemsQueryHookResult = ReturnType<typeof useSearchResultRelatedItemsQuery>
@@ -662,3 +686,43 @@ export type SearchResultRelatedItemsQueryResult = Apollo.QueryResult<
     SearchResultRelatedItemsQuery,
     SearchResultRelatedItemsQueryVariables
 >
+export const GetMessagesDocument = gql`
+    query getMessages {
+        messages {
+            id
+            kind
+            description
+        }
+    }
+`
+
+/**
+ * __useGetMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMessagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMessagesQuery(
+    baseOptions?: Apollo.QueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options)
+}
+export function useGetMessagesLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<GetMessagesQuery, GetMessagesQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<GetMessagesQuery, GetMessagesQueryVariables>(GetMessagesDocument, options)
+}
+export type GetMessagesQueryHookResult = ReturnType<typeof useGetMessagesQuery>
+export type GetMessagesLazyQueryHookResult = ReturnType<typeof useGetMessagesLazyQuery>
+export type GetMessagesQueryResult = Apollo.QueryResult<GetMessagesQuery, GetMessagesQueryVariables>

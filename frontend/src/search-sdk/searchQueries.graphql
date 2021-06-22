@@ -54,3 +54,11 @@ query searchResultRelatedItems($input: [SearchInput]) {
     }
   }
 }
+
+  query getMessages {
+      messages {
+        id
+        kind
+        description
+    }
+  }
