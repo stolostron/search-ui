@@ -31,12 +31,11 @@ export default function HeaderWithNotification(props: { messages: Message[] }) {
                                 popover={{
                                     headerContent: displayShortText,
                                     bodyContent: displayLongText,
-                                    footerContent:
-                                        msg.id === 'S20' && (
-                                            <a href='/search?filters={"textsearch":"kind%3Acluster%20addon%3Asearch-collector%3Dfalse%20name%3A!local-cluster"}'>
-                                                {footerText}
-                                            </a>
-                                        ),
+                                    footerContent: msg.id === 'S20' && (
+                                        <a href='/search?filters={"textsearch":"kind%3Acluster%20addon%3Asearch-collector%3Dfalse%20name%3A!local-cluster"}'>
+                                            {footerText}
+                                        </a>
+                                    ),
                                 }}
                             />
                         </CardBody>
