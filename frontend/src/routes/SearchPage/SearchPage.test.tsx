@@ -56,12 +56,14 @@ describe('SearchPage', () => {
                     query: GetMessagesDocument,
                 },
                 result: {
-                    data: {
-                        id: 'S20',
-                        kind: 'info',
-                        description: 'Search is disabled on some of your managed clusters.',
-                        __typename: 'Message',
-                    },
+                    data: [
+                        {
+                            id: 'S20',
+                            kind: 'info',
+                            description: 'Search is disabled on some of your managed clusters.',
+                            __typename: 'Message',
+                        },
+                    ],
                 },
             },
         ]
@@ -119,12 +121,14 @@ describe('SearchPage', () => {
                     query: GetMessagesDocument,
                 },
                 result: {
-                    data: {
-                        id: '',
-                        kind: '',
-                        description: '',
-                        __typename: '',
-                    },
+                    data: [
+                        {
+                            id: '',
+                            kind: '',
+                            description: '',
+                            __typename: '',
+                        },
+                    ],
                 },
             },
         ]
@@ -204,12 +208,14 @@ describe('SearchPage', () => {
                     query: GetMessagesDocument,
                 },
                 result: {
-                    data: {
-                        id: 'S90',
-                        kind: 'warning',
-                        description: 'This is a new message',
-                        __typename: 'Message',
-                    },
+                    data: [
+                        {
+                            id: 'S90',
+                            kind: 'warning',
+                            description: 'This is a new message',
+                            __typename: 'Message',
+                        },
+                    ],
                 },
             },
         ]
