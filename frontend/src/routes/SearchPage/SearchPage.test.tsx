@@ -55,7 +55,9 @@ describe('SearchPage', () => {
                     query: GetMessagesDocument,
                 },
                 result: {
-                    data: [],
+                    data: {
+                        messages: [],
+                    }
                 },
             },
         ]
@@ -115,7 +117,9 @@ describe('SearchPage', () => {
                     query: GetMessagesDocument,
                 },
                 result: {
-                    data: [],
+                    data: {
+                        messages: [],
+                    }
                 },
             },
         ]
