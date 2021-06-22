@@ -34,7 +34,7 @@ it('should render overview page in loading state', async () => {
         </RecoilRoot>
     )
     // Test the loading state while apollo query finishes
-    expect(screen.getByText('Loading')).toBeInTheDocument()
+    await waitFor(() => expect(screen.getByText('Loading')).toBeInTheDocument())
 })
 
 it('should render overview page in error state', async () => {
