@@ -10,7 +10,7 @@
     "search.modal.delete.resource.unauthorized.error": "You are not authorized to delete this resource.",
     "search.modal.delete.search.action.cancel": "Cancel",
     "search.modal.delete.search.action.delete": "Delete",
-    "search.modal.delete.search.text": "Are you sure that you want to delete {{savedSearchName}}?",
+    "search.modal.delete.search.text": "Are you sure that you want to delete saved search {{savedSearchName}}?",
     "search.modal.delete.search.title": "Delete saved search?",
     "search.modal.info.action.cancel": "Cancel",
     "search.modal.info.additional.info": "Additional information:",

@@ -18,7 +18,6 @@ export const ShareSearchModal = (props: any) => {
         <Fragment>
             <AcmModal
                 title={t('search.modal.share.title')}
-                titleIconVariant={'info'}
                 variant={ModalVariant.small}
                 isOpen={props.shareSearch !== undefined}
                 onClose={props.onClose}

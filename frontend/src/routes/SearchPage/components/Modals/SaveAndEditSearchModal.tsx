@@ -100,7 +100,6 @@ export const SaveAndEditSearchModal = (props: any) => {
                 variant={ModalVariant.small}
                 isOpen={props.editSearch !== undefined || props.saveSearch !== undefined}
                 title={t('search.modal.save.title')}
-                titleIconVariant={'warning'}
                 onClose={props.onClose}
                 actions={[
                     <AcmButton
