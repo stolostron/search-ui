@@ -246,6 +246,5 @@ describe('SearchPage', () => {
 
         // Validate message when managed clusters are disabled. We don't have translation in this context.
         await waitFor(() => expect(screen.queryByText('messages.S20.short')).toBeTruthy())
-        
     })
 })
