@@ -14,9 +14,9 @@ export default function HeaderWithNotification(props: { queryMessages: any[] }) 
     return (
         <div>
             <div style={{ outline: 'none', display: 'flex', justifyContent: 'flex-end' }}>
-                <p style={{ flex: 1 }}>
+                <div style={{ flex: 1 }}>
                     <AcmPageHeader title={t('search')} />
-                </p>
+                </div>
 
                 {messages?.map((msg) => {
                     const displayShortText = t(`messages.${msg?.id}.short`)
