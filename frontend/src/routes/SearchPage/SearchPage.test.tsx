@@ -57,7 +57,7 @@ describe('SearchPage', () => {
                 result: {
                     data: {
                         messages: [],
-                    }
+                    },
                 },
             },
         ]
@@ -119,7 +119,7 @@ describe('SearchPage', () => {
                 result: {
                     data: {
                         messages: [],
-                    }
+                    },
                 },
             },
         ]
