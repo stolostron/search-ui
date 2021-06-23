@@ -28,6 +28,31 @@ import {
 import { PageSection } from '@patternfly/react-core'
 import searchDefinitions from '../searchDefinitions'
 
+function GetRowActions(
+    kind: string,
+    rowTitle: string,
+    currentQuery: string,
+    setDeleteResource: React.Dispatch<React.SetStateAction<IDeleteModalProps>>
+) {
+    return kind !== 'cluster' && kind !== 'release' && kind !== 'policyreport'
+        ? [
+              {
+                  id: 'delete',
+                  title: rowTitle,
+                  click: (item: any) => {
+                      setDeleteResource({
+                          open: true,
+                          close: () => setDeleteResource(ClosedDeleteModalProps),
+                          resource: item,
+                          currentQuery,
+                          relatedResource: false,
+                      })
+                  },
+              },
+          ]
+        : []
+}
+
 function RenderRelatedTables(
     currentQuery: string,
     selectedKinds: string[],
@@ -86,25 +111,12 @@ function RenderRelatedTables(
                             )}
                             keyFn={(item: any) => item._uid.toString()}
                             tableActions={[]}
-                            rowActions={
-                                kind !== 'cluster' && kind !== 'release' && kind !== 'policyreport'
-                                    ? [
-                                          {
-                                              id: 'delete',
-                                              title: t('search.results.delete.resource', { resourceKind: kind }),
-                                              click: (item: any) => {
-                                                  setDeleteResource({
-                                                      open: true,
-                                                      close: () => setDeleteResource(ClosedDeleteModalProps),
-                                                      resource: item,
-                                                      currentQuery,
-                                                      relatedResource: true,
-                                                  })
-                                              },
-                                          },
-                                      ]
-                                    : []
-                            }
+                            rowActions={GetRowActions(
+                                kind,
+                                t('search.results.delete.resource', { resourceKind: kind }),
+                                currentQuery,
+                                setDeleteResource
+                            )}
                             bulkActions={[]}
                         />
                     </AcmExpandableSection>
@@ -256,25 +268,12 @@ function RenderSearchTables(
                                 )}
                                 keyFn={(item: any) => item._uid.toString()}
                                 tableActions={[]}
-                                rowActions={
-                                    kind !== 'cluster' && kind !== 'release' && kind !== 'policyreport'
-                                        ? [
-                                              {
-                                                  id: 'delete',
-                                                  title: t('search.results.delete.resource', { resourceKind: kind }),
-                                                  click: (item: any) => {
-                                                      setDeleteResource({
-                                                          open: true,
-                                                          close: () => setDeleteResource(ClosedDeleteModalProps),
-                                                          resource: item,
-                                                          currentQuery,
-                                                          relatedResource: false,
-                                                      })
-                                                  },
-                                              },
-                                          ]
-                                        : []
-                                }
+                                rowActions={GetRowActions(
+                                    kind,
+                                    t('search.results.delete.resource', { resourceKind: kind }),
+                                    currentQuery,
+                                    setDeleteResource
+                                )}
                                 bulkActions={[]}
                             />
                         </AcmExpandableSection>
