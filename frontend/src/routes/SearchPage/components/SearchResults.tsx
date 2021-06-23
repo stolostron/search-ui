@@ -257,7 +257,7 @@ function RenderSearchTables(
                                 keyFn={(item: any) => item._uid.toString()}
                                 tableActions={[]}
                                 rowActions={
-                                    kind !== 'cluster' && kind !== 'release'
+                                    kind !== 'cluster' && kind !== 'release' && kind !== 'policyreport'
                                         ? [
                                               {
                                                   id: 'delete',
