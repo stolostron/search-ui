@@ -43,6 +43,10 @@ export function mapProviderFromLabel(provider: string): Provider {
             return Provider.gcp
         case 'IBM':
             return Provider.ibm
+        case 'IBMPowerPlatform':
+            return Provider.ibmpower
+        case 'IBMZPlatform':
+            return Provider.ibmz
         case 'RedHat':
             return Provider.redhatcloud
         case 'VMware':

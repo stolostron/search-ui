@@ -18,6 +18,8 @@ it('should responsed with correct value for mapProviderFromLabel function', () =
     expect(mapProviderFromLabel('Baremetal')).toEqual('bmc')
     expect(mapProviderFromLabel('Google')).toEqual('gcp')
     expect(mapProviderFromLabel('IBM')).toEqual('ibm')
+    expect(mapProviderFromLabel('IBMPowerPlatform')).toEqual('ibmpower')
+    expect(mapProviderFromLabel('IBMZPlatform')).toEqual('ibmz')
     expect(mapProviderFromLabel('RedHat')).toEqual('rhocm')
     expect(mapProviderFromLabel('VMware')).toEqual('vmw')
     expect(mapProviderFromLabel('other')).toEqual('other')
