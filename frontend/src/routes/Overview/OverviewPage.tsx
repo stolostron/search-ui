@@ -32,7 +32,6 @@ import { ClusterManagementAddOn } from '../../lib/resource-request'
 import _ from 'lodash'
 
 export function mapProviderFromLabel(provider: string): Provider {
-    provider = 'IBMPowerPlatform'
     switch (provider) {
         case 'Amazon':
             return Provider.aws
