@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@apollo/client": "^3.3.20",
-        "@open-cluster-management/ui-components": "^0.175.0",
+        "@open-cluster-management/ui-components": "^0.178.0",
         "@patternfly/react-core": "^4.128.2",
         "@types/node": "^15.12.4",
         "@types/react": "^17.0.11",
