@@ -12,9 +12,8 @@ import { acmRouteState } from './util'
 
 const express = require('express')
 const helmet = require('hsts')
-
 const app = express()
-
+app.disable('x-powered-by')
 app.use(
     helmet.hsts({
         maxAge: 31536000,
