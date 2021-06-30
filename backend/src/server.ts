@@ -18,26 +18,10 @@ import { join } from 'path'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
+import fastifyHelmet from 'fastify-helmet'
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
-
-// const server = fastify()
-// const helmet = require('fastify-helmet')
-// fastify.use(require('hsts')())
-// server.register(helmet, { hsts: true })
-// const fastify = require('fastify')
-
-// fastify.use(require('hsts')())
-
-const fastify = require('fastify')()
-const helmet = require('fastify-helmet')
-
-fastify.register(
-    helmet,
-    // Example disables the `contentSecurityPolicy` middleware but keeps the rest.
-    { hsts: true }
-)
 
 declare module 'fastify-reply-from' {
     export interface From {
@@ -80,6 +64,8 @@ export async function startServer(): Promise<FastifyInstance> {
 
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
+
+    await fastify.register(fastifyHelmet, { hsts: true })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
