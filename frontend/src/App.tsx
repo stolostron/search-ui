@@ -10,16 +10,6 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import './lib/i18n'
 import { acmRouteState } from './util'
 
-const express = require('express')
-const helmet = require('hsts')
-const app = express()
-app.disable('x-powered-by')
-app.use(
-    helmet.hsts({
-        maxAge: 31536000,
-    })
-)
-
 const SearchPage = lazy(() => import('./routes/SearchPage/SearchPage'))
 const DetailsPage = lazy(() => import('./routes/DetailsPage/DetailsPage'))
 const OverviewPage = lazy(() => import('./routes/Overview/OverviewPage'))

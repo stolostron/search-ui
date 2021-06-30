@@ -21,6 +21,14 @@ import { logError, logger } from './lib/logger'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
+const fastify = require('fastify')
+const fastifyHsts = require('fastify-hsts')
+
+const app = fastify()
+app.register(fastifyHsts, {
+    maxAge: 31536000,
+})
+
 declare module 'fastify-reply-from' {
     export interface From {
         from: (path: string) => void
@@ -245,7 +253,7 @@ export async function startServer(): Promise<FastifyInstance> {
             const query = request.query as { code: string; state: string }
             validStates.add(query.state)
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            const openshift = (this as unknown as any).openshift as OAuth2Namespace
+            const openshift = ((this as unknown) as any).openshift as OAuth2Namespace
             const token = await openshift.getAccessTokenFromAuthorizationCodeFlow(request)
             logger.debug({ msg: 'search/login/callback token', token: token.access_token })
             return reply
