@@ -11,10 +11,15 @@ import './lib/i18n'
 import { acmRouteState } from './util'
 
 const express = require('express')
-const hsts = require('hsts')
+const helmet = require('hsts')
+
 const app = express()
-const globalSTS = hsts.getSTS({ 'max-age': { days: 365 } })
-app.use(globalSTS)
+
+app.use(
+    helmet.hsts({
+        maxAge: 31536000,
+    })
+)
 
 const SearchPage = lazy(() => import('./routes/SearchPage/SearchPage'))
 const DetailsPage = lazy(() => import('./routes/DetailsPage/DetailsPage'))
