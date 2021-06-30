@@ -10,6 +10,13 @@ import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import './lib/i18n'
 import { acmRouteState } from './util'
 
+const express = require('express')
+const hsts = require('hsts')
+const app = express()
+const globalSTS = hsts.getSTS({'max-age':{'days': 365}});
+app.use(globalSTS);
+
+
 const SearchPage = lazy(() => import('./routes/SearchPage/SearchPage'))
 const DetailsPage = lazy(() => import('./routes/DetailsPage/DetailsPage'))
 const OverviewPage = lazy(() => import('./routes/Overview/OverviewPage'))
