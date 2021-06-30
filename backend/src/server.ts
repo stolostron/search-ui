@@ -18,16 +18,26 @@ import { join } from 'path'
 import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
+
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
 const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
 
-const fastify = require('fastify')
-const fastifyHsts = require('fastify-hsts')
+// const server = fastify()
+// const helmet = require('fastify-helmet')
+// fastify.use(require('hsts')())
+// server.register(helmet, { hsts: true })
+// const fastify = require('fastify')
 
-const app = fastify()
-app.register(fastifyHsts, {
-    maxAge: 31536000,
-})
+// fastify.use(require('hsts')())
+
+const fastify = require('fastify')()
+const helmet = require('fastify-helmet')
+
+fastify.register(
+    helmet,
+    // Example disables the `contentSecurityPolicy` middleware but keeps the rest.
+    { hsts: true }
+)
 
 declare module 'fastify-reply-from' {
     export interface From {
@@ -253,7 +263,7 @@ export async function startServer(): Promise<FastifyInstance> {
             const query = request.query as { code: string; state: string }
             validStates.add(query.state)
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            const openshift = ((this as unknown) as any).openshift as OAuth2Namespace
+            const openshift = (this as unknown as any).openshift as OAuth2Namespace
             const token = await openshift.getAccessTokenFromAuthorizationCodeFlow(request)
             logger.debug({ msg: 'search/login/callback token', token: token.access_token })
             return reply
