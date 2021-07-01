@@ -65,16 +65,38 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    await fastify.register(fastifyHelmet, {
-        hsts: true,
-        enableCSPNonces: true,
-        contentSecurityPolicy: {
-            directives: {
-                defaultSrc: ["'self'"],
-                scriptSrc: ["'self'"],
-                styleSrc: ["'self'", 'unsafe-inline'],
+    // await fastify.register(fastifyHelmet, {
+    //     hsts: true,
+    //     enableCSPNonces: true,
+    //     contentSecurityPolicy: {
+    //         directives: {
+    //             defaultSrc: ["'self'"],
+    //             scriptSrc: ["'self'"],
+    //             styleSrc: ["'self'"],
+    //         },
+    //     },
+    // })
+
+    await fastify.register(
+        fastifyHelmet,
+        // customize content security policy with nonce generation
+        {
+            enableCSPNonces: true,
+            contentSecurityPolicy: {
+                directives: {
+                    defaultSrc: ["'self'"],
+                    scriptSrc: ["'self'"],
+                    styleSrc: ["'self'"],
+                },
             },
-        },
+        }
+    )
+
+    fastify.get('/', function (request, reply) {
+        // retrieve script nonce
+        reply.cspNonce.script
+        // retrieve style nonce
+        reply.cspNonce.style
     })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
