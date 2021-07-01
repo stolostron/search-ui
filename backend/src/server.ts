@@ -65,33 +65,21 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    // await fastify.register(fastifyHelmet, {
-    //     hsts: true,
-    //     enableCSPNonces: true,
-    //     contentSecurityPolicy: {
-    //         directives: {
-    //             defaultSrc: ["'self'"],
-    //             scriptSrc: ["'self'"],
-    //             styleSrc: ["'self'"],
-    //         },
-    //     },
-    // })
-
-    await fastify.register(
-        fastifyHelmet,
-        // customize content security policy with nonce generation
-        {
-            hsts: true,
-            enableCSPNonces: true,
-            contentSecurityPolicy: {
-                directives: {
-                    defaultSrc: ["'self'"],
-                    scriptSrc: ["'self'"],
-                    styleSrc: ["'self'", "'unsafe-hashes'"],
-                },
+    await fastify.register(fastifyHelmet, {
+        hsts: true,
+        enableCSPNonces: true,
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'none'"],
+                scriptSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                fontSrc: ["'self'"],
+                connectSrc: ["'self'", 'wss:', `${process.env.OAUTH_SERVER_URL}`],
+                frameSrc: ["'self'", `${process.env.OAUTH_SERVER_URL}`],
+                imgSrc: ["'self'"],
             },
-        }
-    )
+        },
+    })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
