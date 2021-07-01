@@ -1,7 +1,7 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
 /* istanbul ignore file */
-
+'use strict'
 import { AcmHeader } from '@open-cluster-management/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { lazy } from 'react'

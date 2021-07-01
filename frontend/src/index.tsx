@@ -1,7 +1,7 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
 /* istanbul ignore file */
-
+'use strict'
 import '@patternfly/react-core/dist/styles/base.css'
 import { StrictMode, Suspense, Fragment } from 'react'
 import ReactDOM from 'react-dom'

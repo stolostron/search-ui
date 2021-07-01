@@ -87,7 +87,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 directives: {
                     defaultSrc: ["'self'"],
                     scriptSrc: ["'self'"],
-                    styleSrc: ["'self'"],
+                    styleSrc: ["'self'","'unsafe-hashes'"],
                 },
             },
         }
