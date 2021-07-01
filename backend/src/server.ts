@@ -65,7 +65,7 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
 
-    await fastify.register(fastifyHelmet, { hsts: true })
+    await fastify.register(fastifyHelmet, { hsts: true, enableCSPNonces: true })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
