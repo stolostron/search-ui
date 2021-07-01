@@ -81,6 +81,7 @@ export async function startServer(): Promise<FastifyInstance> {
         fastifyHelmet,
         // customize content security policy with nonce generation
         {
+            hsts: true,
             enableCSPNonces: true,
             contentSecurityPolicy: {
                 directives: {
@@ -91,13 +92,6 @@ export async function startServer(): Promise<FastifyInstance> {
             },
         }
     )
-
-    fastify.get('/', function (request, reply) {
-        // retrieve script nonce
-        reply.cspNonce.script
-        // retrieve style nonce
-        reply.cspNonce.style
-    })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
