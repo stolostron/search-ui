@@ -72,7 +72,10 @@ export async function startServer(): Promise<FastifyInstance> {
             directives: {
                 defaultSrc: ["'none'"],
                 scriptSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
-                styleSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                styleSrcElem: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                styleSrcAttr: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                scriptSrcElem: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                styleSrc: ["'self'", "'unsafe-hashes'"],
                 fontSrc: ["'self'"],
                 connectSrc: ["'self'", 'wss:', `${process.env.OAUTH_SERVER_URL}`],
                 frameSrc: ["'self'", `${process.env.OAUTH_SERVER_URL}`],
