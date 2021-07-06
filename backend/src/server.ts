@@ -66,14 +66,14 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCsrf)
 
     await fastify.register(fastifyHelmet, {
-        hsts: true,
+        // hsts: true,
         enableCSPNonces: true,
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'none'"],
                 scriptSrc: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
-                styleSrcElem: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
-                styleSrcAttr: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
+                styleSrcElem: ["'self'", "'unsafe-inline'"],
+                styleSrcAttr: ["'self'", "'unsafe-inline'"],
                 scriptSrcElem: ["'self'", "'unsafe-hashes'", "'unsafe-inline'"],
                 styleSrc: ["'self'", "'unsafe-hashes'"],
                 fontSrc: ["'self'"],
