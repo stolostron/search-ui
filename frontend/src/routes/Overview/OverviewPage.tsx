@@ -28,7 +28,7 @@ import {
     useSearchResultCountLazyQuery,
     useSearchResultItemsLazyQuery,
     useGetOverviewLazyQuery,
-    useGetResourceQuery
+    useGetResourceQuery,
 } from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
