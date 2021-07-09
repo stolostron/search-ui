@@ -52,7 +52,7 @@
     "search.saved.searches.section.title": "Saved searches",
     "search.suggested.searches.seaction.title": "Suggested search templates",
     "searchbar.button.save.search": "Save search",
-    "messages.S20.short": "More on disabled clusters",
+    "messages.S20.short": "Search is disabled on some clusters.",
     "messages.S20.long": "Currently, search is disabled on some of your managed clusters. Some data might be missing from the console view.",
-    "messages.S20.additional.info": "View disabled clusters"
+    "messages.S20.additional.info": "View clusters with search add-on disabled."
 }
