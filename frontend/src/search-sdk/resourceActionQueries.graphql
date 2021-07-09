@@ -2,7 +2,7 @@ query getResource($apiVersion: String, $kind: String, $name: String, $namespace:
     getResource(apiVersion: $apiVersion, kind: $kind, name: $name, namespace: $namespace, cluster: $cluster, selfLink: $selfLink, updateInterval: $updateInterval, deleteAfterUse: $deleteAfterUse)
 }
 
-query updateResource($selfLink: String, $namespace: String, $kind: String, $name: String, $body: JSON, $cluster: String){
+mutation updateResource($selfLink: String, $namespace: String, $kind: String, $name: String, $body: JSON, $cluster: String){
     updateResource(selfLink: $selfLink, namespace: $namespace, kind: $kind, name: $name, body: $body, cluster: $cluster)
 }
 
@@ -17,34 +17,3 @@ query userAccess($resource: String, $kind: String, $action: String!, $namespace:
 query getLogs($containerName: String!, $podName: String!, $podNamespace: String!, $clusterName: String!){
     logs(containerName: $containerName, podName: $podName, podNamespace: $podNamespace, clusterName: $clusterName)
 }
-
-query getOverview($demoMode: Boolean) {
-    overview(demoMode: $demoMode) {
-      clusters {
-        metadata {
-          name
-          namespace
-          labels
-          uid
-        }
-        consoleURL
-        status
-      }
-      applications {
-        metadata {
-          name
-          namespace
-        }
-        raw
-        selector
-      }
-      compliances {
-        metadata {
-          name
-          namespace
-        }
-        raw
-      }
-      timestamp
-    }
-  }

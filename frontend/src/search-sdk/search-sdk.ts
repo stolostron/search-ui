@@ -1,6 +1,3 @@
-// Copyright (c) 2021 Red Hat, Inc.
-// Copyright Contributors to the Open Cluster Management project
-
 import { gql } from '@apollo/client'
 import * as Apollo from '@apollo/client'
 export type Maybe<T> = T | null
@@ -44,6 +41,12 @@ export type Application = {
     targetRevision?: Maybe<Scalars['String']>
 }
 
+export type ApplicationOverview = K8sObject & {
+    metadata?: Maybe<Metadata>
+    raw?: Maybe<Scalars['JSON']>
+    selector?: Maybe<Scalars['JSON']>
+}
+
 export enum CacheControlScope {
     Public = 'PUBLIC',
     Private = 'PRIVATE',
@@ -61,15 +64,56 @@ export type Channel = {
     clusterCount?: Maybe<Scalars['JSON']>
 }
 
+export type ClusterAllocatable = {
+    cpu?: Maybe<Scalars['String']>
+    memory?: Maybe<Scalars['String']>
+}
+
+export type ClusterCapacity = {
+    cpu?: Maybe<Scalars['String']>
+    memory?: Maybe<Scalars['String']>
+}
+
+export type ClusterOverview = K8sObject & {
+    metadata?: Maybe<Metadata>
+    capacity?: Maybe<ClusterCapacity>
+    allocatable?: Maybe<ClusterAllocatable>
+    consoleURL?: Maybe<Scalars['String']>
+    status?: Maybe<Scalars['String']>
+}
+
+export type ComplianceOverview = K8sObject & {
+    metadata?: Maybe<Metadata>
+    raw?: Maybe<Scalars['JSON']>
+}
+
+export type K8sObject = {
+    metadata?: Maybe<Metadata>
+}
+
 export type Message = {
     id: Scalars['String']
     kind?: Maybe<Scalars['String']>
     description?: Maybe<Scalars['String']>
 }
 
+export type Metadata = {
+    annotations?: Maybe<Scalars['JSON']>
+    creationTimestamp?: Maybe<Scalars['String']>
+    labels?: Maybe<Scalars['JSON']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    resourceVersion?: Maybe<Scalars['String']>
+    selfLink?: Maybe<Scalars['String']>
+    status?: Maybe<Scalars['String']>
+    uid?: Maybe<Scalars['String']>
+}
+
 export type Mutation = {
     deleteSearch?: Maybe<Scalars['JSON']>
     saveSearch?: Maybe<Scalars['JSON']>
+    updateResource?: Maybe<Scalars['JSON']>
+    deleteResource?: Maybe<Scalars['JSON']>
 }
 
 export type MutationDeleteSearchArgs = {
@@ -78,6 +122,32 @@ export type MutationDeleteSearchArgs = {
 
 export type MutationSaveSearchArgs = {
     resource?: Maybe<Scalars['JSON']>
+}
+
+export type MutationUpdateResourceArgs = {
+    selfLink?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    body?: Maybe<Scalars['JSON']>
+    cluster?: Maybe<Scalars['String']>
+}
+
+export type MutationDeleteResourceArgs = {
+    selfLink?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    childResources?: Maybe<Scalars['JSON']>
+}
+
+export type Overview = {
+    clusters?: Maybe<Array<Maybe<ClusterOverview>>>
+    applications?: Maybe<Array<Maybe<ApplicationOverview>>>
+    compliances?: Maybe<Array<Maybe<ComplianceOverview>>>
+    timestamp?: Maybe<Scalars['String']>
 }
 
 export type PlacementRule = {
@@ -99,6 +169,10 @@ export type Query = {
     searchComplete?: Maybe<Array<Maybe<Scalars['String']>>>
     searchSchema?: Maybe<Scalars['JSON']>
     savedSearches?: Maybe<Array<Maybe<UserSearch>>>
+    userAccess?: Maybe<Scalars['JSON']>
+    getResource?: Maybe<Scalars['JSON']>
+    logs?: Maybe<Scalars['String']>
+    overview?: Maybe<Overview>
 }
 
 export type QueryApplicationsArgs = {
@@ -129,6 +203,38 @@ export type QuerySearchCompleteArgs = {
     property: Scalars['String']
     query?: Maybe<SearchInput>
     limit?: Maybe<Scalars['Int']>
+}
+
+export type QueryUserAccessArgs = {
+    resource?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    action: Scalars['String']
+    namespace?: Maybe<Scalars['String']>
+    apiGroup?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    version?: Maybe<Scalars['String']>
+}
+
+export type QueryGetResourceArgs = {
+    apiVersion?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    selfLink?: Maybe<Scalars['String']>
+    updateInterval?: Maybe<Scalars['Int']>
+    deleteAfterUse?: Maybe<Scalars['Boolean']>
+}
+
+export type QueryLogsArgs = {
+    containerName: Scalars['String']
+    podName: Scalars['String']
+    podNamespace: Scalars['String']
+    clusterName: Scalars['String']
+}
+
+export type QueryOverviewArgs = {
+    demoMode?: Maybe<Scalars['Boolean']>
 }
 
 export type SearchFilter = {
@@ -168,12 +274,145 @@ export type Subscription = {
     status?: Maybe<Scalars['String']>
 }
 
+export type DeleteResource = {
+    selfLink?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    childResources?: Maybe<Scalars['JSON']>
+}
+
+export type GetResource = {
+    apiVersion?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    selfLink?: Maybe<Scalars['String']>
+    updateInterval?: Maybe<Scalars['Int']>
+    deleteAfterUse?: Maybe<Scalars['Boolean']>
+}
+
+export type Logs = {
+    containerName: Scalars['String']
+    podName: Scalars['String']
+    podNamespace: Scalars['String']
+    clusterName: Scalars['String']
+}
+
+export type UpdateResource = {
+    selfLink?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    body?: Maybe<Scalars['JSON']>
+    cluster?: Maybe<Scalars['String']>
+}
+
+export type UserAccess = {
+    resource?: Maybe<Scalars['String']>
+    action?: Maybe<Scalars['String']>
+}
+
 export type UserSearch = {
     id?: Maybe<Scalars['String']>
     name?: Maybe<Scalars['String']>
     description?: Maybe<Scalars['String']>
     searchText?: Maybe<Scalars['String']>
 }
+
+export type GetOverviewQueryVariables = Exact<{
+    demoMode?: Maybe<Scalars['Boolean']>
+}>
+
+export type GetOverviewQuery = {
+    overview?: Maybe<
+        Pick<Overview, 'timestamp'> & {
+            clusters?: Maybe<
+                Array<
+                    Maybe<
+                        Pick<ClusterOverview, 'consoleURL' | 'status'> & {
+                            metadata?: Maybe<Pick<Metadata, 'name' | 'namespace' | 'labels' | 'uid'>>
+                        }
+                    >
+                >
+            >
+            applications?: Maybe<
+                Array<
+                    Maybe<
+                        Pick<ApplicationOverview, 'raw' | 'selector'> & {
+                            metadata?: Maybe<Pick<Metadata, 'name' | 'namespace'>>
+                        }
+                    >
+                >
+            >
+            compliances?: Maybe<
+                Array<
+                    Maybe<Pick<ComplianceOverview, 'raw'> & { metadata?: Maybe<Pick<Metadata, 'name' | 'namespace'>> }>
+                >
+            >
+        }
+    >
+}
+
+export type GetResourceQueryVariables = Exact<{
+    apiVersion?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    selfLink?: Maybe<Scalars['String']>
+    updateInterval?: Maybe<Scalars['Int']>
+    deleteAfterUse?: Maybe<Scalars['Boolean']>
+}>
+
+export type GetResourceQuery = Pick<Query, 'getResource'>
+
+export type UpdateResourceMutationVariables = Exact<{
+    selfLink?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    body?: Maybe<Scalars['JSON']>
+    cluster?: Maybe<Scalars['String']>
+}>
+
+export type UpdateResourceMutation = Pick<Mutation, 'updateResource'>
+
+export type DeleteResourceMutationVariables = Exact<{
+    selfLink?: Maybe<Scalars['String']>
+    apiVersion?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    namespace?: Maybe<Scalars['String']>
+    cluster?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    childResources?: Maybe<Scalars['JSON']>
+}>
+
+export type DeleteResourceMutation = Pick<Mutation, 'deleteResource'>
+
+export type UserAccessQueryVariables = Exact<{
+    resource?: Maybe<Scalars['String']>
+    kind?: Maybe<Scalars['String']>
+    action: Scalars['String']
+    namespace?: Maybe<Scalars['String']>
+    apiGroup?: Maybe<Scalars['String']>
+    name?: Maybe<Scalars['String']>
+    version?: Maybe<Scalars['String']>
+}>
+
+export type UserAccessQuery = Pick<Query, 'userAccess'>
+
+export type GetLogsQueryVariables = Exact<{
+    containerName: Scalars['String']
+    podName: Scalars['String']
+    podNamespace: Scalars['String']
+    clusterName: Scalars['String']
+}>
+
+export type GetLogsQuery = Pick<Query, 'logs'>
 
 export type SaveSearchMutationVariables = Exact<{
     resource: Scalars['JSON']
@@ -253,6 +492,338 @@ export type GetMessagesQueryVariables = Exact<{ [key: string]: never }>
 
 export type GetMessagesQuery = { messages?: Maybe<Array<Maybe<Pick<Message, 'id' | 'kind' | 'description'>>>> }
 
+export const GetOverviewDocument = gql`
+    query getOverview($demoMode: Boolean) {
+        overview(demoMode: $demoMode) {
+            clusters {
+                metadata {
+                    name
+                    namespace
+                    labels
+                    uid
+                }
+                consoleURL
+                status
+            }
+            applications {
+                metadata {
+                    name
+                    namespace
+                }
+                raw
+                selector
+            }
+            compliances {
+                metadata {
+                    name
+                    namespace
+                }
+                raw
+            }
+            timestamp
+        }
+    }
+`
+
+/**
+ * __useGetOverviewQuery__
+ *
+ * To run a query within a React component, call `useGetOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOverviewQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOverviewQuery({
+ *   variables: {
+ *      demoMode: // value for 'demoMode'
+ *   },
+ * });
+ */
+export function useGetOverviewQuery(
+    baseOptions?: Apollo.QueryHookOptions<GetOverviewQuery, GetOverviewQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<GetOverviewQuery, GetOverviewQueryVariables>(GetOverviewDocument, options)
+}
+export function useGetOverviewLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<GetOverviewQuery, GetOverviewQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<GetOverviewQuery, GetOverviewQueryVariables>(GetOverviewDocument, options)
+}
+export type GetOverviewQueryHookResult = ReturnType<typeof useGetOverviewQuery>
+export type GetOverviewLazyQueryHookResult = ReturnType<typeof useGetOverviewLazyQuery>
+export type GetOverviewQueryResult = Apollo.QueryResult<GetOverviewQuery, GetOverviewQueryVariables>
+export const GetResourceDocument = gql`
+    query getResource(
+        $apiVersion: String
+        $kind: String
+        $name: String
+        $namespace: String
+        $cluster: String
+        $selfLink: String
+        $updateInterval: Int
+        $deleteAfterUse: Boolean
+    ) {
+        getResource(
+            apiVersion: $apiVersion
+            kind: $kind
+            name: $name
+            namespace: $namespace
+            cluster: $cluster
+            selfLink: $selfLink
+            updateInterval: $updateInterval
+            deleteAfterUse: $deleteAfterUse
+        )
+    }
+`
+
+/**
+ * __useGetResourceQuery__
+ *
+ * To run a query within a React component, call `useGetResourceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetResourceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetResourceQuery({
+ *   variables: {
+ *      apiVersion: // value for 'apiVersion'
+ *      kind: // value for 'kind'
+ *      name: // value for 'name'
+ *      namespace: // value for 'namespace'
+ *      cluster: // value for 'cluster'
+ *      selfLink: // value for 'selfLink'
+ *      updateInterval: // value for 'updateInterval'
+ *      deleteAfterUse: // value for 'deleteAfterUse'
+ *   },
+ * });
+ */
+export function useGetResourceQuery(
+    baseOptions?: Apollo.QueryHookOptions<GetResourceQuery, GetResourceQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<GetResourceQuery, GetResourceQueryVariables>(GetResourceDocument, options)
+}
+export function useGetResourceLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<GetResourceQuery, GetResourceQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<GetResourceQuery, GetResourceQueryVariables>(GetResourceDocument, options)
+}
+export type GetResourceQueryHookResult = ReturnType<typeof useGetResourceQuery>
+export type GetResourceLazyQueryHookResult = ReturnType<typeof useGetResourceLazyQuery>
+export type GetResourceQueryResult = Apollo.QueryResult<GetResourceQuery, GetResourceQueryVariables>
+export const UpdateResourceDocument = gql`
+    mutation updateResource(
+        $selfLink: String
+        $namespace: String
+        $kind: String
+        $name: String
+        $body: JSON
+        $cluster: String
+    ) {
+        updateResource(
+            selfLink: $selfLink
+            namespace: $namespace
+            kind: $kind
+            name: $name
+            body: $body
+            cluster: $cluster
+        )
+    }
+`
+export type UpdateResourceMutationFn = Apollo.MutationFunction<UpdateResourceMutation, UpdateResourceMutationVariables>
+
+/**
+ * __useUpdateResourceMutation__
+ *
+ * To run a mutation, you first call `useUpdateResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateResourceMutation, { data, loading, error }] = useUpdateResourceMutation({
+ *   variables: {
+ *      selfLink: // value for 'selfLink'
+ *      namespace: // value for 'namespace'
+ *      kind: // value for 'kind'
+ *      name: // value for 'name'
+ *      body: // value for 'body'
+ *      cluster: // value for 'cluster'
+ *   },
+ * });
+ */
+export function useUpdateResourceMutation(
+    baseOptions?: Apollo.MutationHookOptions<UpdateResourceMutation, UpdateResourceMutationVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useMutation<UpdateResourceMutation, UpdateResourceMutationVariables>(UpdateResourceDocument, options)
+}
+export type UpdateResourceMutationHookResult = ReturnType<typeof useUpdateResourceMutation>
+export type UpdateResourceMutationResult = Apollo.MutationResult<UpdateResourceMutation>
+export type UpdateResourceMutationOptions = Apollo.BaseMutationOptions<
+    UpdateResourceMutation,
+    UpdateResourceMutationVariables
+>
+export const DeleteResourceDocument = gql`
+    mutation deleteResource(
+        $selfLink: String
+        $apiVersion: String
+        $name: String
+        $namespace: String
+        $cluster: String
+        $kind: String
+        $childResources: JSON
+    ) {
+        deleteResource(
+            selfLink: $selfLink
+            apiVersion: $apiVersion
+            name: $name
+            namespace: $namespace
+            cluster: $cluster
+            kind: $kind
+            childResources: $childResources
+        )
+    }
+`
+export type DeleteResourceMutationFn = Apollo.MutationFunction<DeleteResourceMutation, DeleteResourceMutationVariables>
+
+/**
+ * __useDeleteResourceMutation__
+ *
+ * To run a mutation, you first call `useDeleteResourceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteResourceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteResourceMutation, { data, loading, error }] = useDeleteResourceMutation({
+ *   variables: {
+ *      selfLink: // value for 'selfLink'
+ *      apiVersion: // value for 'apiVersion'
+ *      name: // value for 'name'
+ *      namespace: // value for 'namespace'
+ *      cluster: // value for 'cluster'
+ *      kind: // value for 'kind'
+ *      childResources: // value for 'childResources'
+ *   },
+ * });
+ */
+export function useDeleteResourceMutation(
+    baseOptions?: Apollo.MutationHookOptions<DeleteResourceMutation, DeleteResourceMutationVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useMutation<DeleteResourceMutation, DeleteResourceMutationVariables>(DeleteResourceDocument, options)
+}
+export type DeleteResourceMutationHookResult = ReturnType<typeof useDeleteResourceMutation>
+export type DeleteResourceMutationResult = Apollo.MutationResult<DeleteResourceMutation>
+export type DeleteResourceMutationOptions = Apollo.BaseMutationOptions<
+    DeleteResourceMutation,
+    DeleteResourceMutationVariables
+>
+export const UserAccessDocument = gql`
+    query userAccess(
+        $resource: String
+        $kind: String
+        $action: String!
+        $namespace: String
+        $apiGroup: String
+        $name: String
+        $version: String
+    ) {
+        userAccess(
+            resource: $resource
+            kind: $kind
+            action: $action
+            namespace: $namespace
+            apiGroup: $apiGroup
+            name: $name
+            version: $version
+        )
+    }
+`
+
+/**
+ * __useUserAccessQuery__
+ *
+ * To run a query within a React component, call `useUserAccessQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserAccessQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserAccessQuery({
+ *   variables: {
+ *      resource: // value for 'resource'
+ *      kind: // value for 'kind'
+ *      action: // value for 'action'
+ *      namespace: // value for 'namespace'
+ *      apiGroup: // value for 'apiGroup'
+ *      name: // value for 'name'
+ *      version: // value for 'version'
+ *   },
+ * });
+ */
+export function useUserAccessQuery(baseOptions: Apollo.QueryHookOptions<UserAccessQuery, UserAccessQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<UserAccessQuery, UserAccessQueryVariables>(UserAccessDocument, options)
+}
+export function useUserAccessLazyQuery(
+    baseOptions?: Apollo.LazyQueryHookOptions<UserAccessQuery, UserAccessQueryVariables>
+) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<UserAccessQuery, UserAccessQueryVariables>(UserAccessDocument, options)
+}
+export type UserAccessQueryHookResult = ReturnType<typeof useUserAccessQuery>
+export type UserAccessLazyQueryHookResult = ReturnType<typeof useUserAccessLazyQuery>
+export type UserAccessQueryResult = Apollo.QueryResult<UserAccessQuery, UserAccessQueryVariables>
+export const GetLogsDocument = gql`
+    query getLogs($containerName: String!, $podName: String!, $podNamespace: String!, $clusterName: String!) {
+        logs(containerName: $containerName, podName: $podName, podNamespace: $podNamespace, clusterName: $clusterName)
+    }
+`
+
+/**
+ * __useGetLogsQuery__
+ *
+ * To run a query within a React component, call `useGetLogsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLogsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLogsQuery({
+ *   variables: {
+ *      containerName: // value for 'containerName'
+ *      podName: // value for 'podName'
+ *      podNamespace: // value for 'podNamespace'
+ *      clusterName: // value for 'clusterName'
+ *   },
+ * });
+ */
+export function useGetLogsQuery(baseOptions: Apollo.QueryHookOptions<GetLogsQuery, GetLogsQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useQuery<GetLogsQuery, GetLogsQueryVariables>(GetLogsDocument, options)
+}
+export function useGetLogsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetLogsQuery, GetLogsQueryVariables>) {
+    const options = { ...defaultOptions, ...baseOptions }
+    return Apollo.useLazyQuery<GetLogsQuery, GetLogsQueryVariables>(GetLogsDocument, options)
+}
+export type GetLogsQueryHookResult = ReturnType<typeof useGetLogsQuery>
+export type GetLogsLazyQueryHookResult = ReturnType<typeof useGetLogsLazyQuery>
+export type GetLogsQueryResult = Apollo.QueryResult<GetLogsQuery, GetLogsQueryVariables>
 export const SaveSearchDocument = gql`
     mutation saveSearch($resource: JSON!) {
         saveSearch(resource: $resource)

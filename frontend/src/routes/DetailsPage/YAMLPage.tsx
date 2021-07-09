@@ -7,8 +7,8 @@ import { ApolloError } from '@apollo/client'
 import { makeStyles } from '@material-ui/styles'
 import jsYaml from 'js-yaml'
 import { useTranslation } from 'react-i18next'
-import { Query, useUserAccessQuery, useUpdateResourceLazyQuery } from '../../console-sdk/console-sdk'
-import { consoleClient } from '../../console-sdk/console-client'
+import { GetResourceQuery, useUserAccessQuery, useUpdateResourceMutation } from '../../search-sdk/search-sdk'
+import { searchClient } from '../../search-sdk/search-client'
 import './YAMLEditor.css'
 
 import MonacoEditor, { monaco } from 'react-monaco-editor'
@@ -68,7 +68,7 @@ const useStyles = makeStyles({
 })
 
 export default function YAMLPage(props: {
-    resource: Pick<Query, 'getResource'> | undefined
+    resource: GetResourceQuery | undefined
     loading: boolean
     error: ApolloError | undefined
     name: string
@@ -89,9 +89,9 @@ export default function YAMLPage(props: {
         }
     }, [resource?.getResource])
 
-    const [updateResource, { error: updateResourceError }] = useUpdateResourceLazyQuery({
-        client: consoleClient,
-        onCompleted: (res) => {
+    const [updateResource, { error: updateResourceError }] = useUpdateResourceMutation({
+        client: searchClient,
+        onCompleted: (res: any) => {
             setEditMode(false)
             setEditedResourceYaml(jsYaml.dump(res.updateResource, { indent: 2 }))
         },
@@ -105,7 +105,7 @@ export default function YAMLPage(props: {
         loading: userAccessLoading,
         error: userAccessError,
     } = useUserAccessQuery({
-        client: consoleClient,
+        client: searchClient,
         variables: {
             kind,
             action: 'update',

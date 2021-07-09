@@ -7,7 +7,7 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import LogsPage from './LogsPage'
-import { GetLogsDocument } from '../../console-sdk/console-sdk'
+import { GetLogsDocument } from '../../search-sdk/search-sdk'
 
 it('should render logs page with data and successfully switch containers', async () => {
     const mocks = [

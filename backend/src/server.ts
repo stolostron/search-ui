@@ -109,19 +109,11 @@ export async function startServer(): Promise<FastifyInstance> {
         preHandler: csrfProtection,
     })
 
-    // Proxy to CONSOLE-API
+    // Proxy to SEARCH-API (from /resources)
     await fastify.register(fastifyHttpProxy, {
-        upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
-        prefix: '/search/console-api/graphql',
-        rewritePrefix: '/hcmuiapi/graphql',
-        http2: false,
-        preHandler: csrfProtection,
-    })
-    // Proxy to CONSOLE-API (from /resources)
-    await fastify.register(fastifyHttpProxy, {
-        upstream: process.env.CONSOLE_API_URL || 'https://console-api:4000',
-        prefix: '/resources/search/console-api/graphql',
-        rewritePrefix: '/hcmuiapi/graphql',
+        upstream: process.env.SEARCH_API_URL || 'https://search-search-api:4010',
+        prefix: '/resources/searchapi/graphql',
+        rewritePrefix: '/searchapi/graphql',
         http2: false,
         preHandler: csrfProtection,
     })

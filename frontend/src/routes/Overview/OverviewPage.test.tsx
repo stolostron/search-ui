@@ -9,7 +9,7 @@ import { MockedProvider } from '@apollo/client/testing'
 import { GraphQLError } from 'graphql'
 import { wait } from '../../lib/test-helper'
 import OverviewPage, { mapProviderFromLabel } from './OverviewPage'
-import { GetOverviewDocument } from '../../console-sdk/console-sdk'
+import { GetOverviewDocument } from '../../search-sdk/search-sdk'
 import { SearchResultCountDocument, SearchResultItemsDocument } from '../../search-sdk/search-sdk'
 
 it('should responsed with correct value for mapProviderFromLabel function', () => {

@@ -6,13 +6,13 @@ import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
 import { AcmAlert, AcmModal, AcmButton } from '@open-cluster-management/ui-components'
 import { useTranslation } from 'react-i18next'
 import {
+    useUserAccessQuery,
+    useDeleteResourceMutation,
     SearchResultItemsDocument,
     SearchResultRelatedCountDocument,
     SearchResultRelatedItemsDocument,
 } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
-import { useUserAccessQuery, useDeleteResourceMutation } from '../../../../console-sdk/console-sdk'
-import { consoleClient } from '../../../../console-sdk/console-client'
 import { convertStringToQuery } from '../../search-helper'
 
 export interface IDeleteModalProps {
@@ -35,7 +35,7 @@ export const DeleteResourceModal = (props: any) => {
     const { t } = useTranslation(['search'])
     const { open, close, resource, currentQuery, relatedResource } = props
     const [deleteResourceMutation, deleteResourceResults] = useDeleteResourceMutation({
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
     let apiGroup = ''
     if (resource) {
@@ -43,7 +43,7 @@ export const DeleteResourceModal = (props: any) => {
     }
     const userAccessResponse = useUserAccessQuery({
         skip: !resource,
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         variables: {
             kind: resource?.kind,
             action: 'delete',

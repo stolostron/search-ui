@@ -14,7 +14,6 @@
         "test:watch": "react-scripts test --watch",
         "lint": "eslint --ext tsx src",
         "generate:searchapi": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config src/search-sdk/search-sdk.yml",
-        "generate:consoleapi": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config src/console-sdk/console-sdk.yml",
         "update": "rm -rf package-lock.json node_modules && npx npm-check-updates -u && npm install && npm audit fix && npm dedup && npm test && npm run lint && npm run check",
         "docker:build": "docker build -t search .",
         "docker:run": "docker run --rm -p 5000:5000 search"

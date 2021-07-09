@@ -1,0 +1,30 @@
+query getOverview($demoMode: Boolean) {
+    overview(demoMode: $demoMode) {
+        clusters {
+            metadata {
+                name
+                namespace
+                labels
+                uid
+            }
+            consoleURL
+            status
+        }
+        applications {
+            metadata {
+                name
+                namespace
+            }
+            raw
+            selector
+        }
+        compliances {
+            metadata {
+                name
+                namespace
+            }
+            raw
+        }
+        timestamp
+    }
+}

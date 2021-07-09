@@ -24,9 +24,12 @@ import { PlusIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
 import { acmRouteState } from '../../util'
-import { consoleClient } from '../../console-sdk/console-client'
-import { useGetOverviewLazyQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
-import { useSearchResultCountLazyQuery, useSearchResultItemsLazyQuery } from '../../search-sdk/search-sdk'
+import {
+    useSearchResultCountLazyQuery,
+    useSearchResultItemsLazyQuery,
+    useGetOverviewLazyQuery,
+    useGetResourceQuery
+} from '../../search-sdk/search-sdk'
 import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
 import _ from 'lodash'
@@ -149,7 +152,7 @@ const searchQueries = (selectedClusters: Array<string>): Array<any> => {
 const PageActions = (props: { timestamp: string; reloading: boolean; refetch: () => void }) => {
     const { t } = useTranslation(['overview'])
     const { data, error } = useGetResourceQuery({
-        client: consoleClient,
+        client: searchClient,
         variables: {
             namespace: 'open-cluster-management',
             name: 'observability-controller',
@@ -216,17 +219,16 @@ export default function OverviewPage() {
         providers: [],
     })
 
-    // CONSOLE-API
-    const [fireConsoleQuery, { data, loading, error, refetch, called }] = useGetOverviewLazyQuery({
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+    const [fireOverviewQuery, { data, loading, error, refetch, called }] = useGetOverviewLazyQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
     useEffect(() => {
         if (!called) {
-            fireConsoleQuery()
+            fireOverviewQuery()
         } else {
             refetch && refetch()
         }
-    }, [called, fireConsoleQuery, refetch])
+    }, [called, fireOverviewQuery, refetch])
 
     const timestamp = data?.overview?.timestamp as string
     if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
@@ -256,7 +258,7 @@ export default function OverviewPage() {
 
     useEffect(() => {
         if (!called && !searchCalled) {
-            // The console call needs to finish first.
+            // The overview call needs to finish first.
             fireSearchQuery({
                 variables: { input: searchQueries(selectedClusterNames) },
             })
@@ -322,7 +324,7 @@ export default function OverviewPage() {
         const clustersToSearch =
             selectedClusterNames.length > 0 ? selectedClusterNames : clusters.map((cluster) => cluster.metadata.name)
         if (!searchPolicyReportCalled && clustersToSearch.length > 0) {
-            // The console call needs to finish first.
+            // The overview call needs to finish first.
             firePolicyReportQuery({
                 variables: { input: policyReportQuery(clustersToSearch) },
             })

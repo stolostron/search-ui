@@ -8,7 +8,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import { MockedProvider } from '@apollo/client/testing'
 import { wait } from '../../lib/test-helper'
 import DetailsPage from './DetailsPage'
-import { GetResourceDocument } from '../../console-sdk/console-sdk'
+import { GetResourceDocument } from '../../search-sdk/search-sdk'
 
 jest.mock('react-router-dom', () => {
     const originalModule = jest.requireActual('react-router-dom')

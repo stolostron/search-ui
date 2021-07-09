@@ -19,8 +19,8 @@ import { useRecoilState } from 'recoil'
 import { acmRouteState } from '../../util'
 import YAMLPage from './YAMLPage'
 import LogsPage from './LogsPage'
-import { consoleClient } from '../../console-sdk/console-client'
-import { useGetResourceQuery } from '../../console-sdk/console-sdk'
+import { searchClient } from '../../search-sdk/search-client'
+import { useGetResourceQuery } from '../../search-sdk/search-sdk'
 
 const useStyles = makeStyles({
     customBreadcrumb: {
@@ -74,7 +74,7 @@ export default function DetailsPage() {
     resourceUrlParams = `${resourceUrlParams}${name !== '' ? `&name=${name}` : ''}`
     const classes = useStyles()
     const getResourceResponse = useGetResourceQuery({
-        client: consoleClient,
+        client: searchClient,
         variables: {
             apiVersion: apiversion,
             kind,

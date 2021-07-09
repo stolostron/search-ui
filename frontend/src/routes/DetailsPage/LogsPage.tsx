@@ -5,11 +5,11 @@ import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { useTranslation } from 'react-i18next'
 import { ApolloError } from '@apollo/client'
-import { useGetLogsQuery, Query } from '../../console-sdk/console-sdk'
-import { consoleClient } from '../../console-sdk/console-client'
+import { useGetLogsQuery, GetResourceQuery } from '../../search-sdk/search-sdk'
+import { searchClient } from '../../search-sdk/search-client'
 
 export default function LogsPage(props: {
-    getResource: Pick<Query, 'getResource'> | undefined
+    getResource: GetResourceQuery | undefined
     getResourceError: ApolloError | undefined
     containers: string[]
     cluster: string
@@ -20,7 +20,7 @@ export default function LogsPage(props: {
     const { t } = useTranslation(['details'])
     const [container, setContainer] = useState<string>(containers[0] || '')
     const { data, loading, error } = useGetLogsQuery({
-        client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
         skip: containers.length === 0 || !container,
         variables: {
             containerName: container,
