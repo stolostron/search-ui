@@ -19,7 +19,7 @@ before_script:
 jobs:
     include:
         - stage: Build and test
-          name: 'Run tests, lint, and prettier check'
+          name: 'Run tests, lint, and prettier checks'
           if: type != cron
           language: node_js
           node_js: '14'
