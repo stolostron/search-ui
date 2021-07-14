@@ -184,7 +184,7 @@ const PageActions = (props: { timestamp: string; reloading: boolean; refetch: ()
             <AcmActionGroup>
                 <AcmLaunchLink links={getLaunchLink(addons)} />
                 <AcmButton
-                    href="/multicloud/add-connection"
+                    href="/multicloud/credentials"
                     variant={ButtonVariant.link}
                     component="a"
                     rel="noreferrer"
