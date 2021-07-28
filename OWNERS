@@ -2,6 +2,14 @@ approvers:
   - jlpadilla
   - zlayne
   - RobDolares
+  - fxiang1
+  - KevinFCormier
+  - chenz4027
+  - jamestalton 
+  - jeswanke     
+  - mark-nc
+  - Randy424
+  
 reviewers:
   - jlpadilla
   - dislbenn
@@ -11,3 +19,9 @@ reviewers:
   - xrajesh
   - SherinV
   - mqhackett
+  - fxiang1
+  - KevinFCormier
+  - chenz4027
+  - jamestalton 
+  - jeswanke     
+  - Randy424
