@@ -319,7 +319,7 @@ it('should render overview page with expected data', async () => {
         },
     ]
 
-    const { getAllByText, getByText, queryByText } = render(
+    const { getAllByText, getByText } = render(
         <RecoilRoot>
             <Router history={createBrowserHistory()}>
                 <MockedProvider mocks={mocks}>
