@@ -332,7 +332,6 @@ it('should render overview page with expected data', async () => {
     expect(getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
-
     // Test that the component has rendered correctly with an error
     await waitFor(() => expect(getAllByText('Amazon')).toHaveLength(1))
     await waitFor(() => expect(getAllByText('Microsoft')).toHaveLength(1))
