@@ -39,10 +39,6 @@ jobs:
               - make component/build
               - if [ "$DOCKER_PASS" != "" ]; then make component/push ; else echo "No DOCKER_PASS. Skipping image push."; fi
 
-        - stage: update release manifest
-          if: type = push AND branch =~ /^release-[0-9]+\..*$/
-          script: make pipeline-manifest/update PIPELINE_MANIFEST_COMPONENT_SHA256=${TRAVIS_COMMIT} PIPELINE_MANIFEST_COMPONENT_REPO=${TRAVIS_REPO_SLUG} PIPELINE_MANIFEST_BRANCH=${TRAVIS_BRANCH}
-
         - stage: Automated Dependency Upgrade
           if: type = cron AND branch = main
           language: node_js
