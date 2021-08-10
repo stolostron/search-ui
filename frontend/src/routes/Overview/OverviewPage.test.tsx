@@ -319,7 +319,7 @@ it('should render overview page with expected data', async () => {
         },
     ]
 
-    const { getAllByText, getByText } = render(
+    const { getAllByText, getByText, queryByText } = render(
         <RecoilRoot>
             <Router history={createBrowserHistory()}>
                 <MockedProvider mocks={mocks}>
@@ -333,7 +333,7 @@ it('should render overview page with expected data', async () => {
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    expect(getByText('Amazon')).toBeTruthy()
+    expect(queryByText('Amazon')).toBeTruthy()
 
     // Check Cluster compliance chart rendered
     expect(getAllByText('Cluster compliance')).toHaveLength(2)
