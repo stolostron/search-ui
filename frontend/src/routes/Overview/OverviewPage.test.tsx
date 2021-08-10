@@ -319,7 +319,7 @@ it('should render overview page with expected data', async () => {
         },
     ]
 
-    const { getAllByText, getByText, queryByText } = render(
+    const { getAllByText, getByText } = render(
         <RecoilRoot>
             <Router history={createBrowserHistory()}>
                 <MockedProvider mocks={mocks}>
@@ -332,15 +332,17 @@ it('should render overview page with expected data', async () => {
     expect(getByText('Loading')).toBeInTheDocument()
     // This wait pauses till apollo query is returning data
     await wait()
+
     // Test that the component has rendered correctly with an error
-    expect(queryByText('Amazon')).toBeTruthy()
+    await waitFor(() => expect(getAllByText('Amazon')).toHaveLength(1))
+    await waitFor(() => expect(getAllByText('Microsoft')).toHaveLength(1))
 
     // Check Cluster compliance chart rendered
-    expect(getAllByText('Cluster compliance')).toHaveLength(2)
-    expect(getByText('1 Compliant')).toBeTruthy()
-    expect(getByText('1 Non-compliant')).toBeTruthy()
+    await waitFor(() => expect(getAllByText('Cluster compliance')).toHaveLength(2))
+    await waitFor(() => expect(getByText('1 Compliant')).toBeTruthy())
+    await waitFor(() => expect(getByText('1 Non-compliant')).toBeTruthy())
 
     // Check PolicyReport chart
-    expect(getByText('2 Critical')).toBeTruthy()
-    expect(getByText('1 Important')).toBeTruthy()
+    await waitFor(() => expect(getByText('2 Critical')).toBeTruthy())
+    await waitFor(() => expect(getByText('1 Important')).toBeTruthy())
 })
