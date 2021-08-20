@@ -372,7 +372,7 @@ export default function OverviewPage() {
     const cloudLabelFilter: string = selectedCloud === '' ? '' : `%20label%3acloud=${selectedCloud}`
     function buildSummaryLinks(kind: string) {
         return selectedCloud === ''
-            ? `/search?filters={"textsearch":"kind%3A${kind}"}`
+            ? `/search?filters={"textsearch":"kind%3A${kind}%20cluster%3Alocal-cluster"}`
             : `/search?filters={"textsearch":"kind%3Acluster${cloudLabelFilter}"}&showrelated=${kind}`
     }
     const summary =
