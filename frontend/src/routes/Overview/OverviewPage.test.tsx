@@ -333,7 +333,7 @@ it('should render overview page with expected data', async () => {
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    expect(queryByText('Amazon')).toBeTruthy()
+    await waitFor(() => expect(queryByText('Amazon')).toBeTruthy())
 
     // Check Cluster compliance chart rendered
     expect(getAllByText('Cluster compliance')).toHaveLength(2)

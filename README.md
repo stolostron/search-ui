@@ -33,4 +33,4 @@ To do this (in chrome):
 4. Click on the https://localhost cookie option in the left nav.
 5. Delete all the existing cookies 
 
-Rebuild: 2021-07-22
+Rebuild: 2021-08-24
