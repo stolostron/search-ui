@@ -368,11 +368,11 @@ export default function OverviewPage() {
     }
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
-
     const cloudLabelFilter: string = selectedCloud === '' ? '' : `%20label%3acloud=${selectedCloud}`
-    function buildSummaryLinks(kind: string) {
+    function buildSummaryLinks(kind: string, localCluster?: boolean) {
+        const localClusterFilter: string = localCluster === true ? `%20cluster%3Alocal-cluster` : ''
         return selectedCloud === ''
-            ? `/search?filters={"textsearch":"kind%3A${kind}"}`
+            ? `/search?filters={"textsearch":"kind%3A${kind}${localClusterFilter}"}`
             : `/search?filters={"textsearch":"kind%3Acluster${cloudLabelFilter}"}&showrelated=${kind}`
     }
     const summary =
@@ -383,7 +383,7 @@ export default function OverviewPage() {
                       isPrimary: false,
                       description: 'Applications',
                       count: data?.overview?.applications?.length || 0,
-                      href: buildSummaryLinks('application'),
+                      href: buildSummaryLinks('application', true),
                   },
                   {
                       isPrimary: false,
