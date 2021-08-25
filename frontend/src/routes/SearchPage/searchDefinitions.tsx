@@ -6,6 +6,7 @@ import { Label, LabelGroup } from '@patternfly/react-core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { AcmLabels } from '@open-cluster-management/ui-components'
+import queryString from 'query-string'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 const searchDefinitions: any = {
@@ -1382,16 +1383,15 @@ export function CreateDetailsLink(item: any) {
             return <a href={`/multicloud/clusters/${item.name}/overview`}>{item.name}</a>
 
         case 'application':
-            if (item.apigroup === 'app.k8s.io' || item.apigroup === 'argoproj.io') {
+            const { apigroup, apiversion, applicationSet, cluster, name, namespace } = item
+            if (apigroup === 'app.k8s.io' || apigroup === 'argoproj.io') {
                 // only redirect to apps page if it is an ACM application
-
-                return (
-                    <a
-                        href={`/multicloud/applications/${item.namespace}/${item.name}?apiVersion=${item.apigroup}%2F${item.apiversion}&cluster=${item.cluster}`}
-                    >
-                        {item.name}
-                    </a>
-                )
+                const params = queryString.stringify({
+                    apiVersion: `${apigroup}/${apiversion}`,
+                    cluster: cluster === 'local-cluster' ? undefined : cluster,
+                    applicationset: applicationSet == null ? undefined : applicationSet,
+                })
+                return <a href={`/multicloud/applications/${namespace}/${name}?${params}`}>{name}</a>
             }
             return (
                 <Link
