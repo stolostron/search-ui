@@ -1384,7 +1384,6 @@ export function CreateDetailsLink(item: any) {
 
         case 'application':
             const { apigroup, apiversion, applicationSet, cluster, name, namespace } = item
-            debugger;
             if (apigroup === 'app.k8s.io' || apigroup === 'argoproj.io') {
                 // only redirect to apps page if it is an ACM application
                 const params = queryString.stringify({
