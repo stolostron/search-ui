@@ -1389,15 +1389,9 @@ export function CreateDetailsLink(item: any) {
                 const params = queryString.stringify({
                     apiVersion: `${apigroup}/${apiversion}`,
                     cluster: cluster === 'local-cluster' ? undefined : cluster,
-                    applicationset: applicationSet == null ? undefined : applicationSet
+                    applicationset: applicationSet == null ? undefined : applicationSet,
                 })
-                return (
-                    <a
-                        href={`/multicloud/applications/${namespace}/${name}?${params}`}
-                    >
-                        {name}
-                    </a>
-                )
+                return <a href={`/multicloud/applications/${namespace}/${name}?${params}`}>{name}</a>
             }
             return (
                 <Link
