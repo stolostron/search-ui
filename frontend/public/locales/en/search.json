@@ -28,6 +28,7 @@
     "search.modal.save.input.description.placeholder": "Optional: Enter a description for this search query",
     "search.modal.save.input.error.desc": "Enter search text",
     "search.modal.save.input.error.title": "Error",
+    "search.modal.save.name.conflict.error": "A saved search query is already using the name {{searchName}}. Please choose a different name.",
     "search.modal.save.input.name": "Search name (50 character limit)",
     "search.modal.save.input.name.placeholder": "Enter a name for this search query",
     "search.modal.save.text": "Name your search and provide a description so that you can access it in the future.",
