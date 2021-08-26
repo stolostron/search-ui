@@ -85,8 +85,9 @@ function RenderSearchBar(props: {
     setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
     queryErrors: boolean
     setQueryErrors: React.Dispatch<React.SetStateAction<boolean>>
+    savedSearchQueries: UserSearch[]
 }) {
-    const { searchQuery, setCurrentQuery, queryErrors, setQueryErrors } = props
+    const { searchQuery, setCurrentQuery, queryErrors, setQueryErrors, savedSearchQueries } = props
     const { t } = useTranslation(['search'])
     const [saveSearch, setSaveSearch] = useState<string>()
     const [open, toggleOpen] = useState<boolean>(false)
@@ -125,6 +126,7 @@ function RenderSearchBar(props: {
                     setSelectedSearch={props.setSelectedSearch}
                     saveSearch={saveSearch}
                     onClose={() => setSaveSearch(undefined)}
+                    savedSearchQueries={savedSearchQueries}
                 />
                 <SearchInfoModal isOpen={open} onClose={() => toggleOpen(false)} />
                 {HandleErrors(searchSchemaResults.error, searchCompleteResults.error)}
@@ -173,14 +175,10 @@ function RenderDropDownAndNewTab(props: {
     selectedSearch: string
     setSelectedSearch: React.Dispatch<React.SetStateAction<string>>
     setCurrentQuery: React.Dispatch<React.SetStateAction<string>>
+    savedSearchQueries: UserSearch[]
 }) {
     const classes = useStyles()
     const { t } = useTranslation(['search'])
-    const { data } = useSavedSearchesQuery({
-        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
-    })
-
-    const queries = data?.items ?? ([] as UserSearch[])
 
     const SelectQuery = (id: string) => {
         if (id === 'savedSearchesID') {
@@ -188,15 +186,15 @@ function RenderDropDownAndNewTab(props: {
             updateBrowserUrl('')
             props.setSelectedSearch('Saved searches')
         } else {
-            const selectedQuery = queries!.filter((query) => query!.id === id)
+            const selectedQuery = props.savedSearchQueries!.filter((query) => query!.id === id)
             props.setCurrentQuery(selectedQuery[0]!.searchText || '')
             updateBrowserUrl(selectedQuery[0]!.searchText || '')
             props.setSelectedSearch(selectedQuery[0]!.name || '')
         }
     }
 
-    const SavedSearchDropdown = (props: { selectedSearch: string }) => {
-        const dropdownItems: any[] = queries.map((query) => {
+    const SavedSearchDropdown = (props: { selectedSearch: string, savedSearchQueries: UserSearch[] }) => {
+        const dropdownItems: any[] = props.savedSearchQueries.map((query) => {
             return { id: query!.id, text: query!.name }
         })
 
@@ -221,7 +219,7 @@ function RenderDropDownAndNewTab(props: {
     return (
         <div className={classes.actionGroup}>
             <AcmActionGroup>
-                <SavedSearchDropdown selectedSearch={props.selectedSearch} />
+                <SavedSearchDropdown selectedSearch={props.selectedSearch} savedSearchQueries={props.savedSearchQueries} />
                 <AcmButton
                     href={'/search'}
                     variant={ButtonVariant.link}
@@ -252,6 +250,7 @@ export default function SearchPage() {
     const [currentQuery, setCurrentQuery] = useState(searchQuery)
     const [selectedSearch, setSelectedSearch] = useState('Saved searches')
     const [queryErrors, setQueryErrors] = useState(false)
+    const [queryMessages, setQueryMessages] = useState<any[]>([])
 
     useEffect(() => {
         setCurrentQuery(currentQuery)
@@ -264,11 +263,14 @@ export default function SearchPage() {
 
     const query = convertStringToQuery(searchQuery)
 
-    const [queryMessages, setQueryMessages] = useState<any[]>([])
+    const { data } = useSavedSearchesQuery({
+        client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
+    })
+    const savedSearchQueries = data?.items as UserSearch[] ?? ([] as UserSearch[])
+
     const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
-
     useEffect(() => {
         if (msgQuery.data?.messages) {
             setQueryMessages(msgQuery.data?.messages)
@@ -284,6 +286,7 @@ export default function SearchPage() {
                         selectedSearch={selectedSearch}
                         setSelectedSearch={setSelectedSearch}
                         setCurrentQuery={setCurrentQuery}
+                        savedSearchQueries={savedSearchQueries}
                     />
                 </div>
             }
@@ -295,6 +298,7 @@ export default function SearchPage() {
                     setCurrentQuery={setCurrentQuery}
                     queryErrors={queryErrors}
                     setQueryErrors={setQueryErrors}
+                    savedSearchQueries={savedSearchQueries}
                 />
                 {!queryErrors ? (
                     searchQuery !== '' && (query.keywords.length > 0 || query.filters.length > 0) ? (

@@ -85,6 +85,7 @@ function SearchResultCount(
                     setSelectedSearch={setSelectedSearch}
                     editSearch={editSearch}
                     onClose={() => setEditSearch(undefined)}
+                    savedSearchQueries={queries}
                 />
                 <ShareSearchModal shareSearch={shareSearch} onClose={() => setShareSearch(undefined)} />
                 <DeleteSearchModal deleteSearch={deleteSearch} onClose={() => setDeleteSearch(undefined)} />

@@ -12,8 +12,9 @@ import {
     AcmAlert,
 } from '@open-cluster-management/ui-components'
 import { useTranslation } from 'react-i18next'
-import { SavedSearchesDocument, useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
+import { SavedSearchesDocument, useSaveSearchMutation, UserSearch } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
+import SuggestQueryTemplates from '../SuggestedQueryTemplates'
 import { makeStyles } from '@material-ui/styles'
 
 type IState = {
@@ -43,6 +44,7 @@ export const SaveAndEditSearchModal = (props: any) => {
     const { searchName, searchDesc } = state
     const [saveSearchMutation, { error }] = useSaveSearchMutation({ client: searchClient })
     const [isError, setIsError] = useState<boolean>(false)
+    const [isNameConflict, setIsNameConflict] = useState<boolean>(false)
     const classes = useStyles()
 
     useEffect(() => {
@@ -63,6 +65,14 @@ export const SaveAndEditSearchModal = (props: any) => {
     }
 
     function onChange(value: string, e: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) {
+        const suggestedQueryTemplates = SuggestQueryTemplates?.templates ?? ([] as UserSearch[])
+        const allSavedQueryNames = [...suggestedQueryTemplates, ...props.savedSearchQueries].map((savedQuery: UserSearch) => savedQuery.name?.toLowerCase() || '')
+        if (allSavedQueryNames.includes(value.toLowerCase()) && (props.editSearch?.name.toLowerCase() !== value.toLowerCase())) {
+            setIsNameConflict(true)
+        } else if (isNameConflict) {
+            setIsNameConflict(false)
+        }
+    
         dispatch({ field: e.currentTarget.name, value: value })
     }
 
@@ -91,7 +101,7 @@ export const SaveAndEditSearchModal = (props: any) => {
     }
 
     const isSubmitDisabled = () => {
-        return state.searchName === '' || (!props.editSearch && props.saveSearch === '')
+        return state.searchName === '' || (!props.editSearch && props.saveSearch === '') || isNameConflict
     }
 
     return (
@@ -126,6 +136,7 @@ export const SaveAndEditSearchModal = (props: any) => {
                     />
                 )}
                 {isError && <AcmAlert noClose variant={'danger'} title={error!.message} />}
+                {isNameConflict && <AcmAlert isInline noClose variant={'warning'} title={t('search.modal.save.name.conflict.error', { searchName })} />}
                 <AcmForm>
                     <AcmTextInput
                         id="add-query-name"
