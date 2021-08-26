@@ -50,11 +50,17 @@ export const SaveAndEditSearchModal = (props: any) => {
     useEffect(() => {
         dispatch({ field: 'searchName', value: props.editSearch?.name ?? '' })
         dispatch({ field: 'searchDesc', value: props.editSearch?.description ?? '' })
+        return () => {
+            setIsNameConflict(false)
+        }
     }, [props.editSearch])
 
     useEffect(() => {
         dispatch({ field: 'searchName', value: '' })
         dispatch({ field: 'searchDesc', value: '' })
+        return () => {
+            setIsNameConflict(false)
+        }
     }, [props.saveSearch])
 
     function reducer(state: IState, { field, value }: ActionType) {
