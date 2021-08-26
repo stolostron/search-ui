@@ -193,7 +193,7 @@ function RenderDropDownAndNewTab(props: {
         }
     }
 
-    const SavedSearchDropdown = (props: { selectedSearch: string, savedSearchQueries: UserSearch[] }) => {
+    const SavedSearchDropdown = (props: { selectedSearch: string; savedSearchQueries: UserSearch[] }) => {
         const dropdownItems: any[] = props.savedSearchQueries.map((query) => {
             return { id: query!.id, text: query!.name }
         })
@@ -219,7 +219,10 @@ function RenderDropDownAndNewTab(props: {
     return (
         <div className={classes.actionGroup}>
             <AcmActionGroup>
-                <SavedSearchDropdown selectedSearch={props.selectedSearch} savedSearchQueries={props.savedSearchQueries} />
+                <SavedSearchDropdown
+                    selectedSearch={props.selectedSearch}
+                    savedSearchQueries={props.savedSearchQueries}
+                />
                 <AcmButton
                     href={'/search'}
                     variant={ButtonVariant.link}
@@ -266,7 +269,7 @@ export default function SearchPage() {
     const { data } = useSavedSearchesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
     })
-    const savedSearchQueries = data?.items as UserSearch[] ?? ([] as UserSearch[])
+    const savedSearchQueries = (data?.items as UserSearch[]) ?? ([] as UserSearch[])
 
     const msgQuery = useGetMessagesQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : searchClient,
