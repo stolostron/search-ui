@@ -32,26 +32,27 @@ import { ClusterManagementAddOn } from '../../lib/resource-request'
 import _ from 'lodash'
 
 export function mapProviderFromLabel(provider: string): Provider {
-    switch (provider) {
-        case 'Amazon':
+    switch (provider.toLowerCase()) {
+        case 'amazon':
             return Provider.aws
-        case 'Azure':
+        case 'azure':
             return Provider.azure
-        case 'Baremetal':
+        case 'baremetal':
             return Provider.baremetal
-        case 'Google':
+        case 'google':
             return Provider.gcp
-        case 'IBM':
+        case 'ibm':
             return Provider.ibm
-        case 'IBMPowerPlatform':
+        case 'ibmpowerplatform':
             return Provider.ibmpower
-        case 'IBMZPlatform':
+        case 'ibmzplatform':
             return Provider.ibmz
-        case 'RedHat':
+        case 'redhat':
             return Provider.redhatcloud
-        case 'VMware':
+        case 'vmware':
+        case 'vsphere':
             return Provider.vmware
-        case 'OpenStack':
+        case 'openstack':
             return Provider.openstack
         default:
             return Provider.other
@@ -62,14 +63,23 @@ function getClusterSummary(clusters: any, selectedCloud: string, setSelectedClou
     const clusterSummary = clusters.reduce(
         (prev: any, curr: any, index: number) => {
             // Data for Providers section.
-            const cloud = curr.metadata?.labels?.cloud || 'other'
-            const provider = prev.providers.find((p: any) => p.provider === mapProviderFromLabel(cloud))
+            const cloudLabel = curr.metadata?.labels?.cloud || ''
+            const cloud = mapProviderFromLabel(cloudLabel)
+            const provider = prev.providers.find((p: any) => p.provider === cloud)
             if (provider) {
                 provider.clusterCount = provider.clusterCount + 1
+                if (cloudLabel) {
+                    provider.cloudLabels.add(cloudLabel)
+                }
             } else {
+                const cloudLabels = new Set()
+                if (cloudLabel) {
+                    cloudLabels.add(cloudLabel)
+                }
                 prev.providers.push({
-                    provider: mapProviderFromLabel(cloud),
+                    provider: cloud,
                     clusterCount: 1,
+                    cloudLabels,
                     isSelected: selectedCloud === cloud,
                     onClick: () => {
                         // Clicking on the selected cloud card will remove the selection.
@@ -368,7 +378,10 @@ export default function OverviewPage() {
     }
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
-    const cloudLabelFilter: string = selectedCloud === '' ? '' : `%20label%3acloud=${selectedCloud}`
+    const provider = providers.find((p: any) => p.provider === selectedCloud)
+    const cloudLabelFilter: string = selectedCloud === ''
+        ? ''
+        : `%20label%3a${Array.from(provider.cloudLabels).map(n => `cloud=${n}`).join(',')}`
     function buildSummaryLinks(kind: string, localCluster?: boolean) {
         const localClusterFilter: string = localCluster === true ? `%20cluster%3Alocal-cluster` : ''
         return selectedCloud === ''
