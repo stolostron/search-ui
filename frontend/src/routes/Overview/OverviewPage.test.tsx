@@ -22,6 +22,8 @@ it('should responsed with correct value for mapProviderFromLabel function', () =
     expect(mapProviderFromLabel('IBMZPlatform')).toEqual('ibmz')
     expect(mapProviderFromLabel('RedHat')).toEqual('rhocm')
     expect(mapProviderFromLabel('VMware')).toEqual('vmw')
+    expect(mapProviderFromLabel('VSphere')).toEqual('vmw')
+    expect(mapProviderFromLabel('vSphere')).toEqual('vmw')
     expect(mapProviderFromLabel('other')).toEqual('other')
 })
 
