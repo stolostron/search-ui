@@ -379,9 +379,12 @@ export default function OverviewPage() {
 
     const { kubernetesTypes, regions, ready, offline, providers } = summaryData
     const provider = providers.find((p: any) => p.provider === selectedCloud)
-    const cloudLabelFilter: string = selectedCloud === ''
-        ? ''
-        : `%20label%3a${Array.from(provider.cloudLabels).map(n => `cloud=${n}`).join(',')}`
+    const cloudLabelFilter: string =
+        selectedCloud === ''
+            ? ''
+            : `%20label%3a${Array.from(provider.cloudLabels)
+                  .map((n) => `cloud=${n}`)
+                  .join(',')}`
     function buildSummaryLinks(kind: string, localCluster?: boolean) {
         const localClusterFilter: string = localCluster === true ? `%20cluster%3Alocal-cluster` : ''
         return selectedCloud === ''
