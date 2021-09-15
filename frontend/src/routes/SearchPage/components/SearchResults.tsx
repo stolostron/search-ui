@@ -110,14 +110,12 @@ function RenderRelatedTables(
                                 searchDefinitions['genericresource'].columns
                             )}
                             keyFn={(item: any) => item._uid.toString()}
-                            tableActions={[]}
                             rowActions={GetRowActions(
                                 kind,
                                 t('search.results.delete.resource', { resourceKind: kind }),
                                 currentQuery,
                                 setDeleteResource
                             )}
-                            bulkActions={[]}
                         />
                     </AcmExpandableSection>
                 </AcmPageCard>
@@ -267,14 +265,12 @@ function RenderSearchTables(
                                     searchDefinitions['genericresource'].columns
                                 )}
                                 keyFn={(item: any) => item._uid.toString()}
-                                tableActions={[]}
                                 rowActions={GetRowActions(
                                     kind,
                                     t('search.results.delete.resource', { resourceKind: kind }),
                                     currentQuery,
                                     setDeleteResource
                                 )}
-                                bulkActions={[]}
                             />
                         </AcmExpandableSection>
                     </AcmPageCard>
