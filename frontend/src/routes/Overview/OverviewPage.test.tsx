@@ -22,6 +22,8 @@ it('should responsed with correct value for mapProviderFromLabel function', () =
     expect(mapProviderFromLabel('IBMZPlatform')).toEqual('ibmz')
     expect(mapProviderFromLabel('RedHat')).toEqual('rhocm')
     expect(mapProviderFromLabel('VMware')).toEqual('vmw')
+    expect(mapProviderFromLabel('VSphere')).toEqual('vmw')
+    expect(mapProviderFromLabel('vSphere')).toEqual('vmw')
     expect(mapProviderFromLabel('other')).toEqual('other')
 })
 
@@ -333,7 +335,7 @@ it('should render overview page with expected data', async () => {
     // This wait pauses till apollo query is returning data
     await wait()
     // Test that the component has rendered correctly with an error
-    expect(queryByText('Amazon')).toBeTruthy()
+    await waitFor(() => expect(queryByText('Amazon')).toBeTruthy())
 
     // Check Cluster compliance chart rendered
     expect(getAllByText('Cluster compliance')).toHaveLength(2)

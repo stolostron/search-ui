@@ -16,9 +16,9 @@
         "generate-certs": "mkdir -p certs && openssl req -subj '/C=US' -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout certs/tls.key -out certs/tls.crt"
     },
     "dependencies": {
-        "@kubernetes/client-node": "^0.14.3",
+        "@kubernetes/client-node": "^0.15.1",
         "@types/yamljs": "^0.2.31",
-        "axios": "^0.21.1",
+        "axios": "^0.21.4",
         "dotenv": "^8.6.0",
         "fastify": "^3.18.0",
         "fastify-compress": "^3.6.0",
@@ -50,14 +50,14 @@
         "eslint-config-prettier": "^7.2.0",
         "eslint-plugin-prettier": "^3.4.0",
         "husky": "^5.2.0",
-        "jest": "^26.6.3",
+        "jest": "^27.0.6",
         "jest-sonar-reporter": "^2.0.0",
         "nock": "^13.1.0",
         "pino-zen": "^1.0.20",
         "prettier": "^2.3.1",
-        "ts-jest": "^26.5.6",
+        "ts-jest": "^27.0.5",
         "ts-node": "^9.1.1",
-        "ts-node-dev": "^1.1.6",
+        "ts-node-dev": "^1.1.8",
         "typescript": "^4.3.2"
     },
     "husky": {
