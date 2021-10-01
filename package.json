@@ -28,13 +28,13 @@
         "frontend:update": "cd frontend && npm run update"
     },
     "dependencies": {
-        "@kubernetes/client-node": "^0.14.3",
+        "@kubernetes/client-node": "^0.15.1",
         "@material-ui/styles": "^4.11.4",
         "concurrently": "^6.2.2",
         "typescript": "^4.3.5"
     },
     "devDependencies": {
         "cross-env": "^7.0.3",
-        "serve": "^11.3.2"
+        "serve": "^12.0.0"
     }
 }
