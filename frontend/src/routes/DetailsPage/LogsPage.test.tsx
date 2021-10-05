@@ -9,6 +9,10 @@ import { wait } from '../../lib/test-helper'
 import LogsPage from './LogsPage'
 import { GetLogsDocument } from '../../console-sdk/console-sdk'
 
+beforeEach(() => {
+    sessionStorage.clear()
+})
+
 it('should render logs page with data and successfully switch containers', async () => {
     const mocks = [
         {
