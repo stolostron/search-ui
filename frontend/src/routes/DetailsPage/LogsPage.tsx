@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { PageSection } from '@patternfly/react-core'
 import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
 import { useTranslation } from 'react-i18next'
@@ -18,7 +18,15 @@ export default function LogsPage(props: {
 }) {
     const { getResource, getResourceError, containers, cluster, namespace, name } = props
     const { t } = useTranslation(['details'])
-    const [container, setContainer] = useState<string>(containers[0] || '')
+    const [container, setContainer] = useState<string>(sessionStorage.getItem(`${name}-${cluster}-container`) || '')
+
+    useEffect(() => {
+        if (containers.length > 0 && sessionStorage.getItem(`${name}-${cluster}-container`) === null) {
+            sessionStorage.setItem(`${name}-${cluster}-container`, containers[0])
+            setContainer(containers[0])
+        }
+    }, [containers, cluster, name])
+
     const { data, loading, error } = useGetLogsQuery({
         client: process.env.NODE_ENV === 'test' ? undefined : consoleClient,
         skip: containers.length === 0 || !container,
@@ -81,7 +89,10 @@ export default function LogsPage(props: {
                 cluster={cluster}
                 namespace={namespace}
                 initialContainer={container}
-                onSwitchContainer={(newContainer: string | undefined) => setContainer(newContainer || container)}
+                onSwitchContainer={(newContainer: string | undefined) => {
+                    setContainer(newContainer || container)
+                    sessionStorage.setItem(`${name}-${cluster}-container`, newContainer || container)
+                }}
                 containers={containers}
                 logs={data?.logs || ''}
             />
