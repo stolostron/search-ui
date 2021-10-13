@@ -360,7 +360,7 @@ describe('SearchResults Page', () => {
                                                 kind: 'node',
                                                 name: 'testNode',
                                                 osImage: 'Red Hat Enterprise Linux CoreOS 45.82.202008290529-0 (Ootpa)',
-                                                role: 'master',
+                                                role: 'main',
                                                 _uid: 'testing-search-related-results-node',
                                             },
                                         ],
