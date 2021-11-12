@@ -1,6 +1,7 @@
 # Search UI
 
 Open Cluster Management - Search UI
+**As of RHACM 2.5 the search-ui will be deprecated. The Search-ui pages will be located in the [console repo](https://github.com/open-cluster-management/console)*
 
 [![Build Status](https://travis-ci.com/open-cluster-management/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/open-cluster-management/search-ui)
 
