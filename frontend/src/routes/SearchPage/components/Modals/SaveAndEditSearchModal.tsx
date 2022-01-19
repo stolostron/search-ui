@@ -3,14 +3,7 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useReducer, useEffect, useState } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
-import {
-    AcmModal,
-    AcmButton,
-    AcmForm,
-    AcmTextInput,
-    AcmTextArea,
-    AcmAlert,
-} from '@stolostron/ui-components'
+import { AcmModal, AcmButton, AcmForm, AcmTextInput, AcmTextArea, AcmAlert } from '@stolostron/ui-components'
 import { useTranslation } from 'react-i18next'
 import { SavedSearchesDocument, useSaveSearchMutation } from '../../../../search-sdk/search-sdk'
 import { searchClient } from '../../../../search-sdk/search-client'
