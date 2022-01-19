@@ -1,13 +1,7 @@
 import React from 'react'
 import { Switch, Route, Link, useLocation, useHistory } from 'react-router-dom'
 import _ from 'lodash'
-import {
-    AcmButton,
-    AcmPage,
-    AcmPageHeader,
-    AcmSecondaryNav,
-    AcmSecondaryNavItem,
-} from '@stolostron/ui-components'
+import { AcmButton, AcmPage, AcmPageHeader, AcmSecondaryNav, AcmSecondaryNavItem } from '@stolostron/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
 import { useTranslation } from 'react-i18next'
