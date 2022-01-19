@@ -11,7 +11,7 @@ import {
     AcmTile,
     AcmExpandableWrapper,
     AcmLoadingPage,
-} from '@open-cluster-management/ui-components'
+} from '@stolostron/ui-components'
 import { useTranslation } from 'react-i18next'
 import { searchClient } from '../../../search-sdk/search-client'
 import {
