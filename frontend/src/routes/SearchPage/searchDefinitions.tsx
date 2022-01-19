@@ -5,7 +5,7 @@ import _ from 'lodash'
 import { Label, LabelGroup } from '@patternfly/react-core'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { AcmLabels } from '@open-cluster-management/ui-components'
+import { AcmLabels } from '@stolostron/ui-components'
 
 // eslint-disable-next-line import/no-anonymous-default-export
 const searchDefinitions: any = {
@@ -1458,7 +1458,7 @@ export function CreateApplicationLink(item: any) {
         const link = `multicloud/applications/${item.namespace}/${item.name}?apiVersion=${apiversion}`
         return (
             <a target="_blank" rel="noopener noreferrer" href={link}>
-                {/* TODO Not translating - caused issue: https://github.com/open-cluster-management/backlog/issues/9184 */}
+                {/* TODO Not translating - caused issue: https://github.com/stolostron/backlog/issues/9184 */}
                 {'Launch health view'}
             </a>
         )
@@ -1470,7 +1470,7 @@ export function CreateExternalLink(item: any) {
     if (item.consoleURL) {
         return (
             <a target="_blank" rel="noopener noreferrer" href={`${item.consoleURL}`}>
-                {/* TODO Not translating - caused issue: https://github.com/open-cluster-management/backlog/issues/9184 */}
+                {/* TODO Not translating - caused issue: https://github.com/stolostron/backlog/issues/9184 */}
                 {'Launch'}
             </a>
         )

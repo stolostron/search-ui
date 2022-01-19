@@ -2,7 +2,7 @@
 // Copyright Contributors to the Open Cluster Management project
 import { useState, useEffect } from 'react'
 import { PageSection } from '@patternfly/react-core'
-import { AcmAlert, AcmButton, AcmLoadingPage } from '@open-cluster-management/ui-components'
+import { AcmAlert, AcmButton, AcmLoadingPage } from '@stolostron/ui-components'
 import { ApolloError } from '@apollo/client'
 import { makeStyles } from '@material-ui/styles'
 import jsYaml from 'js-yaml'

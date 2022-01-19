@@ -2,7 +2,7 @@
 // Copyright Contributors to the Open Cluster Management project
 import { useState } from 'react'
 import { PageSection } from '@patternfly/react-core'
-import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@open-cluster-management/ui-components'
+import { AcmAlert, AcmLogWindow, AcmLoadingPage } from '@stolostron/ui-components'
 import { useTranslation } from 'react-i18next'
 import { ApolloError } from '@apollo/client'
 import { useGetLogsQuery, Query } from '../../console-sdk/console-sdk'
