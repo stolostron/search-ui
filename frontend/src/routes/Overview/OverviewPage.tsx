@@ -15,7 +15,7 @@ import {
     AcmLaunchLink,
     AcmAutoRefreshSelect,
     AcmRefreshTime,
-} from '@open-cluster-management/ui-components'
+} from '@stolostron/ui-components'
 import { ButtonVariant, PageSection } from '@patternfly/react-core'
 import { PlusIcon } from '@patternfly/react-icons'
 import { useTranslation } from 'react-i18next'
@@ -324,7 +324,7 @@ export default function OverviewPage() {
               ]
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
-    // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+    // Issue: https://github.com/stolostron/backlog/issues/7087
     const urlClusterFilter: string =
         selectedClusterNames.length > 0 ? `%20cluster%3A${selectedClusterNames.join(',')}` : ''
     const podData =
@@ -351,7 +351,7 @@ export default function OverviewPage() {
               ]
 
     // TODO: Breaks url if length of selectedClustersFilter is too big.
-    // Issue: https://github.com/open-cluster-management/backlog/issues/7087
+    // Issue: https://github.com/stolostron/backlog/issues/7087
     function buildClusterComplianceLinks(clusterNames: Array<string> = []): string {
         return `/search?filters={"textsearch":"kind:cluster${
             clusterNames.length > 0 ? `%20name:${clusterNames.join(',')}` : ''

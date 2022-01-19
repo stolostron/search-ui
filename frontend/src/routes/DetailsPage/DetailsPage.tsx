@@ -7,7 +7,7 @@ import {
     AcmPageHeader,
     AcmSecondaryNav,
     AcmSecondaryNavItem,
-} from '@open-cluster-management/ui-components'
+} from '@stolostron/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { makeStyles } from '@material-ui/styles'
 import { useTranslation } from 'react-i18next'

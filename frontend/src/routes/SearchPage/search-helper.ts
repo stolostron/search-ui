@@ -1,4 +1,4 @@
-import { DropdownSuggestionsProps } from '@open-cluster-management/ui-components'
+import { DropdownSuggestionsProps } from '@stolostron/ui-components'
 
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 const dateValues = ['hour', 'day', 'week', 'month', 'year']

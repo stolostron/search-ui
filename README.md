@@ -2,7 +2,7 @@
 
 Red Hat - Advanced Cluster Management for Kubernetes - Search UI
 
-[![Build Status](https://travis-ci.com/open-cluster-management/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/open-cluster-management/search-ui)
+[![Build Status](https://travis-ci.com/stolostron/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/stolostron/search-ui)
 
 ## Development
 
