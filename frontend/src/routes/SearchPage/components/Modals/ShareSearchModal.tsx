@@ -3,7 +3,7 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
 import { ModalVariant } from '@patternfly/react-core'
-import { AcmCodeSnippet, AcmModal } from '@open-cluster-management/ui-components'
+import { AcmCodeSnippet, AcmModal } from '@stolostron/ui-components'
 import { useTranslation } from 'react-i18next'
 
 export const ShareSearchModal = (props: any) => {
