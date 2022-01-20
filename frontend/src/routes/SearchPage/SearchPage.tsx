@@ -9,7 +9,7 @@ import {
     AcmScrollable,
     AcmSearchbar,
     AcmActionGroup,
-} from '@open-cluster-management/ui-components'
+} from '@stolostron/ui-components'
 import { PageSection } from '@patternfly/react-core'
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment, useState, useEffect } from 'react'

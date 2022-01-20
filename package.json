@@ -1,5 +1,5 @@
 {
-    "name": "@open-cluster-management/search-ui",
+    "name": "@stolostron/search-ui",
     "version": "0.0.1",
     "license": "SEE LICENSE IN LICENSE",
     "scripts": {
