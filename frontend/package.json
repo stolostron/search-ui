@@ -1,5 +1,5 @@
 {
-    "name": "@open-cluster-management/search-ui-frontend",
+    "name": "@stolostron/search-ui-frontend",
     "version": "2.4.0",
     "private": true,
     "homepage": "/search/",
@@ -21,8 +21,8 @@
     },
     "dependencies": {
         "@apollo/client": "^3.4.13",
-        "@open-cluster-management/ui-components": "^1.25.2",
         "@patternfly/react-core": "^4.157.3",
+        "@stolostron/ui-components": "^1.25.4",
         "@types/node": "^16.9.6",
         "@types/react": "^17.0.24",
         "@types/react-dom": "^17.0.9",

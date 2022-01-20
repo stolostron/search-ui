@@ -3,7 +3,7 @@
 import '@patternfly/react-core/dist/styles/base.css'
 import React, { Fragment } from 'react'
 import { ButtonVariant, ModalVariant } from '@patternfly/react-core'
-import { AcmAlert, AcmModal, AcmButton } from '@open-cluster-management/ui-components'
+import { AcmAlert, AcmModal, AcmButton } from '@stolostron/ui-components'
 import { useTranslation } from 'react-i18next'
 import {
     SearchResultItemsDocument,
