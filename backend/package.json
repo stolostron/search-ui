@@ -1,5 +1,5 @@
 {
-    "name": "@open-cluster-management/search-ui-backend",
+    "name": "@stolostron/search-ui-backend",
     "version": "2.3.0",
     "private": true,
     "scripts": {

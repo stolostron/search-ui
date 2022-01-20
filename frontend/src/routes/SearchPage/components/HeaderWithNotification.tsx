@@ -3,7 +3,7 @@
 import React from 'react'
 import '@patternfly/react-core/dist/styles/base.css'
 import { useTranslation } from 'react-i18next'
-import { AcmPageHeader, AcmInlineStatus, StatusType } from '@open-cluster-management/ui-components'
+import { AcmPageHeader, AcmInlineStatus, StatusType } from '@stolostron/ui-components'
 import { Message } from '../../../search-sdk/search-sdk'
 import { Card, CardBody } from '@patternfly/react-core'
 
