@@ -2,7 +2,7 @@
 // Copyright Contributors to the Open Cluster Management project
 /* istanbul ignore file */
 
-import { AcmHeader } from '@open-cluster-management/ui-components'
+import { AcmHeader } from '@stolostron/ui-components'
 import '@patternfly/react-core/dist/styles/base.css'
 import { lazy } from 'react'
 import { useRecoilState } from 'recoil'

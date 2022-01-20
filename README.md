@@ -1,10 +1,10 @@
 # Search UI
 
-Open Cluster Management - Search UI
+stolostron - Search UI
 
-# As of RHACM 2.5 the search-ui will be deprecated. The Search-ui pages will be located in the [console repo](https://github.com/open-cluster-management/console)
+# As of RHACM 2.5 the search-ui will be deprecated. The Search-ui pages will be located in the [console repo](https://github.com/stolostron/console)
 
-[![Build Status](https://travis-ci.com/open-cluster-management/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/open-cluster-management/search-ui)
+[![Build Status](https://travis-ci.com/stolostron/search-ui.svg?token=HNunxniixat5Aty1fpye&branch=main)](https://travis-ci.com/stolostron/search-ui)
 
 ## Development
 

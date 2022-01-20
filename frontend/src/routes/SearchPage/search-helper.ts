@@ -1,6 +1,6 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import { DropdownSuggestionsProps } from '@open-cluster-management/ui-components'
+import { DropdownSuggestionsProps } from '@stolostron/ui-components'
 
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 const dateValues = ['hour', 'day', 'week', 'month', 'year']
