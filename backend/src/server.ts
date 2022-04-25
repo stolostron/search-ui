@@ -97,7 +97,6 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     function csrfProtection(req: FastifyRequest, res: FastifyReply, done: () => void) {
-        logger.info('Response: ', res)
         process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
     }
 
@@ -109,6 +108,7 @@ export async function startServer(): Promise<FastifyInstance> {
         http2: false,
         preHandler: csrfProtection,
         onTimeout: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            logger.error({ msg: '!!! Search API proxy timed out.!!!' })
             logger.error('!!! Search API proxy timed out.!!!')
             done()
         },
@@ -121,6 +121,11 @@ export async function startServer(): Promise<FastifyInstance> {
         rewritePrefix: '/hcmuiapi/graphql',
         http2: false,
         preHandler: csrfProtection,
+        onTimeout: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
+            logger.error({ msg: '!!! Console API proxy timed out.!!!' })
+            logger.error('!!! Console API proxy timed out.!!!')
+            done()
+        },
     })
     // Proxy to CONSOLE-API (from /resources)
     await fastify.register(fastifyHttpProxy, {
@@ -147,6 +152,7 @@ export async function startServer(): Promise<FastifyInstance> {
                 break
             default:
                 {
+                    logger.info({ msg: '!!! At onResponse...' })
                     const url = getUrlPath(request.url)
                     let msg: { [key: string]: any }
 
@@ -253,7 +259,7 @@ export async function startServer(): Promise<FastifyInstance> {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const openshift = (this as unknown as any).openshift as OAuth2Namespace
             const token = await openshift.getAccessTokenFromAuthorizationCodeFlow(request)
-            logger.debug({ msg: 'search/login/callback token', token: token.access_token })
+            logger.info({ msg: 'search/login/callback token', token: token.access_token })
             return reply
                 .setCookie('acm-access-token-cookie', `${token.access_token}`, {
                     path: '/',
