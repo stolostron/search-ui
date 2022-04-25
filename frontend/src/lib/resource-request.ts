@@ -82,8 +82,8 @@ export function validateSessionToken() {
     // This is an empty get request to be used to validate the session and token and redirect to login if invalid
     const url = baseUrl + apiProxyUrl
     return axiosRequest({
-        ...{ url, method: 'GET', validateStatus: (status) => true },
-        ...{ retries: 1 }, // JORGE: changed from 2.
+        ...{ url, method: 'GET', validateStatus: (status) => true, timeout: 4000 },
+        ...{ retries: 3 }, // JORGE: changed from 2.
     })
 }
 
