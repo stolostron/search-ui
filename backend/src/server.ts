@@ -114,7 +114,7 @@ export async function startServer(): Promise<FastifyInstance> {
         },
         http: {
             requestOptions: {
-                timeout: 5000, // timeout in msecs, defaults to 10000 (10 seconds)
+                timeout: 35000, // timeout in msecs, defaults to 10000 (10 seconds)
             },
         },
     })
