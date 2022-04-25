@@ -97,6 +97,7 @@ export async function startServer(): Promise<FastifyInstance> {
     })
 
     function csrfProtection(req: FastifyRequest, res: FastifyReply, done: () => void) {
+        logger.info('Response: ', res)
         process.env.NODE_ENV !== 'production' ? done() : fastify.csrfProtection(req, res, done)
     }
 
@@ -183,6 +184,7 @@ export async function startServer(): Promise<FastifyInstance> {
                     } else if (reply.statusCode < 500) {
                         logger.warn(msg)
                     } else {
+                        logger.error(`!!! responded with: ${reply.statusCode}`)
                         logger.error(msg)
                     }
                 }
