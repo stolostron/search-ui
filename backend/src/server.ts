@@ -111,7 +111,7 @@ export async function startServer(): Promise<FastifyInstance> {
         onTimeout: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
             logger.error('!!! Search API proxy timed out.!!!')
             done()
-        }
+        },
     })
 
     // Proxy to CONSOLE-API
