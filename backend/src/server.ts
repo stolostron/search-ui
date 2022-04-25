@@ -113,9 +113,9 @@ export async function startServer(): Promise<FastifyInstance> {
             done()
         },
         http: {
-            requestOptions: { // pass in any options from https://nodejs.org/api/http.html#http_http_request_options_callback
+            requestOptions: {
                 timeout: 5000, // timeout in msecs, defaults to 10000 (10 seconds)
-          },
+            },
         },
     })
 
