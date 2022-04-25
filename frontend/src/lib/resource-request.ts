@@ -131,7 +131,7 @@ function axiosRequest<ResultType>(config: AxiosRequestConfig & IRequestOptions):
                         switch ((err as any)?.code) {
                             case 'ETIMEDOUT':
                                 console.log('!!!! Request timeout, throwing error!')
-                                throw new ResourceError('Request timeout.', ResourceErrorCode.Timeout)
+                                throw new ResourceError('Request timeout. !!!!!', ResourceErrorCode.Timeout)
                             case 'ECONNRESET':
                                 throw new ResourceError('Request connection reset.', ResourceErrorCode.ConnectionReset)
                             default:
