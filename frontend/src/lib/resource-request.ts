@@ -83,7 +83,7 @@ export function validateSessionToken() {
     const url = baseUrl + apiProxyUrl
     return axiosRequest({
         ...{ url, method: 'GET', validateStatus: (status) => true },
-        ...{ retries: 2 },
+        ...{ retries: 1 }, // JORGE: changed from 2.
     })
 }
 
@@ -130,6 +130,7 @@ function axiosRequest<ResultType>(config: AxiosRequestConfig & IRequestOptions):
                     if (typeof (err as any)?.code === 'string') {
                         switch ((err as any)?.code) {
                             case 'ETIMEDOUT':
+                                console.log('!!!! Request timeout, throwing error!')
                                 throw new ResourceError('Request timeout.', ResourceErrorCode.Timeout)
                             case 'ECONNRESET':
                                 throw new ResourceError('Request connection reset.', ResourceErrorCode.ConnectionReset)
