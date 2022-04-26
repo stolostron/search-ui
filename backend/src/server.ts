@@ -106,7 +106,7 @@ export async function startServer(): Promise<FastifyInstance> {
         prefix: '/searchapi/graphql',
         rewritePrefix: '/searchapi/graphql',
         http2: false,
-        preHandler: csrfProtection,
+        // preHandler: csrfProtection,
         onTimeout: (req: FastifyRequest, res: FastifyReply, done: () => void) => {
             logger.error({ msg: '!!! Search API proxy timed out.!!!' })
             logger.error('!!! Search API proxy timed out.!!!')
