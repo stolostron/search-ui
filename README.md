@@ -34,3 +34,6 @@ To do this (in chrome):
 3. Go to the application tab
 4. Click on the https://localhost cookie option in the left nav.
 5. Delete all the existing cookies 
+
+
+Rebuild: 2022-04-28
