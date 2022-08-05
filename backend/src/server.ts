@@ -2,7 +2,6 @@
 // Copyright Contributors to the Open Cluster Management project
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import helmet from 'fastify-helmet'
 import fastifyCookie from '@fastify/cookie'
 import fastifyCors from '@fastify/cors'
 import fastifyCsrf from '@fastify/csrf-protection'
@@ -60,7 +59,7 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCsrf)
     await fastify.register(helmet, { global: true })
 
-    const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
+    const serveIndexHtml = async (_request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
         await reply
             .code(200)
@@ -84,15 +83,15 @@ export async function startServer(): Promise<FastifyInstance> {
     fastify.get('/overview', serveIndexHtml)
     fastify.get('/resources', serveIndexHtml)
 
-    fastify.get('/ping', async (req, res) => {
+    fastify.get('/ping', async (_req, res) => {
         await res.code(200).send()
     })
 
-    fastify.get('/livenessProbe', async (req, res) => {
+    fastify.get('/livenessProbe', async (_req, res) => {
         await res.code(200).send()
     })
 
-    fastify.get('/readinessProbe', async (req, res) => {
+    fastify.get('/readinessProbe', async (_req, res) => {
         await res.code(200).send()
     })
 
@@ -134,7 +133,7 @@ export async function startServer(): Promise<FastifyInstance> {
         preHandler: csrfProtection,
     })
 
-    fastify.addHook('onRequest', (request, reply, done) => {
+    fastify.addHook('onRequest', (request, _reply, done) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         ;(request as any).start = process.hrtime()
         done()
@@ -294,7 +293,7 @@ export async function startServer(): Promise<FastifyInstance> {
         maxAge: 60 * 60 * 1000,
     })
 
-    fastify.addHook('onClose', (instance, done: () => void) => {
+    fastify.addHook('onClose', (_instance, done: () => void) => {
         logger.debug('server closed')
         setTimeout(function () {
             logger.error('shutdown timeout')
@@ -304,7 +303,7 @@ export async function startServer(): Promise<FastifyInstance> {
         done()
     })
 
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, _reject) => {
         fastify.listen(
             process.env.PORT ? Number(process.env.PORT) : undefined,
             '::', // Defaults to IPv6 and falls back to IPv4
@@ -356,12 +355,12 @@ export async function startServer(): Promise<FastifyInstance> {
         void fastify.close()
     })
 
-    process.on('multipleResolves', (type, promise, reason) => {
+    process.on('multipleResolves', (type, _promise, _reason) => {
         logger.error({ msg: 'process multipleResolves', type })
         void fastify.close()
     })
 
-    process.on('unhandledRejection', (reason, promise) => {
+    process.on('unhandledRejection', (reason, _promise) => {
         logger.error({ msg: 'process unhandledRejection', reason })
         void fastify.close()
     })
