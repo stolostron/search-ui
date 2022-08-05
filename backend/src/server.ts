@@ -2,14 +2,16 @@
 // Copyright Contributors to the Open Cluster Management project
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Axios, { AxiosResponse } from 'axios'
+// import helmet from 'fastify-helmet'
+import fastifyCookie from '@fastify/cookie'
+import fastifyCors from '@fastify/cors'
+import fastifyCsrf from '@fastify/csrf-protection'
+import helmet from '@fastify/helmet'
+import fastifyHttpProxy from '@fastify/http-proxy'
+import { OAuth2Namespace } from '@fastify/oauth2'
+import fastifyStatic from '@fastify/static'
+import Axios from 'axios'
 import { fastify as Fastify, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
-import fastifyCookie from 'fastify-cookie'
-import fastifyCors from 'fastify-cors'
-import fastifyCsrf from 'fastify-csrf'
-import { fastifyOauth2, OAuth2Namespace } from 'fastify-oauth2'
-import fastifyReplyFrom from 'fastify-reply-from'
-import fastifyStatic from 'fastify-static'
 import { readFile } from 'fs'
 import { STATUS_CODES } from 'http'
 import * as https from 'https'
@@ -19,13 +21,7 @@ import { URL } from 'url'
 import { promisify } from 'util'
 import { logError, logger } from './lib/logger'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-var-requires
-const fastifyHttpProxy = require('fastify-http-proxy') // import isn't working for this lib.
-
-declare module 'fastify-reply-from' {
-    export interface From {
-        from: (path: string) => void
-    }
-}
+const fastifyOauth2 = require('@fastify/oauth2')
 
 function handleFileReadError(e: Error): void {
     logError('Error reading file.', e)
@@ -62,6 +58,7 @@ export async function startServer(): Promise<FastifyInstance> {
 
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
+    await fastify.register(helmet, { global: true })
 
     const serveIndexHtml = async (request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
@@ -72,7 +69,18 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
-    fastify.get('/search', serveIndexHtml)
+    fastify.get(
+        '/search',
+        {
+            helmet: {
+                hsts: {
+                    maxAge: 63072000,
+                    preload: true,
+                },
+            },
+        },
+        serveIndexHtml
+    )
     fastify.get('/overview', serveIndexHtml)
     fastify.get('/resources', serveIndexHtml)
 
