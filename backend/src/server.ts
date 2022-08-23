@@ -57,7 +57,10 @@ export async function startServer(): Promise<FastifyInstance> {
 
     await fastify.register(fastifyCookie)
     await fastify.register(fastifyCsrf)
-    await fastify.register(helmet, { global: true })
+    await fastify.register(helmet, {
+        global: true,
+        contentSecurityPolicy: { directives: { scriptSrc: ["'self' 'unsafe-eval'"] } }, // custom scriptSrc as we need the unsafe-eval
+    })
 
     const serveIndexHtml = async (_request: FastifyRequest, reply: FastifyReply) => {
         const token = await reply.generateCsrf()
