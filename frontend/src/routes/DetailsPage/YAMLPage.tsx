@@ -1,20 +1,20 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import { useState, useEffect } from 'react'
-import { PageSection } from '@patternfly/react-core'
-import { AcmAlert, AcmButton, AcmLoadingPage } from '@stolostron/ui-components'
 import { ApolloError } from '@apollo/client'
 import { makeStyles } from '@material-ui/styles'
+import { PageSection } from '@patternfly/react-core'
+import { global_BackgroundColor_dark_100 as editorBackground } from '@patternfly/react-tokens'
+import { AcmAlert, AcmButton, AcmLoadingPage } from '@stolostron/ui-components'
 import jsYaml from 'js-yaml'
+import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js'
+import 'monaco-editor/esm/vs/editor/editor.all.js'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Query, useUserAccessQuery, useUpdateResourceLazyQuery } from '../../console-sdk/console-sdk'
+import MonacoEditor, { monaco } from 'react-monaco-editor'
 import { consoleClient } from '../../console-sdk/console-client'
+import { Query, useUpdateResourceLazyQuery, useUserAccessQuery } from '../../console-sdk/console-sdk'
 import './YAMLEditor.css'
 
-import MonacoEditor, { monaco } from 'react-monaco-editor'
-import 'monaco-editor/esm/vs/editor/editor.all.js'
-import 'monaco-editor/esm/vs/basic-languages/yaml/yaml.contribution.js'
-import { global_BackgroundColor_dark_100 as editorBackground } from '@patternfly/react-tokens'
 monaco.editor.defineTheme('console', {
     base: 'vs-dark',
     inherit: true,
@@ -115,9 +115,11 @@ export default function YAMLPage(props: {
         },
     })
 
-    if (!userAccessLoading && !userAccessError && userAccessData && userCanEdit === undefined) {
-        setUserCanEdit(userAccessData?.userAccess.allowed)
-    }
+    useEffect(() => {
+        if (!userAccessLoading && !userAccessError && userAccessData && userCanEdit === undefined) {
+            setUserCanEdit(userAccessData?.userAccess.allowed)
+        }
+    }, [userAccessLoading, userAccessData, userAccessError, userCanEdit])
 
     if (error) {
         return (
@@ -186,10 +188,6 @@ export default function YAMLPage(props: {
                         variant={'primary'}
                         isDisabled={!userCanEdit}
                         onClick={() => {
-                            if (editMode) {
-                                // Reset YAML on cancel click
-                                setEditedResourceYaml(editedResourceYaml)
-                            }
                             setEditMode(!editMode)
                         }}
                         tooltip={tooltipMessage}

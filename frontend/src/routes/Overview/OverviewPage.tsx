@@ -1,35 +1,35 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
+import { ButtonVariant, PageSection } from '@patternfly/react-core'
+import { PlusIcon } from '@patternfly/react-icons'
 import {
+    AcmActionGroup,
     AcmAlert,
+    AcmAutoRefreshSelect,
+    AcmButton,
     AcmChartGroup,
     AcmDonutChart,
+    AcmLaunchLink,
     AcmLoadingPage,
+    AcmOverviewProviders,
     AcmPage,
     AcmPageHeader,
-    AcmOverviewProviders,
+    AcmRefreshTime,
+    AcmRoute,
     AcmScrollable,
     AcmSummaryList,
     Provider,
-    AcmButton,
-    AcmActionGroup,
-    AcmLaunchLink,
-    AcmAutoRefreshSelect,
-    AcmRefreshTime,
-    AcmRoute,
 } from '@stolostron/ui-components'
-import { ButtonVariant, PageSection } from '@patternfly/react-core'
-import { PlusIcon } from '@patternfly/react-icons'
+import _ from 'lodash'
+import { Dispatch, Fragment, SetStateAction, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
-import { acmRouteState } from '../../util'
 import { consoleClient } from '../../console-sdk/console-client'
 import { useGetOverviewLazyQuery, useGetResourceQuery } from '../../console-sdk/console-sdk'
-import { useSearchResultCountLazyQuery, useSearchResultItemsLazyQuery } from '../../search-sdk/search-sdk'
-import { searchClient } from '../../search-sdk/search-client'
 import { ClusterManagementAddOn } from '../../lib/resource-request'
-import _ from 'lodash'
+import { searchClient } from '../../search-sdk/search-client'
+import { useSearchResultCountLazyQuery, useSearchResultItemsLazyQuery } from '../../search-sdk/search-sdk'
+import { acmRouteState } from '../../util'
 
 export function mapProviderFromLabel(provider: string): Provider {
     switch (provider.toLowerCase()) {
@@ -239,9 +239,11 @@ export default function OverviewPage() {
     }, [called, fireConsoleQuery, refetch])
 
     const timestamp = data?.overview?.timestamp as string
-    if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
-        setClusters(data?.overview?.clusters || [])
-    }
+    useEffect(() => {
+        if (!_.isEqual(clusters, data?.overview?.clusters || [])) {
+            setClusters(data?.overview?.clusters || [])
+        }
+    }, [clusters, data?.overview?.clusters])
 
     const nonCompliantClusters = new Set<string>()
     data?.overview?.compliances?.forEach((c) => {

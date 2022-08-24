@@ -1,41 +1,41 @@
 // Copyright (c) 2021 Red Hat, Inc.
 // Copyright Contributors to the Open Cluster Management project
-import _ from 'lodash'
+import { ApolloError } from '@apollo/client'
+import { makeStyles } from '@material-ui/styles'
+import { ButtonVariant, PageSection } from '@patternfly/react-core'
+import '@patternfly/react-core/dist/styles/base.css'
 import {
+    AcmActionGroup,
     AcmAlert,
     AcmButton,
     AcmDropdown,
-    AcmIconVariant,
     AcmIcon,
+    AcmIconVariant,
     AcmPage,
     AcmRoute,
     AcmScrollable,
     AcmSearchbar,
-    AcmActionGroup,
 } from '@stolostron/ui-components'
-import { PageSection, ButtonVariant } from '@patternfly/react-core'
-import '@patternfly/react-core/dist/styles/base.css'
-import React, { Fragment, useState, useEffect } from 'react'
+import _ from 'lodash'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
-import { acmRouteState } from '../../util'
 import { searchClient } from '../../search-sdk/search-client'
-import SavedSearchQueries from './components/SavedSearchQueries'
-import SearchResults from './components/SearchResults'
-import HeaderWithNotification from './components/HeaderWithNotification'
 import {
-    useSearchSchemaQuery,
-    useSearchCompleteQuery,
-    useSavedSearchesQuery,
-    UserSearch,
     useGetMessagesQuery,
+    UserSearch,
+    useSavedSearchesQuery,
+    useSearchCompleteQuery,
+    useSearchSchemaQuery,
 } from '../../search-sdk/search-sdk'
-import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
-import { updateBrowserUrl, transformBrowserUrlToSearchString } from './urlQuery'
+import { acmRouteState } from '../../util'
+import HeaderWithNotification from './components/HeaderWithNotification'
 import { SaveAndEditSearchModal } from './components/Modals/SaveAndEditSearchModal'
 import { SearchInfoModal } from './components/Modals/SearchInfoModal'
-import { makeStyles } from '@material-ui/styles'
-import { ApolloError } from '@apollo/client'
+import SavedSearchQueries from './components/SavedSearchQueries'
+import SearchResults from './components/SearchResults'
+import { convertStringToQuery, formatSearchbarSuggestions, getSearchCompleteString } from './search-helper'
+import { transformBrowserUrlToSearchString, updateBrowserUrl } from './urlQuery'
 
 const operators = ['=', '<', '>', '<=', '>=', '!=', '!']
 
@@ -256,7 +256,8 @@ export default function SearchPage() {
     const [queryMessages, setQueryMessages] = useState<any[]>([])
 
     useEffect(() => {
-        setCurrentQuery(currentQuery)
+        const query = currentQuery
+        setCurrentQuery(query)
     }, [currentQuery])
     useEffect(() => {
         if (searchQuery === '') {
