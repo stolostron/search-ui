@@ -59,7 +59,11 @@ export async function startServer(): Promise<FastifyInstance> {
     await fastify.register(fastifyCsrf)
     await fastify.register(helmet, {
         global: true,
-        contentSecurityPolicy: { directives: { scriptSrc: ["'self' 'unsafe-eval'"] } }, // custom scriptSrc as we need the unsafe-eval
+        contentSecurityPolicy: { directives: { scriptSrc: ["'self' 'unsafe-inline'"] } }, // custom scriptSrc as we need the unsafe-inline
+        hsts: {
+            maxAge: 63072000,
+            preload: true,
+        },
     })
 
     const serveIndexHtml = async (_request: FastifyRequest, reply: FastifyReply) => {
@@ -71,18 +75,7 @@ export async function startServer(): Promise<FastifyInstance> {
     }
 
     fastify.get('/search/index.html', serveIndexHtml)
-    fastify.get(
-        '/search',
-        {
-            helmet: {
-                hsts: {
-                    maxAge: 63072000,
-                    preload: true,
-                },
-            },
-        },
-        serveIndexHtml
-    )
+    fastify.get('/search', serveIndexHtml)
     fastify.get('/overview', serveIndexHtml)
     fastify.get('/resources', serveIndexHtml)
 
