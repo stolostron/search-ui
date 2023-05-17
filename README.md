@@ -1,4 +1,8 @@
-<!-- Last update - Aug 8, 2022 -->
+<!-- Last update - May 17, 2023 -->
+# This project is deprecated.
+- The functionality has been moved to the RHACM [console repo.](https://github.com/stolostron/console)
+- The last RHACM release including this project was RHACM 2.4, which is now at end of life (EOL).
+- This project will be archived soon.
 
 # Search UI
 
